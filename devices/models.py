@@ -1,5 +1,5 @@
 from django.db import models
-
+from venders.models import Vender,VenderStaff
 
 # Create your models here.
 class Machine(models.Model):
@@ -38,21 +38,3 @@ class MachingLocate(models.Model):
     Ulocate = models.IntegerField()
     rack = models.ForeignKey('MachingRack', on_delete=models.CASCADE)
 
-
-class Vender(models.Model):
-    '''
-    vender
-    '''
-    name = models.CharField(max_length=255)
-
-
-class VenderStaff(models.Model):
-    '''
-    the works of vender
-    '''
-    name = models.CharField(max_length=30)
-    company = models.ForeignKey('Vender', on_delete=models.CASCADE)
-    phone = models.IntegerField()
-    wechat = models.CharField(max_length=60)
-    mail = models.CharField(max_length=60)
-    qq = models.IntegerField()
