@@ -31,11 +31,13 @@ def auto_ss():
 #start_pro.std_err
 
 from fabric import Connection
-# host='10.78.43.10:22022'
-host='xuedant@10.78.104.8:22'
+# host='deploy@10.78.70.56:22000'
+# host='xuedant@10.78.104.8:22'
 # gatewayhost='xuedan@10.78.104.8:60022'
+# host='xuedan@10.78.104.8:60022'
+host = 'root@172.20.51.22:22'
 command = 'ls'
-# c=Connection(host,gateway=Connection(gatewayhost),connect_kwargs={'key_filename':'/home/chry/.ssh/id_rsa'})
+# c=Connection(host,gateway=Connection(gatewayhost,connect_kwargs={'key_filename':'/home/chry/.ssh/id_rsa'}))
 c=Connection(host=host,connect_kwargs={'key_filename':'/home/chry/.ssh/id_rsa'})
 result = c.run(command=command)
 
