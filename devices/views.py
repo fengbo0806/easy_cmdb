@@ -3,6 +3,8 @@ import winrm
 #winrm 0.3.0
 import fabric
 #fabric 2.4.0
+import ansible
+#ansible 2.7.1
 # Create your views here.
 s = winrm.Session('192.168.209.162', auth=('*', '*'),transport='ntlm')
 # s = winrm.Session('https://172.30.200.149:5986/wsman', auth= ('chry', 'p'))
