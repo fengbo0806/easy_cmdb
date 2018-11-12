@@ -36,8 +36,8 @@ from fabric import Connection
 # host='deploy@10.78.70.56:22000'
 # host='xuedant@10.78.104.8:22'
 # gatewayhost='xuedan@10.78.104.8:60022'
-# host='xuedan@10.78.104.8:60022'
-host = 'root@172.20.51.22:22'
+host='xuedan@10.78.104.8:60022'
+#host = 'root@172.20.51.22:22'
 command = 'ls'
 # c=Connection(host,gateway=Connection(gatewayhost,connect_kwargs={'key_filename':'/home/chry/.ssh/id_rsa'}))
 c=Connection(host=host,connect_kwargs={'key_filename':'/home/chry/.ssh/id_rsa'})
@@ -56,3 +56,9 @@ c.close()
 #
 # def touchfile():                         # 随便创建一个任务，用来测试
 #     run('touch /tmp/www.txt')
+from django.http import HttpResponse
+import datetime
+def listAllDev(request):
+    now = datetime.datetime.now()
+    html = "<html><body>It is now %s.</body></html>" % now
+    return HttpResponse()

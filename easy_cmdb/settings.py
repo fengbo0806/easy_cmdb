@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'easy_cmdb',
     'ips',
     'venders',
+    'configureBaseData',
 ]
 
 MIDDLEWARE = [
