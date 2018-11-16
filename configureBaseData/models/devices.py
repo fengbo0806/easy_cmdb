@@ -6,9 +6,13 @@ class Machine(models.Model):
     '''
     the detail information for machine, just the basic info.
     '''
-    machine_locate = models.ForeignKey('MachingLocate', on_delete=models.CASCADE)
-    machine_vender = models.ForeignKey('Vender',on_delete=models.CASCADE)
+    machine_locate = models.ForeignKey('MachingLocate', on_delete=models.CASCADE,blank=True,null=True)
+    machine_vender = models.ForeignKey('Vender',on_delete=models.CASCADE,blank=True,null=True)
     machine_asset_number = models.CharField(max_length=255)
+    machine_os = models.CharField(max_length=255)
+    machine_eth_num = models.IntegerField()
+
+
     #machine_service = models.CharField()
    # machine_admin = models.CharField()
 

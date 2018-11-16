@@ -1,49 +1,49 @@
 from django.shortcuts import render
-import winrm
-#winrm 0.3.0
-import fabric
-#fabric 2.4.0
-import ansible
-#ansible 2.7.1
-# Create your views here.
-s = winrm.Session('192.168.209.162', auth=('*', '*'),transport='ntlm')
-# s = winrm.Session('https://172.30.200.149:5986/wsman', auth= ('chry', 'p'))
+# import winrm
+# #winrm 0.3.0
+# import fabric
+# #fabric 2.4.0
+# import ansible
+# #ansible 2.7.1
+# # Create your views here.
+# s = winrm.Session('192.168.209.162', auth=('*', '*'),transport='ntlm')
+# # s = winrm.Session('https://172.30.200.149:5986/wsman', auth= ('chry', 'p'))
+# #
+# #r = s.run_cmd('ipconfig', ['/all'])
+# #print(r.std_out)
+# def auto_ss():
+#     from winrm.protocol import Protocol
 #
-#r = s.run_cmd('ipconfig', ['/all'])
-#print(r.std_out)
-def auto_ss():
-    from winrm.protocol import Protocol
-
-    p = Protocol(
-        endpoint='http://172.30.200.149:5985/wsman',
-        transport='basic',
-        username=r'chry',
-        password='pr0t0ss',
-        server_cert_validation='ignore')
-    shell_id = p.open_shell()
-    command_id = p.run_command(shell_id, 'ipconfig', ['/all'])
-    std_out, std_err, status_code = p.get_command_output(shell_id, command_id)
-    p.cleanup_command(shell_id, command_id)
-    p.close_shell(shell_id)
-#rest_cp = s.run_ps('Restart-Computer -Force')
-#rest_pro= s.run_ps('Get-Process | Where-Object {$_.ProcessName.Contains("cloudia") } | Stop-Process -Force')
-#start_pro = s.run_ps("Start-Process -FilePath 'C:\Sobey\EMDC\MPC\Cloudia\cloudia.exe' -credential administrator")
-#dir_this = s.run_ps('$PSScriptRoot')
-#print(dir_this.std_out)
-#start_pro.std_err
-
-from fabric import Connection
-# host='deploy@10.78.70.56:22000'
-# host='xuedant@10.78.104.8:22'
-# gatewayhost='xuedan@10.78.104.8:60022'
-host='xuedan@10.78.104.8:60022'
-#host = 'root@172.20.51.22:22'
-command = 'ls'
-# c=Connection(host,gateway=Connection(gatewayhost,connect_kwargs={'key_filename':'/home/chry/.ssh/id_rsa'}))
-c=Connection(host=host,connect_kwargs={'key_filename':'/home/chry/.ssh/id_rsa'})
-result = c.run(command=command)
-
-c.close()
+#     p = Protocol(
+#         endpoint='http://172.30.200.149:5985/wsman',
+#         transport='basic',
+#         username=r'chry',
+#         password='pr0t0ss',
+#         server_cert_validation='ignore')
+#     shell_id = p.open_shell()
+#     command_id = p.run_command(shell_id, 'ipconfig', ['/all'])
+#     std_out, std_err, status_code = p.get_command_output(shell_id, command_id)
+#     p.cleanup_command(shell_id, command_id)
+#     p.close_shell(shell_id)
+# #rest_cp = s.run_ps('Restart-Computer -Force')
+# #rest_pro= s.run_ps('Get-Process | Where-Object {$_.ProcessName.Contains("cloudia") } | Stop-Process -Force')
+# #start_pro = s.run_ps("Start-Process -FilePath 'C:\Sobey\EMDC\MPC\Cloudia\cloudia.exe' -credential administrator")
+# #dir_this = s.run_ps('$PSScriptRoot')
+# #print(dir_this.std_out)
+# #start_pro.std_err
+#
+# from fabric import Connection
+# # host='deploy@10.78.70.56:22000'
+# # host='xuedant@10.78.104.8:22'
+# # gatewayhost='xuedan@10.78.104.8:60022'
+# host='xuedan@10.78.104.8:60022'
+# #host = 'root@172.20.51.22:22'
+# command = 'ls'
+# # c=Connection(host,gateway=Connection(gatewayhost,connect_kwargs={'key_filename':'/home/chry/.ssh/id_rsa'}))
+# c=Connection(host=host,connect_kwargs={'key_filename':'/home/chry/.ssh/id_rsa'})
+# result = c.run(command=command)
+#
+# c.close()
 
 # 'host=host:port'
 # with Connection('host') as c:
@@ -57,8 +57,8 @@ c.close()
 # def touchfile():                         # 随便创建一个任务，用来测试
 #     run('touch /tmp/www.txt')
 from django.http import HttpResponse
+from configureBaseData.models.devices import *
 import datetime
 def listAllDev(request):
-    now = datetime.datetime.now()
-    html = "<html><body>It is now %s.</body></html>" % now
-    return HttpResponse()
+    listDevice = Machine.objects.all()
+    return render(request,'devices/devices.html',{'listdevice':listDevice})
