@@ -81,3 +81,10 @@ class operates(object):
 if __name__ == '__main__':
     doOperate = operates(client='root@172.20.51.22:22',device_type='linux',operation='reboot')
     doOperate.reboot()
+'''
+ansible localhost -m shell -a "ps -ef |  awk '/task/{ print \$2,\$3,\$8 }'" --key-file='~/.ssh/id_rsa' --user=root
+
+ps -aux
+
+
+'''
