@@ -1,0 +1,72 @@
+{% extends 'basic.html' %}
+{% block subTitle %}
+
+    Detail
+{% endblock %}
+{% block content %}
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+            <tr>
+                <th>位置</th>
+                <th>厂商</th>
+                <th>固定资产编号</th>
+                <th>系统</th>
+                <th>网卡数量</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>L1</td>
+                <td>dell</td>
+                <td>123</td>
+                <td>linux</td>
+                <td>3</td>
+            </tr>
+            </tbody>
+        </table>
+        <h6> 进程信息</h6>
+        <table class="table table-striped table-sm">
+            <thead>
+            <tr>
+                <th>pid</th>
+                <th>名称</th>
+                <th>运行时间</th>
+                <th>CPU占用</th>
+                <th>内存占用</th>
+                <th>业务</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>Lorem</td>
+                <td>10</td>
+                <td>10</td>
+                <td>test</td>
+            </tr>
+            </tbody>
+        </table>
+        <h6> 人员</h6>
+        <table class="table table-striped table-sm">
+            <thead>
+            <tr>
+                <th>姓名</th>
+                <th>厂商</th>
+                <th>负责内容</th>
+                <th>联系方式</th>
+                <th>备注</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>chry</td>
+                <td>chry</td>
+                <td>设备硬件</td>
+                <td>1111</td>
+                <td>test</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

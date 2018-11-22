@@ -10,3 +10,5 @@ def rebootDev(request):
 
     listDevice = 'reboot'
     return render(request,'devices/devices.html',{'listdevice':listDevice})
+def detailDev(request):
+    return render(request,'devices/detail.html')
