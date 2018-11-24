@@ -1,0 +1,42 @@
+{% extends 'basic.html' %}
+{% block subTitle %}
+
+    listall
+{% endblock %}
+{% block content %}
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+            <tr>
+                <th>位置</th>
+                <th>厂商</th>
+                <th>固定资产编号</th>
+                <th>系统</th>
+                <th>网卡数量</th>
+                <th>业务</th>
+                <th>管理员</th>
+                <th>ip地址</th>
+                <th>备注</th>
+                <th>明细</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for item in listDevice %}
+            <tr>
+                <td>{{ item.MachineIp.machine_locate}}</td>
+                <td>{{ item.MachineIp.machine_vender }}</td>
+                <td>{{ item.MachineIp.machine_asset_number }}</td>
+                <td>{{ item.MachineIp.machine_os }}</td>
+                <td>{{ item.MachineIp.machine_eth_num }}</td>
+                <td>test</td>
+                <td>aaa</td>
+                <td>{{ item.ip }}</td>
+                <td>asds</td>
+                <td> <a href="/devices/detail/{{ item.MachineIp.id }}">click</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

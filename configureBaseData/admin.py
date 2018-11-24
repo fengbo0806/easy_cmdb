@@ -3,8 +3,23 @@ from .models.devices import *
 from .models.ips import *
 from .models.venders import *
 from .models.processes import *
+from .models.businesses import Business,Projects
 
 # Register your models here.
+'''
+bussiness and project
+'''
+
+
+@admin.register(Business)
+class BussinessAdmin(admin.ModelAdmin):
+    list_display = ('name', 'introduction')
+
+
+@admin.register(Projects)
+class ProjectsAdmin(admin.ModelAdmin):
+    list_display = ('name', 'introduction')
+
 
 '''
 ip address
@@ -30,26 +45,26 @@ process
 class processLine(admin.StackedInline):
     extra = 0
     fieldsets = ((None, {'fields': (('aliasName', 'name', 'typeOfProcess'),)},),)
-    raw_id_fields = ['runMachine']
+    raw_id_fields = ('runMachine',)
     model = process
 
 
 class servicesLine(admin.StackedInline):
     extra = 0
     fieldsets = ((None, {'fields': (('aliasName', 'name', 'typeOfProcess'),)},),)
-    raw_id_fields = ['runMachine']
+    raw_id_fields = ('runMachine',)
     model = services
 
 
 @admin.register(typeOfProcesses)
 class typeOfProcessAdmin(admin.ModelAdmin):
-    fieldsets = ((None, {'fields': (('name', 'typeOfBusinesses'), ('runMachine',)), }),)
+    fieldsets = ((None, {'fields': (('name', 'typeOfBusinesses'),), }),)
     list_display = ('name', 'typeOfBusinesses')
 
 
 @admin.register(services)
 class servicesAdmin(admin.ModelAdmin):
-    fieldsets = ((None, {'fields': (('aliasName', 'name', 'typeOfProcess'), ('runMachine',)), }),)
+    fieldsets = ((None, {'fields': (('aliasName', 'name', 'typeOfProcess'),('runMachine'),), }),)
     list_display = ('aliasName', 'name', 'typeOfProcess')
 
 

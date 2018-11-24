@@ -17,11 +17,11 @@
             </thead>
             <tbody>
             <tr>
-                <td>L1</td>
-                <td>dell</td>
-                <td>123</td>
-                <td>linux</td>
-                <td>3</td>
+                <td>{{ deviceInfo.machine_locate }}</td>
+                <td>{{ deviceInfo.machine_vender }}</td>
+                <td>{{ deviceInfo.machine_asset_number }}</td>
+                <td>{{ deviceInfo.machine_os }}</td>
+                <td>{{ deviceInfo.machine_eth_num }}</td>
             </tr>
             </tbody>
         </table>
@@ -35,16 +35,20 @@
                 <th>CPU占用</th>
                 <th>内存占用</th>
                 <th>业务</th>
+                <th>操作</th>
             </tr>
             </thead>
             <tbody>
+            {% for item in deviceProcess %}
             <tr>
-                <td>1</td>
-                <td>Lorem</td>
-                <td>10</td>
+                <td>{{ item.aliasName }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.typeOfProcess }}</td>
                 <td>10</td>
                 <td>test</td>
+                <td>restart</td>
             </tr>
+            {% endfor %}
             </tbody>
         </table>
         <h6> 人员</h6>

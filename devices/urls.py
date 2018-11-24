@@ -20,5 +20,5 @@ from . import views
 urlpatterns = [
     path('listall', views.listAllDev),
     path('reboot', views.rebootDev),
-    path('detail', views.detailDev),
+    path('detail/1', views.detailDev),
 ]
