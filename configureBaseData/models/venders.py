@@ -11,6 +11,9 @@ class Vender(models.Model):
     note = models.TextField(blank=True)
     business = models.ForeignKey('Business', on_delete=models.SET_NULL, null=True)
 
+    def __str__(self):
+        return str(self.name)
+
 
 class VenderStaff(models.Model):
     '''
@@ -24,3 +27,6 @@ class VenderStaff(models.Model):
     mail = models.CharField(max_length=60, blank=True)
     qq = models.IntegerField(blank=True)
     note = models.TextField(blank=True)
+
+    def __str__(self):
+        return str(self.name)
