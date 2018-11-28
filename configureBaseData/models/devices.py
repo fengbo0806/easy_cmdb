@@ -12,6 +12,10 @@ class Machine(models.Model):
     machine_asset_number = models.CharField(max_length=255)
     machine_os = models.CharField(max_length=255)
     machine_eth_num = models.IntegerField()
+    login_user = models.CharField(max_length=255, blank=True, null=True)
+    login_method = models.CharField(max_length=255, blank=True, null=True)
+    login_port = models.IntegerField()
+
     # machine_service = models.CharField()
     # machine_admin = models.CharField()
     def __str__(self):
@@ -40,7 +44,7 @@ class MachingRack(models.Model):
     room = models.ForeignKey('MachineRoom', on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.room) + ':' + str(self.floor) + '楼:' + str(self.locate)+'柜'
+        return str(self.room) + ':' + str(self.floor) + '楼:' + str(self.locate) + '柜'
 
 
 class MachingLocate(models.Model):

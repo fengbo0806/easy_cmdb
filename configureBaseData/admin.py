@@ -67,6 +67,10 @@ class servicesAdmin(admin.ModelAdmin):
     fieldsets = ((None, {'fields': (('aliasName', 'name', 'typeOfProcess'),('runMachine'),), }),)
     list_display = ('aliasName', 'name', 'typeOfProcess')
 
+@admin.register(process)
+class processAdmin(admin.ModelAdmin):
+    fieldsets = ((None, {'fields': (('aliasName', 'name', 'typeOfProcess'),('runMachine'),), }),)
+    list_display = ('aliasName', 'name', 'typeOfProcess')
 
 '''
 device

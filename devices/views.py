@@ -26,10 +26,13 @@ def rebootDev(request):
 
 
 def detailDev(request):
+    if request.method=='GET':
+        nid = int(request.GET.get('nid'))
+        deviceInfo = Machine.objects.get(id=nid)
+        deviceIp = IpV4.objects.filter(MachineIp=deviceInfo)
+        deviceProcess = process.objects.filter(runMachine=deviceInfo)
+    elif request.method=='POST':
+        pass
 
-    deviceInfo = Machine.objects.get(id=1)
-    deviceIp = IpV4.objects.filter(MachineIp=deviceInfo)
-    deviceProcess = process.objects.filter(runMachine=deviceInfo)
-
-    print(deviceProcess.query)
+    # print(deviceProcess.query)
     return render(request, 'devices/detail.html', {'deviceInfo': deviceInfo, 'deviceIp': deviceIp,'deviceProcess':deviceProcess})
