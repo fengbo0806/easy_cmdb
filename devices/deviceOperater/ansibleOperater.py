@@ -42,9 +42,11 @@ class ResultCallback(CallbackBase, ):
 
 # since API is constructed for CLI it expects certain options to always be set, named tuple 'fakes' the args parsing options object
 Options = namedtuple('Options',
-                     ['connection', 'module_path', 'forks', 'become', 'become_method', 'become_user', 'check', 'diff',
+                     ['connection', 'hosts','ansible_remote_port', 'module_path', 'forks', 'become', 'become_method',
+                      'become_user', 'check', 'diff',
                       'private_key_file'])
-options = Options(connection='172.20.51.22,', module_path=['/to/mymodules'], forks=10, become=None, become_method=None,
+options = Options(connection='local', hosts='172.20.51.22,',ansible_remote_port=22, module_path=['/to/mymodules'], forks=10, become=None,
+                  become_method=None,
                   become_user='root', check=False, diff=False, private_key_file='~/.ssh/id_rsa')
 
 # initialize needed objects
@@ -55,7 +57,7 @@ passwords = dict(vault_pass='cctv.com')
 results_callback = ResultCallback()
 
 # create inventory, use path to host config file as source or hosts in a comma separated string
-inventory = InventoryManager(loader=loader, sources='172.20.51.22,')
+inventory = InventoryManager(loader=loader, sources='localhost,')
 
 # variable manager takes care of merging all the different sources to give you a unified view of variables available in each context
 variable_manager = VariableManager(loader=loader, inventory=inventory)
@@ -63,11 +65,11 @@ variable_manager = VariableManager(loader=loader, inventory=inventory)
 # create data structure that represents our play, including tasks, this is basically what our YAML loader does internally.
 play_source = dict(
     name="Ansible Play",
-    hosts='172.20.51.22',
+    hosts='172.20.51.22,',
     gather_facts='no',
     tasks=[
-        # dict(action=dict(module='shell', args='ps -ef | grep VSM'), register='shell_out', ),
-        dict(action=dict(module='setup', ), register='shell_out'),
+        dict(action=dict(module='shell', args='ip add'), register='shell_out', ),
+        # dict(action=dict(module='setup', ), register='shell_out'),
         # dict(action=dict(module='debug', args=dict(msg='{{shell_out.stdout}}')))
     ]
 )
@@ -96,7 +98,7 @@ try:
         loader=loader,
         options=options,
         passwords=None,
-        stdout_callback=results_callback,
+        # stdout_callback=results_callback,
         # Use our custom callback instead of the ``default`` callback plugin, which prints to stdout
     )
     # atest = tqm
@@ -106,9 +108,18 @@ try:
     # if tqm._stdout_callback.consquence:
     #     for key in tqm._stdout_callback.consquence['172.20.51.22']['stderr']:
     #         print(key,)
+except BaseException:
+    print(str(BaseException))
+finally:
+    # we always need to cleanup child procs and the structures we use to communicate with them
+    if tqm is not None:
+        tqm.cleanup()
 
-    '''
-    changed
+    # Remove ansible tmpdir
+    shutil.rmtree(C.DEFAULT_LOCAL_TMP, True)
+
+'''
+changed
 end
 stdout
 cmd
@@ -121,10 +132,3 @@ _ansible_parsed
 stdout_lines
 stderr_lines
 _ansible_no_log'''
-finally:
-    # we always need to cleanup child procs and the structures we use to communicate with them
-    if tqm is not None:
-        tqm.cleanup()
-
-    # Remove ansible tmpdir
-    shutil.rmtree(C.DEFAULT_LOCAL_TMP, True)
