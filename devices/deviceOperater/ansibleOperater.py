@@ -24,9 +24,9 @@ class ResultCallback(CallbackBase, ):
     """
 
     #
-    # def __init__(self):
-    #     super(CallbackBase, self).__init__()
-    #     self.consquence = None
+    def __init__(self):
+        super(CallbackBase, self).__init__()
+        self.consquence = None
 
     def v2_runner_on_ok(self, result, **kwargs):
         """Print a json representation of the result
@@ -35,19 +35,19 @@ class ResultCallback(CallbackBase, ):
         """
         host = result._host
         print(json.dumps({host.name: result._result}, indent=4))
-        # self.consquence = {host.name: result._result}
+        self.consquence = {host.name: result._result}
         # # consquence = json.dumps({host.name: result._result}, indent=4)
-        # return self.consquence
+        return self.consquence
 
 
 # since API is constructed for CLI it expects certain options to always be set, named tuple 'fakes' the args parsing options object
 Options = namedtuple('Options',
-                     ['connection', 'hosts','ansible_remote_port', 'module_path', 'forks', 'become', 'become_method',
-                      'become_user', 'check', 'diff',
-                      'private_key_file'])
-options = Options(connection='local', hosts='172.20.51.22,',ansible_remote_port=22, module_path=['/to/mymodules'], forks=10, become=None,
+                     ['connection','module_path', 'forks', 'become', 'become_method',
+                      'become_user', 'check', 'diff','private_key_file',
+                      ])
+options = Options(connection='smart',module_path=['/to/mymodules'], forks=10, become=None,
                   become_method=None,
-                  become_user='root', check=False, diff=False, private_key_file='~/.ssh/id_rsa')
+                  become_user='root', check=False, diff=False, private_key_file='~/.ssh/id_rsa',)
 
 # initialize needed objects
 loader = DataLoader()  # Takes care of finding and reading yaml, json and ini files
@@ -57,7 +57,9 @@ passwords = dict(vault_pass='cctv.com')
 results_callback = ResultCallback()
 
 # create inventory, use path to host config file as source or hosts in a comma separated string
-inventory = InventoryManager(loader=loader, sources='localhost,')
+inventory = InventoryManager(loader=loader, sources='/etc/ansible/hosts')
+# inventory.add_host(host='172.20.51.22',port=22,group='test')
+
 
 # variable manager takes care of merging all the different sources to give you a unified view of variables available in each context
 variable_manager = VariableManager(loader=loader, inventory=inventory)
@@ -65,11 +67,11 @@ variable_manager = VariableManager(loader=loader, inventory=inventory)
 # create data structure that represents our play, including tasks, this is basically what our YAML loader does internally.
 play_source = dict(
     name="Ansible Play",
-    hosts='172.20.51.22,',
+    hosts='test',
     gather_facts='no',
     tasks=[
-        dict(action=dict(module='shell', args='ip add'), register='shell_out', ),
-        # dict(action=dict(module='setup', ), register='shell_out'),
+        # dict(action=dict(module='shell', args='mkdir test2018'), register='shell_out', ),
+        dict(action=dict(module='setup', ), register='shell_out'),
         # dict(action=dict(module='debug', args=dict(msg='{{shell_out.stdout}}')))
     ]
 )
@@ -98,13 +100,13 @@ try:
         loader=loader,
         options=options,
         passwords=None,
-        # stdout_callback=results_callback,
+        stdout_callback=results_callback,
         # Use our custom callback instead of the ``default`` callback plugin, which prints to stdout
     )
     # atest = tqm
     # atest.run(play)
     tqm.run(play, )  # most interesting data for a play is actually sent to the callback's methods
-    # print(type(tqm._stdout_callback.consquence))
+    print(type(tqm._stdout_callback.consquence))
     # if tqm._stdout_callback.consquence:
     #     for key in tqm._stdout_callback.consquence['172.20.51.22']['stderr']:
     #         print(key,)
