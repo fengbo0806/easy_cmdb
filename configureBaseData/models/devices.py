@@ -24,6 +24,7 @@ class Machine(models.Model):
 class MachineType(models.Model):
     name=models.CharField(max_length=255)
 
+
 class MachineRoom(models.Model):
     '''
     describ the address of IDC, maybe some detail information for contant of the service stuff

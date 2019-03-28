@@ -1,22 +1,26 @@
 from django.shortcuts import render
-# from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from configureBaseData.models.devices import *
 from configureBaseData.models.ips import *
 from configureBaseData.models.venders import *
 from configureBaseData.models.processes import *
 from configureBaseData.models.ips import *
+from configureBaseData.models.encoderserver import *
+from django.forms.forms import pretty_name
+from django.core.exceptions import ObjectDoesNotExist
+import time
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render_to_response
+from django.db.models import Q
+from django.db.models import Count
+from django.template import RequestContext
+import sys
+import re, os
 
 
 # import datetime
 def listAllDev(request):
-    # listDevice = Machine.objects.filter(id=1)
-    # listDevice = Machine.objects.get(pk=1)
-    # lisIP = IpV4.objects.filter(MachineIp=listDevice).all()
     listAdminIP = IpV4.objects.filter(isManage=True).select_related('MachineIp').all()
-    print(listAdminIP.query)
-    for items in listAdminIP:
-        print(items.MachineIp.machine_asset_number)
-
     return render(request, 'devices/listall.html', {'listDevice': listAdminIP})
 
 
@@ -27,38 +31,81 @@ def rebootDev(request):
 
 
 def detailDev(request):
-    if request.method=='GET':
+    if request.method == 'GET':
         nid = int(request.GET.get('nid'))
         deviceInfo = Machine.objects.get(id=nid)
         deviceIp = IpV4.objects.filter(MachineIp=deviceInfo)
         deviceProcess = Process.objects.filter(runMachine=deviceInfo)
-    elif request.method=='POST':
+    elif request.method == 'POST':
         pass
+    return render(request, 'devices/detail.html',
+                  {'deviceInfo': deviceInfo, 'deviceIp': deviceIp, 'deviceProcess': deviceProcess})
 
-    # print(deviceProcess.query)
-    return render(request, 'devices/detail.html', {'deviceInfo': deviceInfo, 'deviceIp': deviceIp,'deviceProcess':deviceProcess})
-from configureBaseData.models.encoderserver import *
 
 def encoders(request):
-    if request.method=='GET':
-        # query1 = IpV4.objects.filter(isManage='True')
-        # query2 = query1.Machine.id
-        # query3 = Machine.objects.filter(ipv4__isManage='True',machine_type__name='1')
-        query4 = ProgramDetail.objects.filter(machine__ipv4__isManage='True',machine__machine_type__name='1').order_by('machine','rowid').values('name','machine__machine_asset_number',
-                                                                                                                     'machine__ipv4__ip')
-        # query5 = Machine.objects.filter(query4)
+    '''
+
+    :param request:
+    :return:
+    '''
+    if request.method == 'GET':
+        query4 = ProgramDetail.objects.filter(machine__ipv4__isManage='True', machine__machine_type__name='1').order_by(
+            'machine', 'rowid').values('name', 'machine__machine_asset_number',
+                                       'machine__ipv4__ip')
         from web_scan import update
         update.updateEncoderInfo()
-        # print('test')
-        # for i in query4:
-        #     print(i)
-        return render(request,'encoders/listall.html',{'programlist':query4})
+        return render(request, 'encoders/listall.html', {'programlist': query4})
+
 
 def taskList(request):
+    '''
+
+    :param request:
+    class Task(models.Model):
+    taskName=models.CharField(verbose_name='任务名称',max_length=255)
+    startDate = models.DateTimeField(verbose_name='计划开始时间', blank=True, null=True)
+    endDate = models.DateTimeField(verbose_name='计划结束时间', blank=True, null=True)
+    typeOf = models.ForeignKey('typeOfTask',on_delete=None)
+class typeOfTask(models.Model):
+    typeName=models.CharField(verbose_name='任务类型',max_length=255)
+class WorkPackage(models.Model):
+    task=models.ForeignKey(Task,on_delete=models.CASCADE)
+    startDate = models.DateTimeField(verbose_name='实际开始时间', blank=True, null=True)
+    endDate = models.DateTimeField(verbose_name='实际结束时间', blank=True, null=True)
+    programChannel= models.CharField(verbose_name='频道名称',max_length=255,)
+    programName= models.CharField(verbose_name='节目名称',max_length=255,)
+    :return:
+    '''
+    if request.method == 'GET':
+        message = Task.objects.all().reverse().annotate(countnum=Count('workpackage__programName')).values('taskName',
+                                                                                                           'startDate',
+                                                                                                           'endDate',
+                                                                                                           'typeOf__typeName',
+                                                                                                           'id',
+                                                                                                           'countnum')
+        # countnum = Task.objects.all()..values('taskName','num')
+        # for i in countnum:
+        #     print(i)
+        return render_to_response('tasks/listall.html', {'message': message, })
+
+
+def workPakgeList(request):
+    if request.method == 'GET':
+        searchId = request.GET.get('tid')
+        message = WorkPackage.objects.filter(task__pk=searchId)
+        # for i in message :
+        #     print(i.programName)
+        return render(request, 'tasks/detail.html', {'message': message, })
+
+
+def workDaily(request):
     if request.method == 'GET':
         search_start_time = request.GET.get('starttime')
         search_end_time = request.GET.get('endtime')
         search_field = request.GET.get('searchfield')
+        '''
+         = models.DateTimeField(verbose_name='实际开始时间', blank=True, null=True)
+    endDate'''
         if search_field:
             search_end_time = str(search_end_time)
             search_start_time = str(search_start_time)
@@ -71,9 +118,9 @@ def taskList(request):
             search_end_time = datetime.datetime(search_end_time.year, search_end_time.month, search_end_time.day, 23,
                                                 59, 59)
         if search_field == 0:
-            message = video_flow.objects.filter(plan_start_date__range=(search_start_time, search_end_time))
+            message = WorkPackage.objects.filter(startDate__range=(search_start_time, search_end_time))
         elif search_field == 1:
-            message = video_flow.objects.filter(updata_time__range=(search_start_time, search_end_time))
+            message = WorkPackage.objects.filter(updata_time__range=(search_start_time, search_end_time))
         else:
             today = datetime.datetime.now()
             tomorrow = datetime.datetime.now() + datetime.timedelta(days=1)
@@ -81,15 +128,18 @@ def taskList(request):
             search_today = datetime.datetime(search_today.year, search_today.month, search_today.day, 00, 00, 00)
             search_today_end = datetime.datetime(search_today.year, search_today.month, search_today.day, 23, 59, 59)
             search_tomorrow = datetime.datetime(tomorrow.year, tomorrow.month, tomorrow.day, 23, 59, 59)
-            message = video_flow.objects.filter(plan_start_date__range=(search_today, search_tomorrow))
-            message_count = video_flow.objects.filter(
-                plan_start_date__range=(search_today, search_today_end)).aggregate(Count('id'))
+            message = WorkPackage.objects.filter(startDate__range=(search_today, search_tomorrow))
+            message_count = WorkPackage.objects.filter(
+                startDate__range=(search_today, search_today_end)).aggregate(Count('id'))
             search_start_time = today
             search_end_time = tomorrow
     message_count = message.aggregate(Count('id'))
-    return render_to_response('video_flow_list.html',
+    return render_to_response('tasks/daily.html',
                               {'message': message, 'message_count': message_count, 'today': search_start_time,
                                'tomorrow': search_end_time, 'search_field': search_field})
+
+
+'''
 def flowlistexport(request):
     if request.method == 'GET':
         search_start_time = request.GET.get('starttime')
@@ -180,42 +230,6 @@ def faq_form(request):
     return render_to_response('FAQform.html', {'message': message, 'today': today, })
 
 
-def cgtn_flow_list(request):
-    if request.method == 'GET':
-        search_start_time = request.GET.get('starttime')
-        search_end_time = request.GET.get('endtime')
-        search_field = request.GET.get('searchfield')
-        if search_field:
-            search_end_time = str(search_end_time)
-            search_start_time = str(search_start_time)
-            search_field = int(search_field)
-            search_start_time = datetime.datetime.strptime(search_start_time, '%Y-%m-%d')
-            search_start_time = datetime.datetime(search_start_time.year, search_start_time.month,
-                                                  search_start_time.day, 00,
-                                                  00, 00)
-            search_end_time = datetime.datetime.strptime(search_end_time, '%Y-%m-%d')
-            search_end_time = datetime.datetime(search_end_time.year, search_end_time.month, search_end_time.day, 23,
-                                                59, 59)
-        if search_field == 0:
-            message = cgtn_flow.objects.filter(plan_start_date__range=(search_start_time, search_end_time))
-        elif search_field == 1:
-            message = cgtn_flow.objects.filter(updata_time__range=(search_start_time, search_end_time))
-        else:
-            today = datetime.datetime.now()
-            tomorrow = datetime.datetime.now() + datetime.timedelta(days=1)
-            search_today = today
-            search_today = datetime.datetime(search_today.year, search_today.month, search_today.day, 00, 00, 00)
-            search_today_end = datetime.datetime(search_today.year, search_today.month, search_today.day, 23, 59, 59)
-            search_tomorrow = datetime.datetime(tomorrow.year, tomorrow.month, tomorrow.day, 23, 59, 59)
-            message = cgtn_flow.objects.filter(plan_start_date__range=(search_today, search_tomorrow))
-            message_count = cgtn_flow.objects.filter(
-                plan_start_date__range=(search_today, search_today_end)).aggregate(Count('id'))
-            search_start_time = today
-            search_end_time = tomorrow
-    message_count = message.aggregate(Count('id'))
-    return render_to_response('cgtn_flow_list_new.html',
-                              {'message': message, 'message_count': message_count, 'today': search_start_time,
-                               'tomorrow': search_end_time, 'search_field': search_field})
 
 
 
@@ -231,347 +245,6 @@ def cgtn_flow_list(request):
     # return render_to_response('cgtn_flow_list_new.html',
     #                           {'message': message, 'message_count': message_count, 'today': today,
     #                            'tomorrow': tomorrow})
-def cgtn_log(request):
-    if request.method == 'GET':
-        program_type = {
-            'cgtne':'cctve_fb',
-            'cgtna': 'cctva_fb',
-            'cgtnr': 'cctvr_fb',
-            'cgtnf': 'cctvf_fb',
-            'cgtnelive': 'cctve_live_fb',
-            'cgtnalive': 'cctva_live_fb',
-            'cgtnrlive': 'cctvr_live_fb',
-            'cgtnflive': 'cctvf_live_fb',
-
-        }
-        log_tag = request.GET.get('program')
-        log_stram = cgtn_control.objects.get(cgtn_type=program_type[log_tag])
-        search_rtmp = log_stram.cgtn_flow_rtmp
-        envconf = open(os.path.join(os.path.dirname(__file__), 'srs.server.conf'), mode='r')
-        envdict = {}
-        for line in envconf:
-            envdict[line.split()[0]] = line.split()[1]
-        envconf.close()
-        env.host_string = envdict['host']
-        env.port = envdict['port']
-        env.user = envdict['user']
-        env.password = envdict['password']
-        envsu = envdict['sudo_user']
-        envpass = envdict['sudo_password']
-        logName = 'cat /usr/local/srs2.0/objs/*' + search_rtmp.split('/')[-1].replace(r'&',r'\&') + '.log'
-        print logName
-        @task
-        def task_getlog():
-
-            with hide('everything'):
-                with settings(user=envsu,password=envpass):
-                    a = run(logName).stdout
-                    return a
-        logtext = re.split(r'\n|\r',task_getlog())[-20:]
-        for i in range(0,len(logtext)):
-            logtext[i] = logtext[i] + '<br>'
-        # return render(request, 'log.html', {'logtext': logtext[-10:], })
-        return HttpResponse(logtext)
-def cgtn_change_unlock(request):
-    if request.method == 'POST':
-        postdate = {}
-        change_cgtn_status={}
-        postdate['cctva_fb'] = request.POST.get('cgtna')
-        postdate['cctvr_fb'] = request.POST.get('cgtnr')
-        postdate['cctve_fb'] = request.POST.get('cgtne')
-        postdate['cctvf_fb'] = request.POST.get('cgtnf')
-        postdate['cctva_live_fb'] = request.POST.get('cgtnalive')
-        postdate['cctvr_live_fb'] = request.POST.get('cgtnrlive')
-        postdate['cctve_live_fb'] = request.POST.get('cgtnelive')
-        postdate['cctvf_live_fb'] = request.POST.get('cgtnflive')
-
-        for i in postdate:
-            if  postdate[i] and 'unlock' in postdate[i] :
-                change_cgtn_status[i] = unquote(postdate[i])
-        for key in change_cgtn_status:
-            change_status_unlock = cgtn_control.objects.filter(cgtn_type = key)
-            change_status_unlock.update(cgtn_status=1)
-        return HttpResponse('ok')
-
-
-def cgtn_change(request):
-    if request.method == 'GET':
-        status = {}
-        cgtn_change_input_status = cgtn_control.objects.all()
-        for item in cgtn_change_input_status:
-            status[item.cgtn_type] = [item.cgtn_status, item.cgtn_flow_rtmp]
-
-        return render(request,'cgtn_flow_change.html',status)
-    elif request.method == 'POST':
-        #get the post data and init the postdict
-        # for i in request.POST:
-        #     print i
-        # print request.POST.get('cgtnf')
-        postdate={}
-        postdate['cctva_fb'] = request.POST.get('cgtna')
-        postdate['cctvr_fb'] = request.POST.get('cgtnr')
-        postdate['cctve_fb'] = request.POST.get('cgtne')
-        postdate['cctvf_fb'] = request.POST.get('cgtnf')
-        postdate['cctva_live_fb'] = request.POST.get('cgtnalive')
-        postdate['cctvr_live_fb'] = request.POST.get('cgtnrlive')
-        postdate['cctve_live_fb'] = request.POST.get('cgtnelive')
-        postdate['cctvf_live_fb'] = request.POST.get('cgtnflive')
-        # init the context,this is not need any more
-
-        envconf = open(os.path.join(os.path.dirname(__file__), 'srs.server.conf'),mode='r')
-        envdict={}
-        for line in envconf:
-            envdict[line.split()[0]] = line.split()[1]
-        envconf.close()
-        env.host_string = envdict['host']
-        env.port = envdict['port']
-        env.user = envdict['user']
-        envsu = envdict['sudo_user']
-        envpass = envdict['sudo_password']
-
-        local_srsconf = os.path.join(os.path.dirname(__file__), 'srs.conf')
-
-        localfile_path = local_srsconf
-
-        remotefile_path = '/usr/local/srs2.0/conf/srs.conf'
-
-        # read the default file
-        change_rtmp_dict = {}
-        # srs_default = os.path.join(os.path.dirname(__file__),'srs_default')
-        # srs_obj = open(srs_default, mode='r')
-        # for line in srs_obj:
-        #     if not line:
-        #         break
-        #     list = re.split(' ', line)
-        #     if len(list) > 1:
-        #         change_rtmp_dict[list[0]] = list[1]
-        # srs_obj.close()
-        # get the link from web,and change the dict list
-        for i in postdate:
-            if  postdate[i] and 'rtmp://' in postdate[i] :
-                change_rtmp_dict[i] = unquote(postdate[i])
-        for i in change_rtmp_dict:
-            if len(change_rtmp_dict[i])>10:
-                change_status = cgtn_control.objects.filter(cgtn_type=i)
-                print change_status.values('cgtn_flow_rtmp')
-                if change_rtmp_dict[i] == change_status.values('cgtn_flow_rtmp')[0]['cgtn_flow_rtmp']:
-                    return redirect('/list/cgtnchange')
-                change_status.update(cgtn_flow_rtmp=change_rtmp_dict[i],cgtn_status=0)
-
-        # change the srs server conf file,must read the remote server conf first,then change the text file
-        @task
-        def get_remote_conf():
-            with settings(user=envsu, password=envpass):
-                get(remotefile_path,localfile_path)
-        get_remote_conf()
-
-        cgtn_read_conf = open(localfile_path,mode='r+')
-        # for line in cgtn_context:
-        #     for k,v in change_rtmp_dict.items():
-        #         if k in line:
-        #             line =v
-        # cgtn_context.close()
-        # cgtn_file = open(local_srsconf, mode='w')
-        # cgtn_file.write(cgtn_context)
-        #cgtn_file.close()
-
-        conf_context = cgtn_read_conf.readlines()
-        isinput = False
-        dict_name = ''
-        for i in range(0, len(conf_context)):
-            for key in change_rtmp_dict:
-                if key in conf_context[i]:
-                    isinput = True
-                    dict_name=key
-            if isinput and 'output' in conf_context[i]:
-                conf_context[i]='            output          ' + change_rtmp_dict[dict_name] + ';\n'
-                isinput = False
-        cgtn_read_conf.close()
-
-        cgtn_write_conf = open(localfile_path,mode='w')
-        for i in conf_context:
-            cgtn_write_conf.write(i)
-        cgtn_write_conf.close()
-        # save the  changes
-        # srs_obj_save = open(srs_default, mode='w')
-        # for k, v in change_rtmp_dict.items():
-        #     if '\n' in v:
-        #         line = k + ' ' + v
-        #     else:
-        #         line =  k + ' ' + v +'\n'
-        #     srs_obj_save.write(line)
-        # srs_obj_save.close()
-
-        # backup the source conf file , the form should be name and date ,make sure if some error cause ,the admin can recover the server
-
-
-        @task
-        def task_backup_conf():
-            with settings(user=envsu, password=envpass):
-                todaytime = datetime.datetime.now().strftime('%y%m%d')
-                #timestamp = todaytime + 'c00'
-                #remotefile_path_stamp = remotefile_path+timestamp
-                check_files_comm = 'ls ' + remotefile_path[0:-8]
-                check_files = run(check_files_comm).split()
-                searchconf = '^srs.conf' + todaytime +'c\d\d'
-
-                compar_num=0
-                for confi in check_files:
-                    if re.search(searchconf,confi):
-                        if compar_num < int(confi[-2:]):
-                            compar_num = int(confi[-2:])
-                compar_num+=1
-                if compar_num <10 :
-                    compar_num = '0'+str(compar_num)
-                else:
-                    compar_num = str(compar_num)
-                # print check_files.split()
-                # if exists(remotefile_path_stamp):
-                #     remotefile_path_stamp = 1
-                # else:
-                #     remotefile_path_stamp = remotefile_path + timestamp + 'c00'
-                backcomm = 'cp ' + remotefile_path + ' ' + remotefile_path +todaytime+'c'+compar_num
-                run(backcomm)
-
-        # upload the change file,a PYer suggest me to use  fabric to implement the features,in the past i used to
-        # use paramiko packet to do this ,may be i can change to use this one, let me try
-
-        @task
-        def task_upload_file():
-            with settings(user=envsu, password=envpass):
-                put(localfile_path, remotefile_path)
-
-        # check the file MD5 , if file block reload .check the privileges make sure the file has the right permit.
-
-        @task
-        def task_check_md5():
-            with settings(user=envsu, password=envpass):
-                md5comm = 'md5sum ' + localfile_path
-                localmd5 = local(md5comm, capture=True).split(' ')[0]
-                md5comm = 'md5sum ' + remotefile_path
-                remotemd5 = run(md5comm).split(' ')[0]
-                return localmd5 == remotemd5
-
-        # restart the process
-
-        @task
-        def task_restart_process():
-            with settings(user=envsu, password=envpass):
-                # run("/etc/init.d/srs reload")
-                run("/etc/init.d/srs reload")
-                #run('echo /ect/init.d/srsreload')
-            # check the process log and show in the front web
-        task_backup_conf()
-
-        while True:
-            if task_check_md5():
-                task_restart_process()
-                time.sleep(1)
-                break
-            else:
-                task_upload_file()
-        return render(request,'cgtn_flow_change.html')
-
-
-def cgtn_log_change(request):
-    envconf = open(os.path.join(os.path.dirname(__file__), 'srs.server.conf'), mode='r')
-    envdict = {}
-    for line in envconf:
-        envdict[line.split()[0]] = line.split()[1]
-    envconf.close()
-    env.host_string = envdict['host']
-    env.user = envdict['user']
-    env.password = envdict['password']
-    localfile_path = os.path.join(os.path.dirname(__file__), 'srs.conf')
-
-
-    remotefile_path = '/usr/local/srs2.0/conf/srs.conf'
-    if request.method=='GET':
-        status = {}
-        cgtn_change_input_status = cgtn_control.objects.all()
-        for item in cgtn_change_input_status:
-            status[item.cgtn_type]=[item.cgtn_status,item.cgtn_flow_rtmp]
-        return
-    return
-
-
-def cgtnexport(request):
-    if request.method == 'GET':
-        search_start_time = request.GET.get('starttime')
-        search_end_time = request.GET.get('endtime')
-        if search_start_time:
-            search_end_time = str(search_end_time)
-            search_start_time = str(search_start_time)
-            search_start_time = datetime.datetime.strptime(search_start_time, '%Y-%m-%d')
-            search_start_time = datetime.datetime(search_start_time.year, search_start_time.month,
-                                                  search_start_time.day, 00,
-                                                  00, 00)
-            search_end_time = datetime.datetime.strptime(search_end_time, '%Y-%m-%d')
-            search_end_time = datetime.datetime(search_end_time.year, search_end_time.month, search_end_time.day, 23,
-                                                59, 59)
-            message = cgtn_flow.objects.filter(plan_start_date__range=(search_start_time, search_end_time))
-            activity_list = message.aggregate(Count('id'))
-            response = HttpResponse(content_type="application/ms-excel")
-            response['Content-Disposition'] = 'attachment; filename=file.xls'
-
-            wb = xlwt.Workbook()
-            ws = wb.add_sheet('Sheetname')
-            icon = 1
-            dateFormat = xlwt.XFStyle()
-            dateFormat.num_format_str = 'yyyy/mm/dd hh:mm'
-            list_taitle=[u'开始时间',u'结束时间',u'需求部门',u'负责人',u'节目名称',u'用途',u'备注']
-            for i in range(0,len(list_taitle)):
-                ws.write(0,i,list_taitle[i])
-            for infor in message:
-                plan_start_day =  infor.plan_start_date.replace(tzinfo=None)
-                plan_start_day=plan_start_day + datetime.timedelta(hours=8)
-                ws.write(icon, 0, plan_start_day,dateFormat)
-                plan_end_day = infor.plan_end_date.replace(tzinfo=None)
-                plan_end_day = plan_end_day + datetime.timedelta(hours=8)
-                ws.write(icon, 1, plan_end_day,dateFormat)
-                ws.write(icon, 2, infor.get_department_display())
-                ws.write(icon, 3, infor.admin_name)
-                ws.write(icon, 4, infor.program_name)
-                ws.write(icon, 5, infor.get_use_for_display())
-                ws.write(icon, 6, infor.notes)
-                icon += 1
-            wb.save(response)
-            return response
-
-#fangfaer
-            # obj = message.first()
-            # for y, column in enumerate(columns):
-            #     value = get_column_head(obj, column)
-            #     sheet.write(0, y, value, header_style)
-            #
-            # for x, obj in enumerate(queryset, start=1):
-            #     for y, column in enumerate(columns):
-            #         value = get_column_cell(obj, column)
-            #         style = default_style
-            #         for value_type, cell_style in cell_style_map:
-            #             if isinstance(value, value_type):
-            #                 style = cell_style
-            #         sheet.write(x, y, value, style)
-
-#fangfayi
-            # response = HttpResponse(content_type='application/vnd.ms-excel')
-            # response['Content-Disposition'] = 'attachment; filename=reportdata.xls'  # 返回下载文件的名称(activity.xls)
-            # workbook = xlwt.Workbook(encoding='utf-8')  # 创建工作簿
-            # mysheet = workbook.add_sheet(u'活动')  # 创建工作页
-            # rows = activity_list
-            # cols = 10  # 每行的列
-            # aaa = ['活动名称', '订单名称', '投放日期', '结束日期', '直播点击数', '直播订阅量', '直播访问量', '开始时间', '结束时间', '广告主名称']  # 表头名
-            # for c in range(len(aaa)):
-            #     mysheet.write(0, c, aaa[c])
-            # for r in range(0, len(rows)):  # 对行进行遍历
-            #     for c in range(cols):  # 对列进行遍历
-            #         mysheet.write(r + 1, c, str(rows[r][c]))
-            #         response = HttpResponse(
-            #             content_type='application/vnd.ms-excel')  # 这里响应对象获得了一个特殊的mime类型,告诉浏览器这是个excel文件不是html
-            #         response[
-            #             'Content-Disposition'] = 'attachment; filename=reportdata.xls'  # 这里响应对象获得了附加的Content-Disposition协议头,它含有excel文件的名称,文件名随意,当浏览器访问它时,会以"另存为"对话框中使用它.
-            #         workbook.save(response)
-            # return response
 
 def handle_uploaded_file(f):
     with open('some/file/name.txt', 'wb+') as destination:
@@ -798,3 +471,4 @@ def get_column_cell(obj, name):
         # A Django queryset (ManyRelatedManager)
         return ', '.join(unicode(x).strip() for x in attr.all())
     return attr
+'''

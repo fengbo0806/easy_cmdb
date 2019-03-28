@@ -4,7 +4,8 @@ from .models.ips import *
 from .models.venders import *
 from .models.processes import *
 from .models.businesses import Business,Projects
-from .models.encoderserver import ProgramDetail
+from .models.encoderserver import ProgramDetail,Task,typeOfTask,WorkPackage
+
 
 # Register your models here.
 '''
@@ -144,4 +145,22 @@ type of mechine
 '''
 @admin.register(MachineType)
 class MachineTypeadmin(admin.ModelAdmin):
+    pass
+@admin.register(Task)
+class Taskadnub(admin.ModelAdmin):
+    '''
+    taskName
+    startDate
+    endDate
+    typeOf
+    '''
+    pass
+@admin.register(typeOfTask)
+class typeOfTaskadmin(admin.ModelAdmin):
+    '''
+    typeName
+    '''
+    pass
+@admin.register(WorkPackage)
+class WorkPackageadmin(admin.ModelAdmin):
     pass

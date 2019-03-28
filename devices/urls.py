@@ -22,4 +22,7 @@ urlpatterns = [
     path('reboot', views.rebootDev),
     path('detail', views.detailDev),
     path('encoders',views.encoders),
+    path('listalltask',views.taskList),
+    path('detailwork',views.workPakgeList),
+    path('daily',views.workDaily),
 ]
