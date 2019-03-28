@@ -19,7 +19,7 @@ class Projects(models.Model):
     '''
     name = models.CharField(max_length=255)
     introduction = models.TextField(blank=True, null=True)
-    typeOfBusiness = models.ManyToManyField('Business', blank=True, null=True)
+    typeOfBusiness = models.ManyToManyField('Business', blank=True,)
 
     def __str__(self):
         return str(self.name)

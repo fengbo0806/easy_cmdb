@@ -21,4 +21,5 @@ urlpatterns = [
     path('listall/', views.listAllDev),
     path('reboot', views.rebootDev),
     path('detail', views.detailDev),
+    path('encoders',views.encoders),
 ]

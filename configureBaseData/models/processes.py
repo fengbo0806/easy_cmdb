@@ -11,7 +11,7 @@ class typeOfProcesses(models.Model):
         return str(self.name)
 
 
-class process(models.Model):
+class Process(models.Model):
     aliasName = models.CharField(max_length=30, null=True, blank=True)
     name = models.CharField(max_length=255, )
     runMachine = models.ForeignKey(Machine, on_delete=models.SET_NULL, null=True, blank=True)
@@ -24,7 +24,7 @@ class process(models.Model):
         return str(self.name)
 
 
-class services(models.Model):
+class Services(models.Model):
     aliasName = models.CharField(max_length=30, null=True, blank=True)
     name = models.CharField(max_length=255)
     runMachine = models.ForeignKey(Machine, on_delete=models.SET_NULL, null=True, blank=True)

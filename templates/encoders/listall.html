@@ -1,0 +1,28 @@
+{% extends 'basic.html' %}
+{% block subTitle %}
+    明细
+{% endblock %}
+{% block content %}
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+            <tr>
+                <th>设备ip</th>
+                <th>频道名称</th>
+                <th>输出组播</th>
+                <th>播放连接</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in programlist %}
+            <tr>
+                <td>{{ item.machine__ipv4__ip }}</td>
+                <td>{{ item.name }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

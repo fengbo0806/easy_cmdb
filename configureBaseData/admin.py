@@ -4,6 +4,7 @@ from .models.ips import *
 from .models.venders import *
 from .models.processes import *
 from .models.businesses import Business,Projects
+from .models.encoderserver import ProgramDetail
 
 # Register your models here.
 '''
@@ -46,14 +47,14 @@ class processLine(admin.StackedInline):
     extra = 0
     fieldsets = ((None, {'fields': (('aliasName', 'name', 'typeOfProcess'),)},),)
     raw_id_fields = ('runMachine',)
-    model = process
+    model = Process
 
 
 class servicesLine(admin.StackedInline):
     extra = 0
     fieldsets = ((None, {'fields': (('aliasName', 'name', 'typeOfProcess'),)},),)
     raw_id_fields = ('runMachine',)
-    model = services
+    model = Services
 
 
 @admin.register(typeOfProcesses)
@@ -62,12 +63,12 @@ class typeOfProcessAdmin(admin.ModelAdmin):
     list_display = ('name', 'typeOfBusinesses')
 
 
-@admin.register(services)
+@admin.register(Services)
 class servicesAdmin(admin.ModelAdmin):
     fieldsets = ((None, {'fields': (('aliasName', 'name', 'typeOfProcess'),('runMachine'),), }),)
     list_display = ('aliasName', 'name', 'typeOfProcess')
 
-@admin.register(process)
+@admin.register(Process)
 class processAdmin(admin.ModelAdmin):
     fieldsets = ((None, {'fields': (('aliasName', 'name', 'typeOfProcess'),('runMachine'),), }),)
     list_display = ('aliasName', 'name', 'typeOfProcess')
@@ -91,13 +92,13 @@ Machinglocate
 class MachingLocateLine(admin.StackedInline):
     extra = 0
     fieldsets = ((None, {'fields': (('Ulocate',),)},),)
-    model = MachingLocate
+    model = MachineLocate
 
 
 class MachingRackLine(admin.StackedInline):  # TabularInline
     extra = 0
     fieldsets = ((None, {'fields': (('floor', 'locate', 'note'),)},),)
-    model = MachingRack
+    model = MachineRack
 
 
 @admin.register(MachineRoom)
@@ -107,7 +108,7 @@ class machineRoomAdmin(admin.ModelAdmin):
     list_display = ('name', 'address', 'note')
 
 
-@admin.register(MachingRack)
+@admin.register(MachineRack)
 class machineRackAdmin(admin.ModelAdmin):
     fieldsets = ((None, {'fields': (('floor', 'locate', 'note'),), }),)
     inlines = [MachingLocateLine, ]
@@ -128,3 +129,19 @@ class machineRoomAdmin(admin.ModelAdmin):
     fieldsets = ((None, {'fields': (('name', 'note'),), }),)
     inlines = [VenderStaffLine, ]
     list_display = ('name', 'note')
+
+'''
+encoders
+'''
+
+
+@admin.register(ProgramDetail)
+class ProgramDetaildmin(admin.ModelAdmin):
+    pass
+
+'''
+type of mechine
+'''
+@admin.register(MachineType)
+class MachineTypeadmin(admin.ModelAdmin):
+    pass

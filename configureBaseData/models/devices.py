@@ -7,10 +7,11 @@ class Machine(models.Model):
     '''
     the detail information for machine, just the basic info.
     '''
-    machine_locate = models.ForeignKey('MachingLocate', on_delete=models.CASCADE, blank=True, null=True)
+    machine_locate = models.ForeignKey('MachineLocate', on_delete=models.CASCADE, blank=True, null=True)
     machine_vender = models.ForeignKey('Vender', on_delete=models.CASCADE, blank=True, null=True)
     machine_asset_number = models.CharField(max_length=255)
     machine_os = models.CharField(max_length=255)
+    machine_type = models.ForeignKey('MachineType', on_delete=models.CASCADE, blank=True, null=True)
     machine_eth_num = models.IntegerField()
     login_user = models.CharField(max_length=255, blank=True, null=True)
     login_method = models.CharField(max_length=255, blank=True, null=True)
@@ -20,7 +21,8 @@ class Machine(models.Model):
     # machine_admin = models.CharField()
     def __str__(self):
         return str(self.machine_asset_number)
-
+class MachineType(models.Model):
+    name=models.CharField(max_length=255)
 
 class MachineRoom(models.Model):
     '''
@@ -34,7 +36,7 @@ class MachineRoom(models.Model):
         return str(self.name)
 
 
-class MachingRack(models.Model):
+class MachineRack(models.Model):
     '''
     describe the detail maching rack locate
     '''
@@ -47,12 +49,12 @@ class MachingRack(models.Model):
         return str(self.room) + ':' + str(self.floor) + '楼:' + str(self.locate) + '柜'
 
 
-class MachingLocate(models.Model):
+class MachineLocate(models.Model):
     '''
     describe the macing locate
     '''
     Ulocate = models.IntegerField()
-    rack = models.ForeignKey('MachingRack', on_delete=models.CASCADE)
+    rack = models.ForeignKey('MachineRack', on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ('Ulocate', 'rack')
