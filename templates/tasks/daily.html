@@ -1,0 +1,37 @@
+{% extends 'basic.html' %}
+{% block subTitle %}
+    每日任务
+{% endblock %}
+{% block content %}
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead>
+            <tr>
+                <th width="5%" style="color: #2b669a">
+                    序号
+                </th>
+                <th>启止时间</th>
+                <th>频道名称</th>
+                <th>节目名称</th>
+                <th>输入地址</th>
+                <th>http流地址</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in message %}
+                <tr>
+                    <td><a href="/admin/flows/video_flow/{{ item.id }}/change">{{ forloop.counter }}</a></td>
+                    <td>
+                        {{ item.startDate|date:"m-d H:i" }}
+                        <br/>
+                        {{ item.endDate |date:"m-d H:i" }}
+                    </td>
+                    <td>{{ item.programChannel }}</td>
+                    <td>{{ item.programName }}</td>
+                    <td>{{ item.inPutStream }}</td>
+                    <td>{{ item.programName }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}

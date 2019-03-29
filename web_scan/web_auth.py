@@ -3,6 +3,14 @@ import re
 from bs4 import BeautifulSoup
 
 # Sample Basic Auth Url with login values as username and password
+'''
+    rowid = models.IntegerField()
+    name = models.CharField(max_length=255)
+    switchStatus = models.BooleanField()
+    programStatus = models.IntegerField()
+    height = models.IntegerField()
+    width = models.IntegerField()
+    outbandwidth = models.IntegerField()'''
 
 url2 = "http:///cgi-bin/status.cgi"
 user2 = ""
@@ -98,17 +106,15 @@ class loginEncoder:
         '''
         test login the realmagic code
         '''
-        url = "http://10.78.64.193/chinese/index.cgi?status___60"
-        user = "admin"
-        passwd = "cntv.cn@real"
-        auth_values = (user, passwd)
+        url = "http://%s/chinese/index.cgi?status___60"%(self.ipadd)
+        auth_values = (self.username, self.passwd)
         response = requests.get(url, auth=auth_values)
         soup = BeautifulSoup(response.content, "html.parser", )
         midleresult = dict()
         resultdict = dict()
         encoderKeyValueCount = 0
         loopCheckNumber = 0
-        encoderKeyValue = ('id', 'status', 'name', 'width', 'height', 'outbandwidth', '7')
+        encoderKeyValue = ('id', 'switchstatus', 'name', 'programstatus', 'video', 'sound', 'load')
         con = soup.find(text=re.compile('频道'))
         con = con.parent.parent
         for sibling in con.next_siblings:
@@ -119,16 +125,49 @@ class loginEncoder:
                         midleresult[encoderKeyValue[encoderKeyValueCount]] = child.text.strip()
                         encoderKeyValueCount = encoderKeyValueCount + 1
                 resultdict[loopCheckNumber] = midleresult
-                midleresult=dict()
+                midleresult = dict()
                 loopCheckNumber = loopCheckNumber + 1
                 encoderKeyValueCount = 0
-        print(resultdict)
+        for item in resultdict:
+            if resultdict[item]['switchstatus'] == 'ON':
+                resultdict[item]['switchstatus'] = True
+            else:
+                resultdict[item]['switchstatus'] = False
+            if int(resultdict[item]['programstatus'][0]) == 0:
+                resultdict[item]['programstatus'] = 1
+        for item in resultdict:
+            getEncUrl = "http://%s/chinese/index.cgi?enc_setup___%d" % (self.ipadd,item)
 
-        return
+            response = requests.get(getEncUrl, auth=auth_values)
+            soup = BeautifulSoup(response.content, "html.parser", )
+            '''
+                rowid = models.IntegerField()
+                name = models.CharField(max_length=255)
+                switchStatus = models.BooleanField()
+                programStatus = models.IntegerField()
+                height = models.IntegerField()
+                width = models.IntegerField()
+                outbandwidth = models.IntegerField()'''
+            resultdict[item]['outbandwidth'] = soup.find('input', id='enc_total_bitrate')["value"]
+            resultdict[item]['width'] = soup.find('input', id='enc_video_cwidth')["value"]
+            resultdict[item]['height'] = soup.find('input', id='enc_video_cheight')["value"]
+            '''
+            drop unuse data
+            '''
+            resultdict[item].pop('video')
+            resultdict[item].pop('sound')
+            resultdict[item].pop('load')
+            # print(resultdict)
+            '''
+            {0: {'id': '0', 'switchstatus': True, 'name': '体育-01', 'programstatus': 1, 'video': '0', 'sound': '0', 'load': '0%', 'outbandwidth': '8000', 'width': '720', 'height': '576'}, 1: {'id': '1', 'switchstatus': True, 'name': '体育-02', 'programstatus': 1, 'video': '0', 'sound': '0', 'load': '0%', 'outbandwidth': '8000', 'width': '720', 'height': '576'}, 2: {'id': '2', 'switchstatus': True, 'name': '体育-03', 'programstatus': 1, 'video': '0', 'sound': '0', 'load': '0%', 'outbandwidth': '8000', 'width': '720', 'height': '576'}, 3: {'id': '3', 'switchstatus': True, 'name': '体育-04', 'programstatus': 1, 'video': '0', 'sound': '0', 'load': '0%', 'outbandwidth': '8000', 'width': '720', 'height': '576'}, 4: {'id': '4', 'switchstatus': True, 'name': '体育-05', 'programstatus': 1, 'video': '0', 'sound': '0', 'load': '0%', 'outbandwidth': '8000', 'width': '720', 'height': '576'}, 5: {'id': '5', 'switchstatus': True, 'name': '体育-06', 'programstatus': 1, 'video': '0', 'sound': '0', 'load': '1%', 'outbandwidth': '8000', 'width': '720', 'height': '576'}, 6: {'id': '6', 'switchstatus': True, 'name': '体育-07', 'programstatus': '5672[Q:100%]', 'video': '493187', 'sound': '924786', 'load': '4%', 'outbandwidth': '8000', 'width': '720', 'height': '576'}, 7: {'id': '7', 'switchstatus': True, 'name': '体育-08', 'programstatus': '9927[Q:100%]', 'video': '1139577', 'sound': '2136714', 'load': '4%', 'outbandwidth': '8000', 'width': '720', 'height': '576'}, 8: {'id': '8', 'switchstatus': True, 'name': '体育-09', 'programstatus': '6449[Q:100%]', 'video': '1138866', 'sound': '2135479', 'load': '3%', 'outbandwidth': '8000', 'width': '720', 'height': '576'}, 9: {'id': '9', 'switchstatus': True, 'name': '体育-10', 'programstatus': '5825[Q:100%]', 'video': '1139513', 'sound': '2136688', 'load': '3%', 'outbandwidth': '8000', 'width': '720', 'height': '576'}, 10: {'id': '10', 'switchstatus': False, 'name': '体育01-CDN', 'programstatus': 1, 'video': '0', 'sound': '0', 'load': '0%', 'outbandwidth': '1000', 'width': '960', 'height': '540'}, 11: {'id': '11', 'switchstatus': False, 'name': '体育02-CDN', 'programstatus': 1, 'video': '0', 'sound': '0', 'load': '0%', 'outbandwidth': '1000', 'width': '960', 'height': '540'}, 12: {'id': '12', 'switchstatus': False, 'name': '体育03-CDN', 'programstatus': 1, 'video': '0', 'sound': '0', 'load': '0%', 'outbandwidth': '1000', 'width': '960', 'height': '540'}, 13: {'id': '13', 'switchstatus': False, 'name': '体育04-CDN', 'programstatus': 1, 'video': '0', 'sound': '0', 'load': '0%', 'outbandwidth': '1000', 'width': '960', 'height': '540'}, 14: {'id': '14', 'switchstatus': False, 'name': '体育05-CDN', 'programstatus': 1, 'video': '0', 'sound': '0', 'load': '0%', 'outbandwidth': '2000', 'width': '960', 'height': '540'}, 15: {'id': '15', 'switchstatus': False, 'name': '体育06-CDN', 'programstatus': 1, 'video': '0', 'sound': '0', 'load': '0%', 'outbandwidth': '1000', 'width': '960', 'height': '540'}, 16: {'id': '16', 'switchstatus': False, 'name': '体育07-CDN', 'programstatus': 1, 'video': '0', 'sound': '0', 'load': '0%', 'outbandwidth': '1000', 'width': '960', 'height': '540'}, 17: {'id': '17', 'switchstatus': False, 'name': '体育08-CDN', 'programstatus': 1, 'video': '0', 'sound': '0', 'load': '0%', 'outbandwidth': '1000', 'width': '960', 'height': '540'}, 18: {'id': '18', 'switchstatus': False, 'name': '体育09-CDN', 'programstatus': 1, 'video': '0', 'sound': '0', 'load': '0%', 'outbandwidth': '1000', 'width': '960', 'height': '540'}, 19: {'id': '19', 'switchstatus': False, 'name': '体育010-CDN', 'programstatus': 1, 'video': '0', 'sound': '0', 'load': '0%', 'outbandwidth': '1000', 'width': '960', 'height': '540'}}
+            
+            '''
+        return resultdict
 
 
-# testa = loginEncoder(ipadd='', username='sdf', passwd='sdf', targetType='sdf')
-# testa.realmagic()
+testa = loginEncoder(ipadd='', username='sdf', passwd='sdf', targetType='sdf')
+aaa = testa.realmagic()
+print(aaa)
 r8 = requests.session()
 getDeatilURL = 'http:///html/encoder/setup3.html?referer=1&id=0'
 'get_device.cgi?rnd=" + Math.random()'
@@ -143,33 +182,37 @@ RequestURL = 'http:///get_encoder_1109.cgi?rnd=0.736911286746887'
 # testlist = list()
 url1 = "http://10.78.64.193/chinese/index.cgi?status___60"
 url2 = "http://10.78.64.193/chinese/index.cgi?input_setup___0"
+url3 = "http://10.78.64.193/chinese/index.cgi?enc_setup___0"
 '''
 <frame src="index.cgi?input_setup___0" name="mainFrame" id="mainFrame" title="mainFrame" noresize="noresize">'''
-user = "admin"
-passwd = "cntv.cn@real"
-auth_values = (user, passwd)
-response=requests.session()
-response.get(url1, auth=auth_values)
-con = response.get(url2,auth=auth_values).content
-
-soup = BeautifulSoup(con, "html.parser", )
-print(soup.prettify())
-# with open('ruima.html') as con:
+# user = "admin"
+# passwd = "cntv.cn@real"
+# auth_values = (user, passwd)
+# response=requests.session()
+# response.get(url1, auth=auth_values)
+# con = response.get(url3,auth=auth_values).content
+#
+# soup = BeautifulSoup(con, "html.parser", )
+# print(soup.prettify())
+# with open('ruima2.html') as con:
 #     soup = BeautifulSoup(con, "html.parser", )
-#     # print(soup.find_all('tr'))
-#     # for link in soup.find_all('a'):
-#     #     print(link.get('href'))
-#     # for child in soup.tr.children:
-#     #     print(child)
-#     #     print('*'*10)
-#     # for link in soup.find_all('tr'):
-#     #     # for con in link.contents:
-#     #         # if len(con)>1:
-#     #     testlist.append(link.contents[5])
-#     #         # print(con)
-#     #     print('-'*10)
-#     # print(testlist)
-#     # print(soup.a.next_siblings)
+#
+#     print(soup.find('input', id='enc_total_bitrate')["value"])
+#     print(soup.find('input', id='enc_video_cwidth')["value"])
+#     print(soup.find('input', id='enc_video_cheight')["value"])
+    # for link in soup.find_all('a'):
+    #     print(link.get('href'))
+    # for child in soup.tr.children:
+    #     print(child)
+    #     print('*'*10)
+    # for link in soup.find_all('tr'):
+    #     # for con in link.contents:
+    #         # if len(con)>1:
+    #     testlist.append(link.contents[5])
+    #         # print(con)
+    #     print('-'*10)
+    # print(testlist)
+    # print(soup.a.next_siblings)
 #
 #     midleresult = dict()
 #     resultdict = dict()
@@ -195,8 +238,9 @@ print(soup.prettify())
     {0: {'id': '0', 'status': 'ON', 'name': '移动直播01', 'width': '0[Q:0%]', 'height': '0', 'outbandwidth': '0', '7': '1%'}, 1: {'id': '1', 'status': 'ON', 'name': '移动直播02', 'width': '0[Q:0%]', 'height': '0', 'outbandwidth': '0', '7': '1%'}, 2: {'id': '2', 'status': 'ON', 'name': '移动直播03', 'width': '1234[Q:100%]', 'height': '179120', 'outbandwidth': '335864', '7': '0%'}, 3: {'id': '3', 'status': 'ON', 'name': '移动直播04', 'width': '1335[Q:100%]', 'height': '179226', 'outbandwidth': '336061', '7': '0%'}, 4: {'id': '4', 'status': 'ON', 'name': '移动直播05', 'width': '0[Q:0%]', 'height': '0', 'outbandwidth': '0', '7': '0%'}, 5: {'id': '5', 'status': 'ON', 'name': '移动直播06', 'width': '0[Q:0%]', 'height': '0', 'outbandwidth': '0', '7': '0%'}, 6: {'id': '6', 'status': 'ON', 'name': '移动直播07', 'width': '0[Q:0%]', 'height': '0', 'outbandwidth': '0', '7': '0%'}, 7: {'id': '7', 'status': 'ON', 'name': '移动直播08', 'width': '0[Q:0%]', 'height': '0', 'outbandwidth': '0', '7': '0%'}, 8: {'id': '8', 'status': 'ON', 'name': '移动直播09', 'width': '0[Q:0%]', 'height': '0', 'outbandwidth': '0', '7': '0%'}, 9: {'id': '9', 'status': 'ON', 'name': '移动直播10', 'width': '0[Q:0%]', 'height': '0', 'outbandwidth': '0', '7': '0%'}, 10: {'id': '10', 'status': 'ON', 'name': '移动直播11', 'width': '0[Q:0%]', 'height': '0', 'outbandwidth': '0', '7': '0%'}, 11: {'id': '11', 'status': 'ON', 'name': '移动直播12', 'width': '0[Q:0%]', 'height': '0', 'outbandwidth': '0', '7': '0%'}, 12: {'id': '12', 'status': 'ON', 'name': '移动直播13', 'width': '0[Q:0%]', 'height': '0', 'outbandwidth': '0', '7': '0%'}, 13: {'id': '13', 'status': 'ON', 'name': '移动直播14', 'width': '0[Q:0%]', 'height': '0', 'outbandwidth': '0', '7': '0%'}, 14: {'id': '14', 'status': 'ON', 'name': '移动直播15', 'width': '0[Q:0%]', 'height': '0', 'outbandwidth': '0', '7': '0%'}, 15: {'id': '15', 'status': 'ON', 'name': '移动直播16', 'width': '0[Q:0%]', 'height': '0', 'outbandwidth': '0', '7': '0%'}, 16: {'id': '16', 'status': 'ON', 'name': '移动直播17', 'width': '0[Q:0%]', 'height': '0', 'outbandwidth': '0', '7': '0%'}, 17: {'id': '17', 'status': 'ON', 'name': '移动直播18', 'width': '0[Q:0%]', 'height': '0', 'outbandwidth': '0', '7': '0%'}, 18: {'id': '18', 'status': 'ON', 'name': '移动直播19', 'width': '0[Q:0%]', 'height': '0', 'outbandwidth': '0', '7': '0%'}, 19: {'id': '19', 'status': 'ON', 'name': '移动直播20', 'width': '0[Q:0%]', 'height': '0', 'outbandwidth': '0', '7': '0%'}}
     
 '''
-    # print(sibling.contents[1].get_text(),sibling.contents[3].get_text())
-    # print(sibling.td.get_text())
+
+# print(sibling.contents[1].get_text(),sibling.contents[3].get_text())
+# print(sibling.td.get_text())
 
 # import json
 
