@@ -2,6 +2,10 @@ import requests
 import re
 from bs4 import BeautifulSoup
 
+'''
+selenium
+'''
+
 # Sample Basic Auth Url with login values as username and password
 '''
     rowid = models.IntegerField()
