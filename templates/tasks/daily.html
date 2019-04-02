@@ -13,13 +13,15 @@
                 <th>启止时间</th>
                 <th>频道名称</th>
                 <th>节目名称</th>
+                <th>源地址</th>
                 <th>输入地址</th>
                 <th>http流地址</th>
             </tr>
             </thead>
             <tbody>
-            {% for item in message %}
+            {% for key,item in message.items %}
                 <tr>
+                {{ item }}
                     <td><a href="/admin/flows/video_flow/{{ item.id }}/change">{{ forloop.counter }}</a></td>
                     <td>
                         {{ item.startDate|date:"m-d H:i" }}
@@ -29,7 +31,8 @@
                     <td>{{ item.programChannel }}</td>
                     <td>{{ item.programName }}</td>
                     <td>{{ item.inPutStream }}</td>
-                    <td>{{ item.programName }}</td>
+                    <th>{{ item.inPutFirst }}</th>
+                    <td>{{ item.outPutHttpFlow }}</td>
                 </tr>
             {% endfor %}
         </table>

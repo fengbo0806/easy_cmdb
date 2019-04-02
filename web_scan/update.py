@@ -13,17 +13,17 @@ def updateEncoderInfo():
     device
     :return:
     '''
-    messages = {'0': {'rowid': 0, 'switchStatus': True, 'name': '银川公共-公网天维', 'width': 576, 'height': 720,
+    messages = {'0': {'rowid': 0, 'switchStatus': True, 'name': '银川公共-公网天维', 'width': 576, 'height': 720,'programStatus':1,
                       'outbandwidth': '2500'},
-                '1': {'rowid': 1, 'switchStatus': -True, 'name': '杭州新闻-公网天维', 'width': 720, 'height': 576,
+                '1': {'rowid': 1, 'switchStatus': True, 'name': '杭州新闻-公网天维', 'width': 720, 'height': 576,'programStatus':1,
                       'outbandwidth': '2500'},
-                '2': {'rowid': 2, 'switchStatus': True, 'name': '广州新闻-公网天维', 'width': 576, 'height': 720,
+                '2': {'rowid': 2, 'switchStatus': True, 'name': '广州新闻-公网天维', 'width': 576, 'height': 720,'programStatus':1,
                       'outbandwidth': '2500'},
-                '3': {'rowid': 3, 'switchStatus': True, 'name': '福州新闻-公网天维', 'width': 576, 'height': 576,
+                '3': {'rowid': 3, 'switchStatus': True, 'name': '福州新闻-公网天维', 'width': 576, 'height': 576,'programStatus':1,
                       'outbandwidth': '2500'},
-                '4': {'rowid': 4, 'switchStatus': True, 'name': '郑州新闻-公网天维', 'width': 720, 'height': 576,
+                '4': {'rowid': 4, 'switchStatus': True, 'name': '郑州新闻-公网天维', 'width': 720, 'height': 576,'programStatus':1,
                       'outbandwidth': '2500'},
-                '5': {'rowid': 5, 'switchStatus': True, 'name': '兰州新闻-公网天维', 'width': 720, 'height': 576,
+                '5': {'rowid': 5, 'switchStatus': True, 'name': '兰州新闻-公网天维', 'width': 720, 'height': 576,'programStatus':1,
                       'outbandwidth': '2500'}}
     tagMachine = Machine.objects.get(machineType__name='编码器')
     n=0

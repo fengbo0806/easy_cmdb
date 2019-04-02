@@ -49,7 +49,8 @@ def encoders(request):
     :return:
     '''
     if request.method == 'GET':
-        query4 = ProgramDetail.objects.filter(machine__ipv4__isManage='True',machine__machineType__name='编码器').order_by(
+        query4 = ProgramDetail.objects.filter(machine__ipv4__isManage='True',
+                                              machine__machineType__name='编码器').order_by(
             'machine', 'rowid').values('name', 'machine__machineAssetNumber',
                                        'machine__ipv4__ip')
 
@@ -135,8 +136,22 @@ def workDaily(request):
             search_start_time = today
             search_end_time = tomorrow
     message_count = message.aggregate(Count('id'))
+    dictCount=0
+    messagedict=dict()
+    for item in message.values('id', 'startDate', 'endDate', 'programChannel', 'programName', ):
+        print(item)
+        # taskMessage = item.values('id', 'startDate', 'endDate', 'programChannel', 'programName', )
+        # print(item.endDate)
+        programMessage = ProgramDetail.objects.filter(name=item['programChannel']).values('programStatus','inPutFirst',
+                                                                                          'outPutHttpFlow')
+        for subitem in programMessage:
+            print(subitem)
+            messagedict[dictCount] = item
+            messagedict[dictCount].update(subitem)
+        dictCount=dictCount+1
+    print(messagedict)
     return render_to_response('tasks/daily.html',
-                              {'message': message, 'message_count': message_count, 'today': search_start_time,
+                              {'message': messagedict, 'message_count': message_count, 'today': search_start_time,
                                'tomorrow': search_end_time, 'search_field': search_field})
 
 
