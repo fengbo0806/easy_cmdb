@@ -81,7 +81,7 @@ device
 
 @admin.register(Machine)
 class deviceAdmin(admin.ModelAdmin):
-    list_display = ('machine_locate', 'machine_vender', 'machine_asset_number', 'machine_os')
+    list_display = ('machineLocate', 'machineVender', 'machineAssetNumber', 'machineOs')
     inlines = [IpV4Line, processLine, ]
 
 

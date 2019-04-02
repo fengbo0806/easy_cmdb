@@ -49,11 +49,12 @@ def encoders(request):
     :return:
     '''
     if request.method == 'GET':
-        query4 = ProgramDetail.objects.filter(machine__ipv4__isManage='True', machine__machine_type__name='1').order_by(
-            'machine', 'rowid').values('name', 'machine__machine_asset_number',
+        query4 = ProgramDetail.objects.filter(machine__ipv4__isManage='True',machine__machineType__name='编码器').order_by(
+            'machine', 'rowid').values('name', 'machine__machineAssetNumber',
                                        'machine__ipv4__ip')
-        from web_scan import update
-        update.updateEncoderInfo()
+
+        # from web_scan import update
+        # update.updateEncoderInfo()
         return render(request, 'encoders/listall.html', {'programlist': query4})
 
 
