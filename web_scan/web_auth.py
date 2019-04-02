@@ -141,7 +141,8 @@ class loginEncoder:
                 resultdict[item]['programstatus'] = 1
         for item in resultdict:
             getEncUrl = "http://%s/chinese/index.cgi?enc_setup___%d" % (self.ipadd,item)
-
+            getIputUrl = "http://%s/chinese/index.cgi?input_setup___%d" % (self.ipadd,item)
+            getOutUrl = "http://%s/chinese/index.cgi?output_setup___%d" % (self.ipadd, item)
             response = requests.get(getEncUrl, auth=auth_values)
             soup = BeautifulSoup(response.content, "html.parser", )
             '''
@@ -169,9 +170,9 @@ class loginEncoder:
         return resultdict
 
 
-testa = loginEncoder(ipadd='', username='sdf', passwd='sdf', targetType='sdf')
-aaa = testa.realmagic()
-print(aaa)
+# testa = loginEncoder(ipadd='10.78.64.195', username='admin', passwd='cntv.cn@real', targetType='sdf')
+# aaa = testa.realmagic()
+# print(aaa)
 r8 = requests.session()
 getDeatilURL = 'http:///html/encoder/setup3.html?referer=1&id=0'
 'get_device.cgi?rnd=" + Math.random()'
@@ -187,22 +188,35 @@ RequestURL = 'http:///get_encoder_1109.cgi?rnd=0.736911286746887'
 url1 = "http://10.78.64.193/chinese/index.cgi?status___60"
 url2 = "http://10.78.64.193/chinese/index.cgi?input_setup___0"
 url3 = "http://10.78.64.193/chinese/index.cgi?enc_setup___0"
+url4 = "http://10.78.64.193/chinese/index.cgi?output_setup___0"
 '''
-<frame src="index.cgi?input_setup___0" name="mainFrame" id="mainFrame" title="mainFrame" noresize="noresize">'''
+<frame src="index.cgi?input_setup___0" name="mainFrame" id="mainFrame" title="mainFrame" noresize="noresize">
+<input class="edit" name="ipinput_address___0" size="39" type="text" value="http://192.168.169.12:8088/yuxuan1 "/>
+      <span class="unwrap_label">
+       udp://@228.2.1.15:1000
+      </span>
+'''
 # user = "admin"
 # passwd = "cntv.cn@real"
 # auth_values = (user, passwd)
 # response=requests.session()
 # response.get(url1, auth=auth_values)
-# con = response.get(url3,auth=auth_values).content
+# con = response.get(url4,auth=auth_values).content
 #
 # soup = BeautifulSoup(con, "html.parser", )
 # print(soup.prettify())
-# with open('ruima2.html') as con:
-#     soup = BeautifulSoup(con, "html.parser", )
+with open('ruimaoutput.html') as con:
+    soup = BeautifulSoup(con, "html.parser", )
 #
-#     print(soup.find('input', id='enc_total_bitrate')["value"])
-#     print(soup.find('input', id='enc_video_cwidth')["value"])
+#     print(soup.find('input', attrs={'name':'ipinput_address___0'})["value"])
+#     print(soup.find_all('span',attrs={'class':'unwrap_label'}))
+    conslut = soup.find_all('span',attrs={'class':'unwrap_label'})
+    for i in conslut:
+        print(i.get_text().strip())
+        '''
+        http://10.78.64.193:4001/tiyu01
+udp://@228.2.1.15:1000
+        '''
 #     print(soup.find('input', id='enc_video_cheight')["value"])
     # for link in soup.find_all('a'):
     #     print(link.get('href'))

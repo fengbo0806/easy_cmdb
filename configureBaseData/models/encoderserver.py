@@ -57,6 +57,7 @@ class WorkPackage(models.Model):
     programName = models.CharField(verbose_name='节目名称', max_length=255, )
     inPutStream = models.CharField(verbose_name='源地址', max_length=255, )
     notes = models.TextField(verbose_name='备注', null=True, blank=True)
+    adminStaff = models.ForeignKey('Staff', on_delete=None,blank=True,default=None)
 
     class Meta:
         verbose_name = '工作包'
