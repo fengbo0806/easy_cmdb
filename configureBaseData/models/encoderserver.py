@@ -19,6 +19,8 @@ class ProgramDetail(models.Model):
         return str(self.name)
     class Meta:
         unique_together = ('machine', 'rowid',)
+        verbose_name='频道表'
+        verbose_name_plural='频道表'
 
 
 
@@ -67,3 +69,6 @@ class Staff(models.Model):
     task = models.ManyToManyField(Task,blank=True,)
     department = models.CharField(verbose_name='需求部门', choices=department, blank=True, max_length=30)
     staffName = models.CharField(verbose_name='负责人', blank=True, max_length=30)
+    class Meta:
+        verbose_name='业务人员'
+        verbose_name_plural='业务人员'

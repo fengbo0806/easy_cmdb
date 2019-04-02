@@ -7,22 +7,31 @@ class Machine(models.Model):
     '''
     the detail information for machine, just the basic info.
     '''
-    machine_locate = models.ForeignKey('MachineLocate', on_delete=models.CASCADE, blank=True, null=True)
-    machine_vender = models.ForeignKey('Vender', on_delete=models.CASCADE, blank=True, null=True)
-    machine_asset_number = models.CharField(max_length=255)
-    machine_os = models.CharField(max_length=255)
-    machine_type = models.ForeignKey('MachineType', on_delete=models.CASCADE, blank=True, null=True)
-    machine_eth_num = models.IntegerField()
-    login_user = models.CharField(max_length=255, blank=True, null=True)
-    login_method = models.CharField(max_length=255, blank=True, null=True)
-    login_port = models.IntegerField()
+    machineLocate = models.ForeignKey('MachineLocate', on_delete=models.CASCADE, blank=True, null=True)
+    machineVender = models.ForeignKey('Vender', on_delete=models.CASCADE, blank=True, null=True)
+    machineAssetNumber = models.CharField(max_length=255)
+    machineOs = models.CharField(max_length=255)
+    machineType = models.ForeignKey('MachineType', on_delete=models.CASCADE, blank=True, null=True)
+    machineEthNum = models.IntegerField()
+    loginUser = models.CharField(max_length=255, blank=True, null=True)
+    loginMethod = models.CharField(max_length=255, blank=True, null=True)
+    loginPort = models.IntegerField()
 
     # machine_service = models.CharField()
     # machine_admin = models.CharField()
     def __str__(self):
-        return str(self.machine_asset_number)
+        return str(self.machineAssetNumber)
+
+    class Meta:
+        verbose_name = '机器'
+
+
 class MachineType(models.Model):
-    name=models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    def __str__(self):
+        return str(self.name)
+    class Meta:
+        verbose_name = '设备类型'
 
 
 class MachineRoom(models.Model):
@@ -35,6 +44,9 @@ class MachineRoom(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+    class Meta:
+        verbose_name = '机房'
 
 
 class MachineRack(models.Model):
@@ -49,6 +61,9 @@ class MachineRack(models.Model):
     def __str__(self):
         return str(self.room) + ':' + str(self.floor) + '楼:' + str(self.locate) + '柜'
 
+    class Meta:
+        verbose_name = '机架'
+
 
 class MachineLocate(models.Model):
     '''
@@ -59,6 +74,7 @@ class MachineLocate(models.Model):
 
     class Meta:
         unique_together = ('Ulocate', 'rack')
+        verbose_name = '设备位置'
 
     def __str__(self):
         return str(self.rack) + '-U' + str(self.Ulocate)
