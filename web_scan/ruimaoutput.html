@@ -1,0 +1,1822 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+ <head>
+  <meta content="no-cache" http-equiv="pragma"/>
+  <title>
+   Output Setup
+  </title>
+  <link href="global.css" rel="stylesheet" type="text/css"/>
+  <script language="JavaScript">
+   function checkIP2(sIPAddress)
+{
+    var exp=/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;		
+    var reg = sIPAddress.match(exp);	
+    var ErrMsg= "无效的输入:" + sIPAddress;
+	
+    if(reg==null)
+    {
+        alert(ErrMsg);
+		return false;
+    }
+	return true;
+}
+
+function input_check()
+{
+	var fm = window.document.fm_output_setup;
+		
+	//if(! checkIP2(fm.enc_outip___0.value)) return false;
+	//if(! checkIP2(fm.enc_outip1___0.value)) return false;
+			
+	return true;
+}
+
+function switch_to_channel(index)
+{	
+	if("999" != index)
+	window.document.cookie="CurrentChannel="+index; 
+	location.href="index.cgi?output_setup___"+index;
+}
+  </script>
+  <script src="global.js">
+  </script>
+  <script>
+   function onload_func()
+{   		
+	restore_display("basicoutput");	
+	restore_display("backupoutput");	
+	restore_display("backupoutput2");	
+	restore_display("httplivestream");
+	restore_display("mpegdash");	
+	restore_display("gp3overudportcp");	
+	restore_display("flvoverrtmp");	
+	restore_display("flvoverrtmp2");	
+	restore_display("flvoverrtmp3");
+	restore_display("flvoverrtmp4");
+	restore_display("flvoverrtmp5");
+	restore_display("flvoverrtmp6");
+	restore_display("httpsmoothstream");	
+	restore_display("muxedoutputsetup");	
+	restore_display("fileoutput");	
+}   
+window.onload = onload_func;
+function onbeforeunload_func()
+{	
+	save_display("basicoutput");	
+	save_display("backupoutput");	
+	save_display("backupoutput2");	
+	save_display("httplivestream");		
+	save_display("mpegdash");	
+	save_display("gp3overudportcp");	
+	save_display("flvoverrtmp");	
+	save_display("flvoverrtmp2");	
+	save_display("flvoverrtmp3");
+	save_display("flvoverrtmp4");
+	save_display("flvoverrtmp5");
+	save_display("flvoverrtmp6");
+	save_display("httpsmoothstream");	
+	save_display("muxedoutputsetup");		
+	save_display("fileoutput");	
+}
+window.onbeforeunload = onbeforeunload_func;
+  </script>
+ </head>
+ <body>
+  <span class="client_title">
+   输出设置(0)
+  </span>
+  <img alt="" height="3" name="" src="" style="background-color: #CC0000" width="100%"/>
+  <table border="0" cellpadding="0" cellspacing="0">
+   <tr>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(0); return false;">
+      0
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(1); return false;">
+      1
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(2); return false;">
+      2
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(3); return false;">
+      3
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(4); return false;">
+      4
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(5); return false;">
+      5
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(6); return false;">
+      6
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(7); return false;">
+      7
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(8); return false;">
+      8
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(9); return false;">
+      9
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(10); return false;">
+      10
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(11); return false;">
+      11
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(12); return false;">
+      12
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(13); return false;">
+      13
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(14); return false;">
+      14
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(15); return false;">
+      15
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(16); return false;">
+      16
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(17); return false;">
+      17
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(18); return false;">
+      18
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(19); return false;">
+      19
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(999); return false;">
+      X
+     </a>
+    </td>
+    <td>
+    </td>
+   </tr>
+  </table>
+  <form action="index.cgi?output_setup___0" id="fm_output_setup" method="post" name="fm_output_setup" onsubmit="return input_check();">
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       组播TTL(1~255):
+      </span>
+     </td>
+     <td width="90">
+      <input class="edit" maxlength="3" name="ipout_ttl___0" onkeyup="value=this.value.replace(/\D+/g,'')" size="6" type="text" value="64"/>
+     </td>
+     <td valign="center" width="130">
+      <span class="Label_caption">
+       UDP TOS(0~255):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" maxlength="3" name="ipout_tos___0" onkeyup="value=this.value.replace(/\D+/g,'')" size="3" type="text" value="0"/>
+     </td>
+    </tr>
+    <tr>
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       UDP包间隔(0~1000000us):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" maxlength="7" name="ipout_interval_us___0" onkeyup="value=this.value.replace(/\D+/g,'')" size="6" type="text" value="0"/>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="180">
+      <span class="sub_menu">
+       基本输出:
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="basicoutput_in" onclick="swap_display(this,'basicoutput')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="basicoutput">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       格式:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="ipout_format___0">
+       <option selected="selected" value=" HTTP ">
+        HTTP
+       </option>
+       <option value="UDP">
+        UDP
+       </option>
+       <option value="RTP">
+        RTP
+       </option>
+       <option value="HTTP">
+        HTTP
+       </option>
+       <option value="RTSP">
+        RTSP
+       </option>
+       <option value="MMS">
+        MMS
+       </option>
+       <option value="FLVoHTTP">
+        FLVoHTTP
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       IP地址:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" maxlength="63" name="enc_outip___0" size="26" type="text" value="192.168.1.98"/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       输出端口:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" maxlength="5" name="enc_ipout_port___0" onkeyup="value=this.value.replace(/\D+/g,'')" size="8" type="text" value="4001"/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       UDP输出网卡指定:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="enc_ipout_if___0">
+       <option selected="selected" value=" NIC1 ">
+        NIC1
+       </option>
+       <option value="NIC1">
+        NIC1
+       </option>
+       <option value="NIC2">
+        NIC2
+       </option>
+       <!--NIC_ENABLE_BEG-->
+       <!--3-->
+       <option value="NIC3">
+        NIC3
+       </option>
+       <!--NIC_ENABLE_END-->
+       <!--NIC_ENABLE_BEG-->
+       <!--4-->
+       <option value="NIC4">
+        NIC4
+       </option>
+       <!--NIC_ENABLE_END-->
+       <!--NIC_ENABLE_BEG-->
+       <!--5-->
+       <option value="NIC5">
+        NIC5
+       </option>
+       <!--NIC_ENABLE_END-->
+       <!--NIC_ENABLE_BEG-->
+       <!--6-->
+       <option value="NIC6">
+        NIC6
+       </option>
+       <!--NIC_ENABLE_END-->
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       拉流名称:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="ipout_name___0" size="40" type="text" value="tiyu01 "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       URL:
+      </span>
+     </td>
+     <td>
+      <span class="unwrap_label">
+       http://10.78.64.193:4001/tiyu01
+      </span>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="180">
+      <span class="sub_menu">
+       备份输出:
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="backupoutput_in" onclick="swap_display(this,'backupoutput')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="backupoutput">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       使能:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="enc_ipout2_enable___0">
+       <option selected="selected" value=" ON ">
+        ON
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       格式:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="ipout_format1___0">
+       <option selected="selected" value=" UDP ">
+        UDP
+       </option>
+       <option value="UDP">
+        UDP
+       </option>
+       <option value="RTP">
+        RTP
+       </option>
+       <option value="HTTP">
+        HTTP
+       </option>
+       <option value="RTSP">
+        RTSP
+       </option>
+       <option value="MMS">
+        MMS
+       </option>
+       <option value="FLVoHTTP">
+        FLVoHTTP
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       IP地址:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" maxlength="63" name="enc_outip1___0" size="26" type="text" value="228.2.1.15"/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       输出端口:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" maxlength="5" name="enc_ipout_port1___0" onkeyup="value=this.value.replace(/\D+/g,'')" size="8" type="text" value="1000"/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       UDP输出网卡指定:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="enc_ipout_if1___0">
+       <option selected="selected" value=" NIC3 ">
+        NIC3
+       </option>
+       <option value="NIC1">
+        NIC1
+       </option>
+       <option value="NIC2">
+        NIC2
+       </option>
+       <!--NIC_ENABLE_BEG-->
+       <!--3-->
+       <option value="NIC3">
+        NIC3
+       </option>
+       <!--NIC_ENABLE_END-->
+       <!--NIC_ENABLE_BEG-->
+       <!--4-->
+       <option value="NIC4">
+        NIC4
+       </option>
+       <!--NIC_ENABLE_END-->
+       <!--NIC_ENABLE_BEG-->
+       <!--5-->
+       <option value="NIC5">
+        NIC5
+       </option>
+       <!--NIC_ENABLE_END-->
+       <!--NIC_ENABLE_BEG-->
+       <!--6-->
+       <option value="NIC6">
+        NIC6
+       </option>
+       <!--NIC_ENABLE_END-->
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       拉流名称:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="ipout_name1___0" size="40" type="text" value="live "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       URL:
+      </span>
+     </td>
+     <td>
+      <span class="unwrap_label">
+       udp://@228.2.1.15:1000
+      </span>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="180">
+      <span class="sub_menu">
+       备份输出2:
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="backupoutput2_in" onclick="swap_display(this,'backupoutput2')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="backupoutput2">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       使能:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="enc_ipout3_enable___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       格式:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="ipout_format3___0">
+       <option selected="selected" value=" UDP ">
+        UDP
+       </option>
+       <option value="HTTP">
+        HTTP
+       </option>
+       <option value="MMS">
+        MMS
+       </option>
+       <option value="FLVoHTTP">
+        FLVoHTTP
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       输出端口:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" maxlength="5" name="enc_ipout_port3___0" onkeyup="value=this.value.replace(/\D+/g,'')" size="8" type="text" value="1235"/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       拉流名称:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="ipout_name3___0" size="40" type="text" value="live "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       URL:
+      </span>
+     </td>
+     <td>
+      <span class="unwrap_label">
+      </span>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="180">
+      <span class="sub_menu">
+       iPhone系列直播:
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="httplivestream_in" onclick="swap_display(this,'httplivestream')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="httplivestream">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       使能:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="hls_enable___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       切片长度(3~18s):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_seg_len_s___0" size="12" type="text" value="5 "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       切片数量(2~21):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_seg_count___0" size="12" type="text" value="3 "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       拉流路径(选填):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_pull_path___0" size="12" type="text" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       拉流名称(选填):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_pull_name___0" size="12" type="text" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       加密流KEY(选填):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_ext_xkey___0" size="40" type="text" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流目标地址:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_url___0" size="40" type="text" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流用户名:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_user___0" size="12" type="text" value="Admin "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流密码:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_passwd___0" size="12" type="password" value="Arc123456 "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流目标地址(2):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_url2___0" size="40" type="text" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流用户名(2):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_user2___0" size="12" type="text" value="Admin "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流密码(2):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_passwd2___0" size="12" type="password" value="Arc123456 "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流目标地址(3):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_url3___0" size="40" type="text" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流用户名(3):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_user3___0" size="12" type="text" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流密码(3):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_passwd3___0" size="12" type="password" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流目标地址(4):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_url4___0" size="40" type="text" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流用户名(4):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_user4___0" size="12" type="text" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流密码(4):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_passwd4___0" size="12" type="password" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流目标地址(5):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_url5___0" size="40" type="text" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流用户名(5):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_user5___0" size="12" type="text" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流密码(5):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_passwd5___0" size="12" type="password" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流目标地址(6):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_url6___0" size="40" type="text" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流用户名(6):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_user6___0" size="12" type="text" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流密码(6):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_passwd6___0" size="12" type="password" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流目标地址(7):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_url7___0" size="40" type="text" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流用户名(7):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_user7___0" size="12" type="text" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流密码(7):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_passwd7___0" size="12" type="password" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流目标地址(8):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_url8___0" size="40" type="text" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流用户名(8):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_user8___0" size="12" type="text" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       HTTP推流密码(8):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hls_push_passwd8___0" size="12" type="password" value="null "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       URL:
+      </span>
+     </td>
+     <td>
+      <span class="unwrap_label">
+      </span>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="180">
+      <span class="sub_menu">
+       MPEG DASH:
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="mpegdash_in" onclick="swap_display(this,'mpegdash')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="mpegdash">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       使能:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="dash_enable___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       URL:
+      </span>
+     </td>
+     <td>
+      <span class="unwrap_label">
+      </span>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="180">
+      <span class="sub_menu">
+       3GP over UDP or TCP:
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="gp3overudportcp_in" onclick="swap_display(this,'gp3overudportcp')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="gp3overudportcp">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       使能:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="3gp_enable___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       SDP命名:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="3gp_name___0" size="40" type="text" value="3gp "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       URL:
+      </span>
+     </td>
+     <td>
+      <span class="unwrap_label">
+      </span>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="180">
+      <span class="sub_menu">
+       FLV over RTMP:
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="flvoverrtmp_in" onclick="swap_display(this,'flvoverrtmp')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="flvoverrtmp">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       使能:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="rtmp_enable___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       目标地址:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_target___0" size="40" type="text" value="rtmp://192.168.1.125/live "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       流名称:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_name___0" size="13" type="text" value="live_show "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       推流用户名:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_user___0" size="13" type="text" value="user "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       推流密码:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_psw___0" size="13" type="text" value="passwd "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       推流超时(1~60秒):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" maxlength="2" name="rtmp_timeout___0" onkeyup="value=this.value.replace(/\D+/g,'')" size="8" type="text" value="3 "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       使用老版本协议:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="rtmp_old_style___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+       <option value="V2">
+        V2
+       </option>
+      </select>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="180">
+      <span class="sub_menu">
+       FLV over RTMP 2:
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="flvoverrtmp2_in" onclick="swap_display(this,'flvoverrtmp2')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="flvoverrtmp2">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       使能:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="rtmp_enable2___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       目标地址:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_target2___0" size="40" type="text" value="rtmp://192.168.1.33/live "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       流名称:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_name2___0" size="13" type="text" value="live2 "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       推流用户名:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_user2___0" size="13" type="text" value="user "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       推流密码:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_psw2___0" size="13" type="text" value="passwd "/>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="180">
+      <span class="sub_menu">
+       FLV over RTMP 3:
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="flvoverrtmp3_in" onclick="swap_display(this,'flvoverrtmp3')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="flvoverrtmp3">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       使能:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="rtmp_enable3___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       目标地址:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_target3___0" size="40" type="text" value="rtmp://192.168.1.33/live "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       流名称:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_name3___0" size="13" type="text" value="live2 "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       推流用户名:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_user3___0" size="13" type="text" value="user "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       推流密码:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_psw3___0" size="13" type="text" value="passwd "/>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="180">
+      <span class="sub_menu">
+       FLV over RTMP 4:
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="flvoverrtmp4_in" onclick="swap_display(this,'flvoverrtmp4')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="flvoverrtmp4">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       使能:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="rtmp_enable4___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       目标地址:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_target4___0" size="40" type="text" value="rtmp://192.168.1.33/live "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       流名称:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_name4___0" size="13" type="text" value="live2 "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       推流用户名:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_user4___0" size="13" type="text" value="user "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       推流密码:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_psw4___0" size="13" type="text" value="passwd "/>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="180">
+      <span class="sub_menu">
+       FLV over RTMP 5:
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="flvoverrtmp5_in" onclick="swap_display(this,'flvoverrtmp5')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="flvoverrtmp5">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       使能:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="rtmp_enable5___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       目标地址:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_target5___0" size="40" type="text" value="rtmp://192.168.1.33/live "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       流名称:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_name5___0" size="13" type="text" value="live2 "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       推流用户名:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_user5___0" size="13" type="text" value="user "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       推流密码:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_psw5___0" size="13" type="text" value="passwd "/>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="180">
+      <span class="sub_menu">
+       FLV over RTMP 6:
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="flvoverrtmp6_in" onclick="swap_display(this,'flvoverrtmp6')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="flvoverrtmp6">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       使能:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="rtmp_enable6___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       目标地址:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_target6___0" size="40" type="text" value="rtmp://192.168.1.33/live "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       流名称:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_name6___0" size="13" type="text" value="live2 "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       推流用户名:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_user6___0" size="13" type="text" value="user "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       推流密码:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="rtmp_psw6___0" size="13" type="text" value="passwd "/>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="180">
+      <span class="sub_menu">
+       HTTP Smooth Stream.:
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="httpsmoothstream_in" onclick="swap_display(this,'httpsmoothstream')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="httpsmoothstream">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       使能:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="hss_enable___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       目标地址:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hss_target___0" size="40" type="text" value="http://192.168.1.95/publishingpoint.isml/tst "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       流名称:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="hss_name___0" size="13" type="text" value="live "/>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="180">
+      <span class="sub_menu">
+       复用输出:
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="muxedoutputsetup_in" onclick="swap_display(this,'muxedoutputsetup')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="muxedoutputsetup">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       ASI复用输出:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="asi_out_enable___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       IP复用输出:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="ipmux_out_enable___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+      </select>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="180">
+      <span class="sub_menu">
+       文件输出:
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="fileoutput_in" onclick="swap_display(this,'fileoutput')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="fileoutput">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       使能:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="file_out_enable___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       格式:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="file_out_format___0">
+       <option selected="selected" value=" TS ">
+        TS
+       </option>
+       <option value="TS">
+        TS
+       </option>
+       <option value="MPG">
+        MPG
+       </option>
+       <option value="MP4">
+        MP4
+       </option>
+       <option value="3GP">
+        3GP
+       </option>
+       <option value="FLV">
+        FLV
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       存储位置:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="file_out_nfs___0">
+       <option selected="selected" value=" LocalDisk ">
+        LocalDisk
+       </option>
+       <option value="LocalDisk">
+        LocalDisk
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       输出子目录:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="file_out_dir___0" size="50" type="text" value="/home/ftpuser/config/video "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       文件分片大小(单位:MB):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" maxlength="10" name="file_out_mbytes___0" onkeyup="value=this.value.replace(/\D+/g,'')" size="8" type="text" value="800"/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       文件分片时间(单位:秒):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" maxlength="10" name="file_out_tlimit_s___0" onkeyup="value=this.value.replace(/\D+/g,'')" size="8" type="text" value="0"/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="180">
+      <span class="Label_caption">
+       存储满时自动循环:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="file_out_auto_loop___0">
+       <option selected="selected" value=" ON ">
+        ON
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+      </select>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td height="80" valign="center" width="200">
+      <p align="right">
+       <input class="button_caption" type="submit" value="  设置  "/>
+      </p>
+     </td>
+     <td width="*">
+     </td>
+    </tr>
+   </table>
+  </form>
+ </body>
+</html>
+

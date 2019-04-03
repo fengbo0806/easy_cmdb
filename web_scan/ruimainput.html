@@ -1,0 +1,1350 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+ <head>
+  <meta content="no-cache" http-equiv="pragma"/>
+  <title>
+   Input Setup
+  </title>
+  <link href="global.css" rel="stylesheet" type="text/css"/>
+  <script language="JavaScript">
+   function input_check()
+{
+	var fm = window.document.fm_input_setup;
+			
+	if(fm.ipinput_address___0.value == "")
+		fm.ipinput_address___0.value = "0";			
+	if(fm.ipinput_address2___0.value == "")
+		fm.ipinput_address2___0.value = "0";				
+	return true;
+}
+function switch_to_channel(index)
+{	
+	if("999" != index)
+	window.document.cookie="CurrentChannel="+index; 
+	location.href="index.cgi?input_setup___"+index;
+}
+  </script>
+  <script src="global.js">
+  </script>
+  <script>
+   function dialog_program_setup(subid)
+{		
+	window.open('index.cgi?program_setup___0___'+subid,'Program Setup','height=600,width=800,top=100,left=200,status=yes');
+}	
+	
+function onload_func()
+{   	
+	
+	 
+	restore_display("ipinputsetup");
+	restore_display("othersetup");	
+	
+	restore_display("backupinput1");	
+	restore_display("backupinput2");	
+	restore_display("backupinput3");	
+	restore_display("backupinput4");	
+	restore_display("filebackupinput");			
+	restore_display("audiointracks");
+	
+		
+}   
+window.onload = onload_func;
+function onbeforeunload_func()
+{			
+	
+	 
+	save_display("ipinputsetup");
+	save_display("othersetup");	
+
+	save_display("backupinput1");	
+	save_display("backupinput2");	
+	save_display("backupinput3");	
+	save_display("backupinput4");		
+	save_display("filebackupinput");				
+	save_display("audiointracks");
+	
+	
+}
+window.onbeforeunload = onbeforeunload_func;
+  </script>
+ </head>
+ <body>
+  <span class="client_title">
+   输入设置(0)
+  </span>
+  <img alt="" height="3" name="" src="" style="background-color: #CC0000" width="100%"/>
+  <table border="0" cellpadding="0" cellspacing="0">
+   <tr>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(0); return false;">
+      0
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(1); return false;">
+      1
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(2); return false;">
+      2
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(3); return false;">
+      3
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(4); return false;">
+      4
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(5); return false;">
+      5
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(6); return false;">
+      6
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(7); return false;">
+      7
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(8); return false;">
+      8
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(9); return false;">
+      9
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(10); return false;">
+      10
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(11); return false;">
+      11
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(12); return false;">
+      12
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(13); return false;">
+      13
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(14); return false;">
+      14
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(15); return false;">
+      15
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(16); return false;">
+      16
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(17); return false;">
+      17
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(18); return false;">
+      18
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(19); return false;">
+      19
+     </a>
+    </td>
+    <td>
+    </td>
+    <td valign="center" width="8">
+     <a class="Label_caption" href="" onclick="javascript:switch_to_channel(999); return false;">
+      X
+     </a>
+    </td>
+    <td>
+    </td>
+   </tr>
+  </table>
+  <form action="index.cgi?input_setup___0" id="fm_input_setup" method="post" name="fm_input_setup" onsubmit="return input_check();">
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       频道使能:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="channel_enable___0">
+       <option selected="selected" value=" ON ">
+        ON
+       </option>
+       <option value="ON">
+        ON
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr>
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       输入选择:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="input_source___0">
+       <option selected="selected" value=" IPIN ">
+        IPIN
+       </option>
+       <option value="IPIN">
+        IPIN
+       </option>
+       <option value="Virtual">
+        Virtual
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr>
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       输入缓存(0~60000ms):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" maxlength="5" name="ipinput_cach___0" onkeyup="value=this.value.replace(/\D+/g,'')" size="12" type="text" value="2000"/>
+     </td>
+    </tr>
+    <tr>
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       UDP延时(0~172800秒):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" maxlength="7" name="udp_delay___0" onkeyup="value=this.value.replace(/\D+/g,'')" size="12" type="text" value="0"/>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="210">
+      <span class="sub_menu">
+       IP输入设置:
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="ipinputsetup_in" onclick="swap_display(this,'ipinputsetup')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="ipinputsetup">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       输入协议:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="ipinput_protocol___0">
+       <option selected="selected" value=" HTTP ">
+        HTTP
+       </option>
+       <option value="UDP">
+        UDP
+       </option>
+       <option value="RTP">
+        RTP
+       </option>
+       <option value="RTSP">
+        RTSP
+       </option>
+       <option value="RTMP">
+        RTMP
+       </option>
+       <option value="MMS">
+        MMS
+       </option>
+       <option value="HTTP">
+        HTTP
+       </option>
+       <!--
+				<option value="HTTPS">HTTPS</option>
+				-->
+       <option value="FTP">
+        FTP
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       输入地址:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="ipinput_address___0" size="39" type="text" value="http://192.168.169.12:8088/yuxuan1 "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       输入端口:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" maxlength="5" name="ipinput_port___0" onkeyup="value=this.value.replace(/\D+/g,'')" size="12" type="text" value="1234"/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       组播输入网卡指定:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="ipinput_if___0">
+       <option selected="selected" value=" NIC1 ">
+        NIC1
+       </option>
+       <option value="NIC1">
+        NIC1
+       </option>
+       <option value="NIC2">
+        NIC2
+       </option>
+       <!--NIC_ENABLE_BEG-->
+       <!--3-->
+       <option value="NIC3">
+        NIC3
+       </option>
+       <!--NIC_ENABLE_END-->
+       <!--NIC_ENABLE_BEG-->
+       <!--4-->
+       <option value="NIC4">
+        NIC4
+       </option>
+       <!--NIC_ENABLE_END-->
+       <!--NIC_ENABLE_BEG-->
+       <!--5-->
+       <option value="NIC5">
+        NIC5
+       </option>
+       <!--NIC_ENABLE_END-->
+       <!--NIC_ENABLE_BEG-->
+       <!--6-->
+       <option value="NIC6">
+        NIC6
+       </option>
+       <!--NIC_ENABLE_END-->
+      </select>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="210">
+      <span class="sub_menu">
+       IP备份控制:
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="backupinput1_in" onclick="swap_display(this,'backupinput1')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="backupinput1">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       切换控制:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="input_backup_ctrl___0">
+       <option selected="selected" value=" Auto ">
+        Auto
+       </option>
+       <option value="Manual">
+        Manual
+       </option>
+       <option value="Auto">
+        Auto
+       </option>
+       <option value="HalfAuto">
+        HalfAuto
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       当前输入:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="input_cur_index___0">
+       <option selected="selected" value=" 1 ">
+        1
+       </option>
+       <option value="1">
+        1
+       </option>
+       <option value="2">
+        2
+       </option>
+       <option value="3">
+        3
+       </option>
+       <option value="4">
+        4
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       失锁门限(100~60000ms):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" maxlength="5" name="ipinput_timeout___0" onkeyup="value=this.value.replace(/\D+/g,'')" size="12" type="text" value="800"/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       恢复门限(100~60000ms):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" maxlength="5" name="ipinput_recover_ms___0" onkeyup="value=this.value.replace(/\D+/g,'')" size="12" type="text" value="2000"/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td height="30" valign="center" width="210">
+      <span class="Label_caption">
+       连续计数检测:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="ipinput_cc_check___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+      </select>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="210">
+      <span class="sub_menu">
+       备份输入(2):
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="backupinput2_in" onclick="swap_display(this,'backupinput2')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="backupinput2">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       备份使能(2):
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="input_backup_mode___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       输入地址(2):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="ipinput_address2___0" size="39" type="text" value="rtmp://10.78.43.21/live/officecut02 "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       输入端口(2):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" maxlength="5" name="ipinput_port2___0" onkeyup="value=this.value.replace(/\D+/g,'')" size="12" type="text" value="1234"/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       组播输入网卡指定(2):
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="ipinput_if2___0">
+       <option selected="selected" value=" NIC1 ">
+        NIC1
+       </option>
+       <option value="NIC1">
+        NIC1
+       </option>
+       <option value="NIC2">
+        NIC2
+       </option>
+       <!--NIC_ENABLE_BEG-->
+       <!--3-->
+       <option value="NIC3">
+        NIC3
+       </option>
+       <!--NIC_ENABLE_END-->
+       <!--NIC_ENABLE_BEG-->
+       <!--4-->
+       <option value="NIC4">
+        NIC4
+       </option>
+       <!--NIC_ENABLE_END-->
+       <!--NIC_ENABLE_BEG-->
+       <!--5-->
+       <option value="NIC5">
+        NIC5
+       </option>
+       <!--NIC_ENABLE_END-->
+       <!--NIC_ENABLE_BEG-->
+       <!--6-->
+       <option value="NIC6">
+        NIC6
+       </option>
+       <!--NIC_ENABLE_END-->
+      </select>
+      <input class="Label_caption" onclick="dialog_program_setup(1)" type="button" value="节目设置..."/>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="210">
+      <span class="sub_menu">
+       备份输入(3):
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="backupinput3_in" onclick="swap_display(this,'backupinput3')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="backupinput3">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       备份使能(3):
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="input_backup_mode3___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       输入地址(3):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="ipinput_address3___0" size="39" type="text" value="0 "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       输入端口(3):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" maxlength="5" name="ipinput_port3___0" onkeyup="value=this.value.replace(/\D+/g,'')" size="12" type="text" value="1234"/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       组播输入网卡指定(3):
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="ipinput_if3___0">
+       <option selected="selected" value=" NIC2 ">
+        NIC2
+       </option>
+       <option value="NIC1">
+        NIC1
+       </option>
+       <option value="NIC2">
+        NIC2
+       </option>
+       <!--NIC_ENABLE_BEG-->
+       <!--3-->
+       <option value="NIC3">
+        NIC3
+       </option>
+       <!--NIC_ENABLE_END-->
+       <!--NIC_ENABLE_BEG-->
+       <!--4-->
+       <option value="NIC4">
+        NIC4
+       </option>
+       <!--NIC_ENABLE_END-->
+       <!--NIC_ENABLE_BEG-->
+       <!--5-->
+       <option value="NIC5">
+        NIC5
+       </option>
+       <!--NIC_ENABLE_END-->
+       <!--NIC_ENABLE_BEG-->
+       <!--6-->
+       <option value="NIC6">
+        NIC6
+       </option>
+       <!--NIC_ENABLE_END-->
+      </select>
+      <input class="Label_caption" onclick="dialog_program_setup(2)" type="button" value="节目设置..."/>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="210">
+      <span class="sub_menu">
+       备份输入(4):
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="backupinput4_in" onclick="swap_display(this,'backupinput4')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="backupinput4">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       备份使能(4):
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="input_backup_mode4___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       输入地址(4):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="ipinput_address4___0" size="39" type="text" value="0 "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       输入端口(4):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" maxlength="5" name="ipinput_port4___0" onkeyup="value=this.value.replace(/\D+/g,'')" size="12" type="text" value="1234"/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       组播输入网卡指定(4):
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="ipinput_if4___0">
+       <option selected="selected" value=" NIC2 ">
+        NIC2
+       </option>
+       <option value="NIC1">
+        NIC1
+       </option>
+       <option value="NIC2">
+        NIC2
+       </option>
+       <!--NIC_ENABLE_BEG-->
+       <!--3-->
+       <option value="NIC3">
+        NIC3
+       </option>
+       <!--NIC_ENABLE_END-->
+       <!--NIC_ENABLE_BEG-->
+       <!--4-->
+       <option value="NIC4">
+        NIC4
+       </option>
+       <!--NIC_ENABLE_END-->
+       <!--NIC_ENABLE_BEG-->
+       <!--5-->
+       <option value="NIC5">
+        NIC5
+       </option>
+       <!--NIC_ENABLE_END-->
+       <!--NIC_ENABLE_BEG-->
+       <!--6-->
+       <option value="NIC6">
+        NIC6
+       </option>
+       <!--NIC_ENABLE_END-->
+      </select>
+      <input class="Label_caption" onclick="dialog_program_setup(3)" type="button" value="节目设置..."/>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="210">
+      <span class="sub_menu">
+       UDP输入垫片:
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="filebackupinput_in" onclick="swap_display(this,'filebackupinput')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="filebackupinput">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       垫片使能:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="file_backup_mode___0">
+       <option selected="selected" value=" OFF ">
+        OFF
+       </option>
+       <option value="ON">
+        ON
+       </option>
+       <option value="OFF">
+        OFF
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       文件名称:
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="file_backup_url___0" size="39" type="text" value="0 "/>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       报告到URL(联通):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" name="file_bak_report_url___0" size="39" type="text" value="0 "/>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td valign="center" width="210">
+      <span class="sub_menu">
+       其他设置:
+      </span>
+     </td>
+     <td width="*">
+      <div class="unwrap_label" id="othersetup_in" onclick="swap_display(this,'othersetup')" style="cursor:pointer">
+      </div>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0" id="othersetup">
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       错误修正:
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="input_special_fix___0">
+       <option selected="selected" value=" NONE ">
+        NONE
+       </option>
+       <option value="NONE">
+        NONE
+       </option>
+       <option value="263TIME">
+        263TIME
+       </option>
+       <option value="SOWELL">
+        SOWELL
+       </option>
+       <option value="SuperCBR">
+        SuperCBR
+       </option>
+       <option value="XZXY">
+        XZXY
+       </option>
+       <option value="H264Speedup">
+        H264Speedup
+       </option>
+       <option value="Alone">
+        Alone
+       </option>
+       <option value="RTMP">
+        RTMP
+       </option>
+       <option value="MPEG2Speedup">
+        MPEG2Speedup
+       </option>
+       <option value="NoAlign">
+        NoAlign
+       </option>
+       <option value="HDMIRst">
+        HDMIRst
+       </option>
+       <option value="I264Err">
+        I264Err
+       </option>
+       <option value="EnableMM">
+        EnableMM
+       </option>
+       <option value="DynamicAspectRatio">
+        DynamicAspectRatio
+       </option>
+       <option value="ForcedMPEG2Audio">
+        ForcedMPEG2Audio
+       </option>
+       <option value="OTTInput">
+        OTTInput
+       </option>
+       <option value="StaticLogoOnly">
+        StaticLogoOnly
+       </option>
+       <option value="HWDec">
+        HWDec
+       </option>
+       <option value="KeepRun">
+        KeepRun
+       </option>
+       <option value="AVSync2">
+        AVSync2
+       </option>
+       <option value="LetvHLS">
+        LetvHLS
+       </option>
+       <option value="NoOutOnWarn">
+        NoOutOnWarn
+       </option>
+       <option value="MostVideo">
+        MostVideo
+       </option>
+       <option value="DiskDelay">
+        DiskDelay
+       </option>
+       <option value="UDPass">
+        UDPass
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       错误修正(1):
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="input_special_fix1___0">
+       <option selected="selected" value=" NONE ">
+        NONE
+       </option>
+       <option value="NONE">
+        NONE
+       </option>
+       <option value="263TIME">
+        263TIME
+       </option>
+       <option value="SOWELL">
+        SOWELL
+       </option>
+       <option value="SuperCBR">
+        SuperCBR
+       </option>
+       <option value="XZXY">
+        XZXY
+       </option>
+       <option value="H264Speedup">
+        H264Speedup
+       </option>
+       <option value="Alone">
+        Alone
+       </option>
+       <option value="RTMP">
+        RTMP
+       </option>
+       <option value="MPEG2Speedup">
+        MPEG2Speedup
+       </option>
+       <option value="NoAlign">
+        NoAlign
+       </option>
+       <option value="HDMIRst">
+        HDMIRst
+       </option>
+       <option value="I264Err">
+        I264Err
+       </option>
+       <option value="EnableMM">
+        EnableMM
+       </option>
+       <option value="DynamicAspectRatio">
+        DynamicAspectRatio
+       </option>
+       <option value="ForcedMPEG2Audio">
+        ForcedMPEG2Audio
+       </option>
+       <option value="OTTInput">
+        OTTInput
+       </option>
+       <option value="StaticLogoOnly">
+        StaticLogoOnly
+       </option>
+       <option value="HWDec">
+        HWDec
+       </option>
+       <option value="KeepRun">
+        KeepRun
+       </option>
+       <option value="AVSync2">
+        AVSync2
+       </option>
+       <option value="LetvHLS">
+        LetvHLS
+       </option>
+       <option value="NoOutOnWarn">
+        NoOutOnWarn
+       </option>
+       <option value="MostVideo">
+        MostVideo
+       </option>
+       <option value="DiskDelay">
+        DiskDelay
+       </option>
+       <option value="UDPass">
+        UDPass
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       错误修正(2):
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="input_special_fix2___0">
+       <option selected="selected" value=" NONE ">
+        NONE
+       </option>
+       <option value="NONE">
+        NONE
+       </option>
+       <option value="263TIME">
+        263TIME
+       </option>
+       <option value="SOWELL">
+        SOWELL
+       </option>
+       <option value="SuperCBR">
+        SuperCBR
+       </option>
+       <option value="XZXY">
+        XZXY
+       </option>
+       <option value="H264Speedup">
+        H264Speedup
+       </option>
+       <option value="Alone">
+        Alone
+       </option>
+       <option value="RTMP">
+        RTMP
+       </option>
+       <option value="MPEG2Speedup">
+        MPEG2Speedup
+       </option>
+       <option value="NoAlign">
+        NoAlign
+       </option>
+       <option value="HDMIRst">
+        HDMIRst
+       </option>
+       <option value="I264Err">
+        I264Err
+       </option>
+       <option value="EnableMM">
+        EnableMM
+       </option>
+       <option value="DynamicAspectRatio">
+        DynamicAspectRatio
+       </option>
+       <option value="ForcedMPEG2Audio">
+        ForcedMPEG2Audio
+       </option>
+       <option value="OTTInput">
+        OTTInput
+       </option>
+       <option value="StaticLogoOnly">
+        StaticLogoOnly
+       </option>
+       <option value="HWDec">
+        HWDec
+       </option>
+       <option value="KeepRun">
+        KeepRun
+       </option>
+       <option value="AVSync2">
+        AVSync2
+       </option>
+       <option value="LetvHLS">
+        LetvHLS
+       </option>
+       <option value="NoOutOnWarn">
+        NoOutOnWarn
+       </option>
+       <option value="MostVideo">
+        MostVideo
+       </option>
+       <option value="DiskDelay">
+        DiskDelay
+       </option>
+       <option value="UDPass">
+        UDPass
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       错误修正(3):
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="input_special_fix3___0">
+       <option selected="selected" value=" NONE ">
+        NONE
+       </option>
+       <option value="NONE">
+        NONE
+       </option>
+       <option value="263TIME">
+        263TIME
+       </option>
+       <option value="SOWELL">
+        SOWELL
+       </option>
+       <option value="SuperCBR">
+        SuperCBR
+       </option>
+       <option value="XZXY">
+        XZXY
+       </option>
+       <option value="H264Speedup">
+        H264Speedup
+       </option>
+       <option value="Alone">
+        Alone
+       </option>
+       <option value="RTMP">
+        RTMP
+       </option>
+       <option value="MPEG2Speedup">
+        MPEG2Speedup
+       </option>
+       <option value="NoAlign">
+        NoAlign
+       </option>
+       <option value="HDMIRst">
+        HDMIRst
+       </option>
+       <option value="I264Err">
+        I264Err
+       </option>
+       <option value="EnableMM">
+        EnableMM
+       </option>
+       <option value="DynamicAspectRatio">
+        DynamicAspectRatio
+       </option>
+       <option value="ForcedMPEG2Audio">
+        ForcedMPEG2Audio
+       </option>
+       <option value="OTTInput">
+        OTTInput
+       </option>
+       <option value="StaticLogoOnly">
+        StaticLogoOnly
+       </option>
+       <option value="HWDec">
+        HWDec
+       </option>
+       <option value="KeepRun">
+        KeepRun
+       </option>
+       <option value="AVSync2">
+        AVSync2
+       </option>
+       <option value="LetvHLS">
+        LetvHLS
+       </option>
+       <option value="NoOutOnWarn">
+        NoOutOnWarn
+       </option>
+       <option value="MostVideo">
+        MostVideo
+       </option>
+       <option value="DiskDelay">
+        DiskDelay
+       </option>
+       <option value="UDPass">
+        UDPass
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr bgcolor="#eeeeee">
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       错误修正(4):
+      </span>
+     </td>
+     <td width="*">
+      <select class="edit" name="input_special_fix4___0">
+       <option selected="selected" value=" NONE ">
+        NONE
+       </option>
+       <option value="NONE">
+        NONE
+       </option>
+       <option value="263TIME">
+        263TIME
+       </option>
+       <option value="SOWELL">
+        SOWELL
+       </option>
+       <option value="SuperCBR">
+        SuperCBR
+       </option>
+       <option value="XZXY">
+        XZXY
+       </option>
+       <option value="H264Speedup">
+        H264Speedup
+       </option>
+       <option value="Alone">
+        Alone
+       </option>
+       <option value="RTMP">
+        RTMP
+       </option>
+       <option value="MPEG2Speedup">
+        MPEG2Speedup
+       </option>
+       <option value="NoAlign">
+        NoAlign
+       </option>
+       <option value="HDMIRst">
+        HDMIRst
+       </option>
+       <option value="I264Err">
+        I264Err
+       </option>
+       <option value="EnableMM">
+        EnableMM
+       </option>
+       <option value="DynamicAspectRatio">
+        DynamicAspectRatio
+       </option>
+       <option value="ForcedMPEG2Audio">
+        ForcedMPEG2Audio
+       </option>
+       <option value="OTTInput">
+        OTTInput
+       </option>
+       <option value="StaticLogoOnly">
+        StaticLogoOnly
+       </option>
+       <option value="HWDec">
+        HWDec
+       </option>
+       <option value="KeepRun">
+        KeepRun
+       </option>
+       <option value="AVSync2">
+        AVSync2
+       </option>
+       <option value="LetvHLS">
+        LetvHLS
+       </option>
+       <option value="NoOutOnWarn">
+        NoOutOnWarn
+       </option>
+       <option value="MostVideo">
+        MostVideo
+       </option>
+       <option value="DiskDelay">
+        DiskDelay
+       </option>
+       <option value="UDPass">
+        UDPass
+       </option>
+      </select>
+     </td>
+    </tr>
+    <tr>
+     <td valign="center" width="210">
+      <span class="Label_caption">
+       输入超时自动关闭频道(秒):
+      </span>
+     </td>
+     <td width="*">
+      <input class="edit" maxlength="7" name="input_timeout_s___0" onkeyup="value=this.value.replace(/\D+/g,'')" size="12" type="text" value="0"/>
+     </td>
+    </tr>
+   </table>
+   <table border="0" cellpadding="0" cellspacing="0">
+    <tr>
+     <td height="80" valign="center" width="200">
+      <p align="right">
+       <input class="button_caption" type="submit" value="  设置  "/>
+      </p>
+     </td>
+     <td width="*">
+     </td>
+    </tr>
+   </table>
+  </form>
+ </body>
+</html>
+

@@ -3,8 +3,8 @@ from .models.devices import *
 from .models.ips import *
 from .models.venders import *
 from .models.processes import *
-from .models.businesses import Business,Projects
-from .models.encoderserver import ProgramDetail,Task,typeOfTask,WorkPackage
+from .models.businesses import *
+from .models.encoderserver import *
 
 
 # Register your models here.
@@ -163,4 +163,10 @@ class typeOfTaskadmin(admin.ModelAdmin):
     pass
 @admin.register(WorkPackage)
 class WorkPackageadmin(admin.ModelAdmin):
+    pass
+@admin.register(Staff)
+class Staffadmin(admin.ModelAdmin):
+    '''
+    typeName
+    '''
     pass
