@@ -1,9 +1,21 @@
+from threading import Thread
+from multiprocessing import Process
+import django
+import sys
+import os
+import time
+'''
+the django enviormant just for test ,while the code on line ,delete it
+'''
+# 将项目路径添加到系统搜寻路径当中，查找方式为从当前脚本开始，找到要调用的django项目的路径
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# 设置项目的配置文件 不做修改的话就是 settings 文件
+os.environ['DJANGO_SETTINGS_MODULE'] = 'easy_cmdb.settings'
+django.setup()
+# from django.db.models.expressions
 from configureBaseData.models.encoderserver import *
 from configureBaseData.models.ips import *
 from django.core.exceptions import ObjectDoesNotExist
-
-
-# from django.db.models.expressions
 class updateEncoder():
     '''
     input a list like [{ip:ip,type:type,}], use web_auth.py get encoder data,update database
@@ -137,3 +149,32 @@ class updateEncoder():
         :return:
         '''
         pass
+
+
+
+if __name__ == '__main__':
+
+    def work():
+        print('hello', os.getpid())
+        from concurrent.futures import ThreadPoolExecutor as TPE
+        def task(arg):
+            time.sleep(0.5)
+            print('Thread:', arg)
+        pool = TPE(5)  # 线程池里放5个线程
+        for i in range(100):
+            # 去连接池中获取连接
+            pool.submit(task, i)
+
+    #part1:在主进程下开启多个线程,每个线程都跟主进程的pid一样
+    t1=Thread(target=work)
+    t2=Thread(target=work)
+    t1.start()
+    t2.start()
+    print('主进程-->线程pid',os.getpid())
+
+    #part2:开多个进程,每个进程都有不同的pid
+    p1=Process(target=work)
+    p2=Process(target=work)
+    p1.start()
+    p2.start()
+    print('主进程-->子进程pid',os.getpid())
