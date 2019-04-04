@@ -66,13 +66,26 @@
 {% block customerjs %}
     <script type="text/javascript">
         $(document).ready(function () {
+            var startTime = $("input[name='starttime']").val();
+            var endTime = $("input[name='endtime']").val();
+            var targetUrl = '/tasks/getEncoderStatus?starttime=' + startTime + '&endtime=' + endTime;
             $("span").each(function () {
                 if ($(this).data("status") == "True") {
                     //alert($(this).data("status"));
                     $(this).removeClass();
                     $(this).addClass("badge badge-success");
                 }
-            })
+            });
+
+            function getEncoderStatus() {
+                $.get(targetUrl, function (data) {
+                    alert("Data Loaded: " + data);
+                });
+            }
+
+            var timer = setInterval(function () {
+                getEncoderStatus();
+            }, 5000);
         });
     </script>
 {% endblock %}

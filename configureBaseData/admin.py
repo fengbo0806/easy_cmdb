@@ -34,7 +34,7 @@ class IpV4Admin(admin.ModelAdmin):
 
 class IpV4Line(admin.StackedInline):
     extra = 0
-    fieldsets = ((None, {'fields': (('vlan', 'ip', 'isManage'),)},),)
+    fieldsets = ((None, {'fields': (('vlan', 'ip', 'isHttpManage', 'isSshManage'),)},),)
     model = IpV4
 
 

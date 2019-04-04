@@ -25,4 +25,5 @@ urlpatterns = [
     path('listalltask',views.taskList),
     path('detailwork',views.workPakgeList),
     path('daily',views.workDaily),
+    path('getEncoderStatus',views.getEncoderStatus),
 ]

@@ -145,7 +145,8 @@ class EncoderOperater:
             '''
             deal with the in put part,get the value of inPutFirst
             '''
-            resultdict[item]['inPutFirst'] = soupInput.find('input', attrs={'name': 'ipinput_address___%d' % (item)})["value"]
+            resultdict[item]['inPutFirst'] = soupInput.find('input', attrs={'name': 'ipinput_address___%d' % (item)})[
+                "value"]
             '''
             deal with the out put part,get the value of outPutFirst,outPutSecond,outPutHttpFlow
             '''
@@ -213,10 +214,38 @@ class EncoderOperater:
         return resultdict
 
 
+class GetEncoderStatus:
+    def __init__(self, ipadd, username, passwd, targetType):
+        self.ipadd = ipadd
+        self.username = username
+        self.passwd = passwd
+        self.target = targetType
+        self.loginURL = None
+        self.getInfoURL = None
+
+    def doOption(self):
+        judgeEncoder = {
+            'powersmart': self.powersmart,
+            'realmagic': self.realmagic,
+            'arcvideo': self.arcvideo,
+        }
+        func = judgeEncoder.get(self.target, 'error')
+        return func()
+
+    def powersamrt(self):
+        pass
+
+    def realmagic(self):
+        pass
+
+    def arcvideo(self):
+        pass
+
+
 if __name__ == '__main__':
     '''
     use for test 
     '''
-    result = EncoderOperater(ipadd='ip',username='name',passwd='password',targetType='type')
+    result = EncoderOperater(ipadd='ip', username='name', passwd='password', targetType='type')
     valuesDict = result.doOption()
     print(valuesDict)

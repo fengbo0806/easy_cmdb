@@ -18,6 +18,8 @@ import sys
 import re, os
 import xlrd
 import xlwt
+import json
+from web_scan.web_auth import EncoderOperater
 
 
 # import datetime
@@ -86,7 +88,7 @@ class WorkPackage(models.Model):
         message = Task.objects.all().reverse().annotate(countnum=Count('workpackage__programName')).values('taskName',
                                                                                                            'startDate',
                                                                                                            'endDate',
-                                                                                                           'typeOf__typeName',
+                                                                                                           'typeOf',
                                                                                                            'id',
                                                                                                            'countnum')
         # countnum = Task.objects.all()..values('taskName','num')
@@ -164,6 +166,56 @@ def workDaily(request):
     return render_to_response('tasks/daily.html',
                               {'message': messagedict, 'messageCount': messageCount, 'today': searchStartTime,
                                'tomorrow': searchEndTime, })
+
+
+def getEncoderStatus(request):
+    if request.method == 'GET':
+        '''
+        get id,time,programChannel,
+        :return id, program status
+        '''
+        # eor = EncoderOperater()
+        searchStartTime = request.GET.get('starttime')
+        searchEndTime = request.GET.get('endtime')
+        '''
+        get the datetime
+        '''
+        if searchStartTime == None:
+            return None
+        searchEndTime = str(searchEndTime)
+        searchStartTime = str(searchStartTime)
+        searchStartTime = datetime.datetime.strptime(searchStartTime, '%Y-%m-%d')
+        searchStartTime = datetime.datetime(searchStartTime.year, searchStartTime.month,
+                                            searchStartTime.day, 00,
+                                            00, 00)
+        searchEndTime = datetime.datetime.strptime(searchEndTime, '%Y-%m-%d')
+        searchEndTime = datetime.datetime(searchEndTime.year, searchEndTime.month, searchEndTime.day, 23,
+                                          59, 59)
+
+        message = WorkPackage.objects.filter(startDate__range=(searchStartTime, searchEndTime)).values('id',
+                                                                                                       'programChannel')
+        midDict = dict()
+        for items in message:
+            mid = ProgramDetail.objects.filter(name=items['programChannel']).values('machine_id')
+            if mid == None:
+                continue
+            for subitem in mid:
+                midDict[subitem['machine_id']] = None
+        for keyid in midDict.keys():
+            targetIp = IpV4.objects.filter(MachineIp=keyid, isHttpManage=True).values('ip')
+            for ip in targetIp:
+                print(ip['ip'])
+                # eor = EncoderOperater(ipadd=ip['ip'], username='admin', passwd='cntv.cn@real', targetType='realmagic')
+                # result = eor.doOption()
+                # print(result)
+        msg = {0: {'id': '0', 'status': 'ON', 'name': '移动直播01', },
+               1: {'id': '1', 'status': 'ON', 'name': '移动直播02', },
+               2: {'id': '2', 'status': 'ON', 'name': '移动直播03', },
+               3: {'id': '3', 'status': 'ON', 'name': '移动直播04', }, }
+
+        return HttpResponse(json.dumps({"msg": msg}))
+    else:
+        return HttpResponse(None)
 
 
 def exportTaskExcel(request):
