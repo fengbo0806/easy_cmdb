@@ -24,14 +24,18 @@ class Machine(models.Model):
 
     class Meta:
         verbose_name = '机器'
+        verbose_name_plural = '机器'
 
 
 class MachineType(models.Model):
     name = models.CharField(max_length=255)
+
     def __str__(self):
         return str(self.name)
+
     class Meta:
         verbose_name = '设备类型'
+        verbose_name_plural = '设备类型'
 
 
 class MachineRoom(models.Model):
@@ -47,6 +51,7 @@ class MachineRoom(models.Model):
 
     class Meta:
         verbose_name = '机房'
+        verbose_name_plural = '机房'
 
 
 class MachineRack(models.Model):
@@ -63,6 +68,7 @@ class MachineRack(models.Model):
 
     class Meta:
         verbose_name = '机架'
+        verbose_name_plural = '机架'
 
 
 class MachineLocate(models.Model):
@@ -75,6 +81,7 @@ class MachineLocate(models.Model):
     class Meta:
         unique_together = ('Ulocate', 'rack')
         verbose_name = '设备位置'
+        verbose_name_plural = '设备位置'
 
     def __str__(self):
         return str(self.rack) + '-U' + str(self.Ulocate)

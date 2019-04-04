@@ -18,8 +18,8 @@
                 <tr>
                     <td>{{ item.programChannel }}</td>
                     <td>{{ item.programName }}</td>
-                    <td>{{ item.startDate }}</td>
-                    <td>{{ item.endDate }}</td>
+                    <td>{{ item.startDate |date:"m-d H:i"}}</td>
+                    <td>{{ item.endDate |date:"m-d H:i"}}</td>
                 </tr>
             {% endfor %}
             </tbody>

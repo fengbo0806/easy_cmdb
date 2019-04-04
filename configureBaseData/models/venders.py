@@ -14,6 +14,10 @@ class Vender(models.Model):
     def __str__(self):
         return str(self.name)
 
+    class Meta:
+        verbose_name = '厂商'
+        verbose_name_plural = '厂商'
+
 
 class VenderStaff(models.Model):
     '''
@@ -30,3 +34,7 @@ class VenderStaff(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+    class Meta:
+        verbose_name = '厂商人员'
+        verbose_name_plural = '厂商人员'

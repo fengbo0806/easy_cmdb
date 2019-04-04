@@ -6,7 +6,6 @@ from .models.processes import *
 from .models.businesses import *
 from .models.encoderserver import *
 
-
 # Register your models here.
 '''
 bussiness and project
@@ -66,13 +65,15 @@ class typeOfProcessAdmin(admin.ModelAdmin):
 
 @admin.register(Services)
 class servicesAdmin(admin.ModelAdmin):
-    fieldsets = ((None, {'fields': (('aliasName', 'name', 'typeOfProcess'),('runMachine'),), }),)
+    fieldsets = ((None, {'fields': (('aliasName', 'name', 'typeOfProcess'), ('runMachine'),), }),)
     list_display = ('aliasName', 'name', 'typeOfProcess')
+
 
 @admin.register(Process)
 class processAdmin(admin.ModelAdmin):
-    fieldsets = ((None, {'fields': (('aliasName', 'name', 'typeOfProcess'),('runMachine'),), }),)
+    fieldsets = ((None, {'fields': (('aliasName', 'name', 'typeOfProcess'), ('runMachine'),), }),)
     list_display = ('aliasName', 'name', 'typeOfProcess')
+
 
 '''
 device
@@ -131,6 +132,7 @@ class machineRoomAdmin(admin.ModelAdmin):
     inlines = [VenderStaffLine, ]
     list_display = ('name', 'note')
 
+
 '''
 encoders
 '''
@@ -140,12 +142,17 @@ encoders
 class ProgramDetaildmin(admin.ModelAdmin):
     pass
 
+
 '''
 type of mechine
 '''
+
+
 @admin.register(MachineType)
 class MachineTypeadmin(admin.ModelAdmin):
     pass
+
+
 @admin.register(Task)
 class Taskadnub(admin.ModelAdmin):
     '''
@@ -155,15 +162,13 @@ class Taskadnub(admin.ModelAdmin):
     typeOf
     '''
     pass
-@admin.register(typeOfTask)
-class typeOfTaskadmin(admin.ModelAdmin):
-    '''
-    typeName
-    '''
-    pass
+
+
 @admin.register(WorkPackage)
 class WorkPackageadmin(admin.ModelAdmin):
     pass
+
+
 @admin.register(Staff)
 class Staffadmin(admin.ModelAdmin):
     '''

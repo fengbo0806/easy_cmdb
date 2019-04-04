@@ -30,22 +30,21 @@ class ProgramDetail(models.Model):
 
 
 class Task(models.Model):
+    typeOfTask = (
+        ('项目型', '项目型'),
+        ('运营型', '运营型'),
+    )
     taskName = models.CharField(verbose_name='任务名称', max_length=255)
     startDate = models.DateTimeField(verbose_name='计划开始时间', blank=True, null=True)
     endDate = models.DateTimeField(verbose_name='计划结束时间', blank=True, null=True)
-    typeOf = models.ForeignKey('typeOfTask', on_delete=None)
+    typeOf = models.CharField(verbose_name='任务类型',choices=typeOfTask,max_length=255)
+
+    def __str__(self):
+        return self.taskName
 
     class Meta:
         verbose_name = '保障任务'
         verbose_name_plural = '保障任务'
-
-
-class typeOfTask(models.Model):
-    typeName = models.CharField(verbose_name='任务类型', max_length=255)
-
-    class Meta:
-        verbose_name = '任务类型'
-        verbose_name_plural = '任务类型'
 
 
 class WorkPackage(models.Model):
@@ -59,7 +58,10 @@ class WorkPackage(models.Model):
     isLive = models.BooleanField(verbose_name='直播')
     isRecode = models.BooleanField(verbose_name='收录')
     notes = models.TextField(verbose_name='备注', null=True, blank=True)
-    adminStaff = models.ForeignKey('Staff', on_delete=None,blank=True,default=None)
+    adminStaff = models.ForeignKey('Staff', on_delete=None, blank=True, default=None)
+
+    def __str__(self):
+        return self.programName
 
     class Meta:
         verbose_name = '工作包'
@@ -83,9 +85,10 @@ class Staff(models.Model):
     task = models.ManyToManyField(Task, blank=True, )
     department = models.CharField(verbose_name='需求部门', choices=department, blank=True, max_length=30)
     staffName = models.CharField(verbose_name='负责人', blank=True, max_length=30)
+
     class Meta:
-        verbose_name='业务人员'
-        verbose_name_plural='业务人员'
+        verbose_name = '业务人员'
+        verbose_name_plural = '业务人员'
 
     class Meta:
         verbose_name = '业务人员'
