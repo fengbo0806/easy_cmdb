@@ -7,6 +7,7 @@ class IpV4(models.Model):
     vlan = models.IntegerField(default=0)
     ip = models.GenericIPAddressField()
     MachineIp = models.ForeignKey(Machine, on_delete=models.CASCADE, blank=True, null=True)
-    isManage = models.BooleanField(default=False)
+    isHttpManage = models.BooleanField(default=False)
+    isSshManage = models.BooleanField(default=False)
     def __str__(self):
         return str(self.ip)

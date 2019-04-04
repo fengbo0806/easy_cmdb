@@ -16,11 +16,13 @@ from django.db.models import Count
 from django.template import RequestContext
 import sys
 import re, os
+import xlrd
+import xlwt
 
 
 # import datetime
 def listAllDev(request):
-    listAdminIP = IpV4.objects.filter(isManage=True).select_related('MachineIp').all()
+    listAdminIP = IpV4.objects.filter(isHttpManage=True).select_related('MachineIp').all()
     return render(request, 'devices/listall.html', {'listDevice': listAdminIP})
 
 
@@ -49,7 +51,7 @@ def encoders(request):
     :return:
     '''
     if request.method == 'GET':
-        query4 = ProgramDetail.objects.filter(machine__ipv4__isManage='True',
+        query4 = ProgramDetail.objects.filter(machine__ipv4__isHttpManage='True',
                                               machine__machineType__name='编码器').order_by(
             'machine', 'rowid').values('name', 'machine__machineAssetNumber',
                                        'machine__ipv4__ip')
@@ -57,6 +59,8 @@ def encoders(request):
         # from web_scan import update
         # update.updateEncoderInfo()
         return render(request, 'encoders/listall.html', {'programlist': query4})
+    elif request.method == 'POST':
+        return None
 
 
 def taskList(request):
@@ -102,27 +106,27 @@ def workPakgeList(request):
 
 def workDaily(request):
     if request.method == 'GET':
-        search_start_time = request.GET.get('starttime')
-        search_end_time = request.GET.get('endtime')
-        search_field = request.GET.get('searchfield')
+        searchStartTime = request.GET.get('starttime')
+        searchEndTime = request.GET.get('endtime')
+        searchField = request.GET.get('searchfield')
         '''
          = models.DateTimeField(verbose_name='实际开始时间', blank=True, null=True)
     endDate'''
-        if search_field:
-            search_end_time = str(search_end_time)
-            search_start_time = str(search_start_time)
-            search_field = int(search_field)
-            search_start_time = datetime.datetime.strptime(search_start_time, '%Y-%m-%d')
-            search_start_time = datetime.datetime(search_start_time.year, search_start_time.month,
-                                                  search_start_time.day, 00,
-                                                  00, 00)
-            search_end_time = datetime.datetime.strptime(search_end_time, '%Y-%m-%d')
-            search_end_time = datetime.datetime(search_end_time.year, search_end_time.month, search_end_time.day, 23,
-                                                59, 59)
-        if search_field == 0:
-            message = WorkPackage.objects.filter(startDate__range=(search_start_time, search_end_time))
-        elif search_field == 1:
-            message = WorkPackage.objects.filter(updata_time__range=(search_start_time, search_end_time))
+        if searchField:
+            searchEndTime = str(searchEndTime)
+            searchStartTime = str(searchStartTime)
+            searchField = int(searchField)
+            searchStartTime = datetime.datetime.strptime(searchStartTime, '%Y-%m-%d')
+            searchStartTime = datetime.datetime(searchStartTime.year, searchStartTime.month,
+                                                searchStartTime.day, 00,
+                                                00, 00)
+            searchEndTime = datetime.datetime.strptime(searchEndTime, '%Y-%m-%d')
+            searchEndTime = datetime.datetime(searchEndTime.year, searchEndTime.month, searchEndTime.day, 23,
+                                              59, 59)
+        if searchField == 0:
+            message = WorkPackage.objects.filter(startDate__range=(searchStartTime, searchEndTime))
+        elif searchField == 1:
+            message = WorkPackage.objects.filter(updata_time__range=(searchStartTime, searchEndTime))
         else:
             today = datetime.datetime.now()
             tomorrow = datetime.datetime.now() + datetime.timedelta(days=1)
@@ -131,46 +135,45 @@ def workDaily(request):
             search_today_end = datetime.datetime(search_today.year, search_today.month, search_today.day, 23, 59, 59)
             search_tomorrow = datetime.datetime(tomorrow.year, tomorrow.month, tomorrow.day, 23, 59, 59)
             message = WorkPackage.objects.filter(startDate__range=(search_today, search_tomorrow))
-            message_count = WorkPackage.objects.filter(
+            messageCount = WorkPackage.objects.filter(
                 startDate__range=(search_today, search_today_end)).aggregate(Count('id'))
-            search_start_time = today
-            search_end_time = tomorrow
-    message_count = message.aggregate(Count('id'))
-    dictCount=0
-    messagedict=dict()
+            searchStartTime = today
+            searchEndTime = tomorrow
+    messageCount = message.aggregate(Count('id'))
+    dictCount = 0
+    messagedict = dict()
     for item in message.values('id', 'startDate', 'endDate', 'programChannel', 'programName', ):
         print(item)
         # taskMessage = item.values('id', 'startDate', 'endDate', 'programChannel', 'programName', )
         # print(item.endDate)
-        programMessage = ProgramDetail.objects.filter(name=item['programChannel']).values('programStatus','inPutFirst',
+        programMessage = ProgramDetail.objects.filter(name=item['programChannel']).values('programStatus', 'inPutFirst',
                                                                                           'outPutHttpFlow')
         for subitem in programMessage:
             print(subitem)
             messagedict[dictCount] = item
             messagedict[dictCount].update(subitem)
-        dictCount=dictCount+1
+        dictCount = dictCount + 1
     print(messagedict)
     return render_to_response('tasks/daily.html',
-                              {'message': messagedict, 'message_count': message_count, 'today': search_start_time,
-                               'tomorrow': search_end_time, 'search_field': search_field})
+                              {'message': messagedict, 'messageCount': messageCount, 'today': searchStartTime,
+                               'tomorrow': searchEndTime, 'searchField': searchField})
 
 
-'''
-def flowlistexport(request):
+def exportTaskExcel(request):
     if request.method == 'GET':
-        search_start_time = request.GET.get('starttime')
-        search_end_time = request.GET.get('endtime')
-        if search_start_time:
-            search_end_time = str(search_end_time)
-            search_start_time = str(search_start_time)
-            search_start_time = datetime.datetime.strptime(search_start_time, '%Y-%m-%d')
-            search_start_time = datetime.datetime(search_start_time.year, search_start_time.month,
-                                                  search_start_time.day, 00,
-                                                  00, 00)
-            search_end_time = datetime.datetime.strptime(search_end_time, '%Y-%m-%d')
-            search_end_time = datetime.datetime(search_end_time.year, search_end_time.month, search_end_time.day, 23,
-                                                59, 59)
-            message = video_flow.objects.filter(plan_start_date__range=(search_start_time, search_end_time))
+        searchStartTime = request.GET.get('starttime')
+        searchEndTime = request.GET.get('endtime')
+        if searchStartTime:
+            searchEndTime = str(searchEndTime)
+            searchStartTime = str(searchStartTime)
+            searchStartTime = datetime.datetime.strptime(searchStartTime, '%Y-%m-%d')
+            searchStartTime = datetime.datetime(searchStartTime.year, searchStartTime.month,
+                                                searchStartTime.day, 00,
+                                                00, 00)
+            searchEndTime = datetime.datetime.strptime(searchEndTime, '%Y-%m-%d')
+            searchEndTime = datetime.datetime(searchEndTime.year, searchEndTime.month, searchEndTime.day, 23,
+                                              59, 59)
+            message = WorkPackage.objects.filter(startDate__range=(searchStartTime, searchEndTime))
             activity_list = message.aggregate(Count('id'))
             response = HttpResponse(content_type="application/ms-excel")
             response['Content-Disposition'] = 'attachment; filename=file.xls'
@@ -180,24 +183,32 @@ def flowlistexport(request):
             icon = 1
             dateFormat = xlwt.XFStyle()
             dateFormat.num_format_str = 'yyyy/mm/dd hh:mm'
-            list_taitle=[u'开始日期',u'开始时间',u'结束日期',u'结束时间',u'节目名称',u'需求部门',u'源地址',u'输出地址',u'负责人',u'用途',u'备注']
-            for i in range(0,len(list_taitle)):
-                ws.write(0,i,list_taitle[i])
+            list_title = [u'开始日期', u'开始时间', u'结束日期', u'结束时间', u'节目名称', u'需求部门', u'源地址', u'输出地址', u'负责人', u'用途', u'备注']
+            for i in range(0, len(list_title)):
+                '''
+                wirte excel title
+                '''
+                ws.write(0, i, list_title[i])
             for infor in message:
-                plan_start_day =  infor.plan_start_date.replace(tzinfo=None)
-                plan_start_day=plan_start_day + datetime.timedelta(hours=8)
+                '''
+                get data from workpackage and task write 
+                task,startDate,endDate,programChannel,programStatus,programName,inPutStream,notes,adminStaff
+                to excel and download it
+                '''
+                plan_start_day = infor.plan_start_date.replace(tzinfo=None)
+                plan_start_day = plan_start_day + datetime.timedelta(hours=8)
                 plan_start_time = plan_start_day.strftime('%H:%m')
-                ws.write(icon, 0, plan_start_day.strftime('%Y/%m/%d'),dateFormat)
-                ws.write(icon, 1,plan_start_time,dateFormat)
+                ws.write(icon, 0, plan_start_day.strftime('%Y/%m/%d'), dateFormat)
+                ws.write(icon, 1, plan_start_time, dateFormat)
                 plan_end_day = infor.plan_end_date.replace(tzinfo=None)
                 plan_end_day = plan_end_day + datetime.timedelta(hours=8)
                 plan_end_time = plan_end_day.strftime('%H:%m')
-                ws.write(icon, 2, plan_end_day.strftime('%Y/%m/%d'),dateFormat)
-                ws.write(icon, 3,plan_end_time,dateFormat)
+                ws.write(icon, 2, plan_end_day.strftime('%Y/%m/%d'), dateFormat)
+                ws.write(icon, 3, plan_end_time, dateFormat)
                 ws.write(icon, 4, infor.program_name)
                 ws.write(icon, 5, infor.get_department_display())
-                ws.write(icon, 6,infor.source_addr)
-                ws.write(icon, 7,infor.video_id)
+                ws.write(icon, 6, infor.source_addr)
+                ws.write(icon, 7, infor.video_id)
                 ws.write(icon, 8, infor.admin_name)
                 ws.write(icon, 9, infor.get_use_for_display())
                 ws.write(icon, 10, infor.notes)
@@ -205,6 +216,8 @@ def flowlistexport(request):
             wb.save(response)
             return response
 
+
+'''
 def change_status_flow(request):
     if request.method=='POST':
         nid = int(request.POST.get('nid'))
@@ -220,47 +233,6 @@ def change_status_flow(request):
             req =  sta.get_program_status_display()
 
         return HttpResponse(req)
-
-def faq_form(request):
-    if request.method == 'GET':
-        search_start_time = request.GET.get('starttime')
-        search_end_time = request.GET.get('endtime')
-        print search_start_time, search_end_time
-        if search_start_time:
-            search_end_time = str(search_end_time)
-            search_start_time = str(search_start_time)
-            search_start_time = datetime.datetime.strptime(search_start_time, '%Y-%m-%d')
-            search_start_time = datetime.datetime(search_start_time.year, search_start_time.month,
-                                                  search_start_time.day, 00,
-                                                  00, 00)
-            search_end_time = datetime.datetime.strptime(search_end_time, '%Y-%m-%d')
-            search_end_time = datetime.datetime(search_end_time.year, search_end_time.month, search_end_time.day, 23,
-                                                59, 59)
-    today = datetime.datetime.now()
-    # search_today = today
-    # search_tomorrow = today
-    # search_today = datetime.datetime(search_today.year, search_today.month, search_today.day, 00, 00, 00)
-    # search_today_end = datetime.datetime(search_tomorrow.year, search_tomorrow.month, search_tomorrow.day, 23, 59, 59)
-    message = video_flow.objects.filter(start_date__range=(search_start_time, search_end_time)).order_by('start_date')
-
-    return render_to_response('FAQform.html', {'message': message, 'today': today, })
-
-
-
-
-
-    # today = datetime.datetime.now()
-    # tomorrow = datetime.datetime.now() + datetime.timedelta(days=1)
-    # search_today = today
-    # search_today = datetime.datetime(search_today.year, search_today.month, search_today.day, 00, 00, 00)
-    # search_today_end = datetime.datetime(search_today.year, search_today.month, search_today.day, 23, 59, 59)
-    # search_tomorrow = datetime.datetime(tomorrow.year, tomorrow.month, tomorrow.day, 23, 59, 59)
-    # message = cgtn_flow.objects.filter(plan_start_date__range=(search_today, search_tomorrow))
-    # message_count = cgtn_flow.objects.filter(plan_start_date__range=(search_today, search_today_end)).aggregate(
-    #     Count('id'))
-    # return render_to_response('cgtn_flow_list_new.html',
-    #                           {'message': message, 'message_count': message_count, 'today': today,
-    #                            'tomorrow': tomorrow})
 
 def handle_uploaded_file(f):
     with open('some/file/name.txt', 'wb+') as destination:
