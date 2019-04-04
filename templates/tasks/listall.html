@@ -18,8 +18,8 @@
             {% for item in message %}
             <tr>
                 <td>{{ item.taskName }}</td>
-                <td>{{ item.startDate }}</td>
-                <td>{{ item.endDate }}</td>
+                <td>{{ item.startDate |date:"Y-m-d" }}</td>
+                <td>{{ item.endDate |date:"Y-m-d" }}</td>
                 <td>{{ item.typeOf__typeName }}</td>
                 <td><a href="/tasks/detailwork?tid={{ item.id }}">总计{{ item.countnum }}场</a></td>
             </tr>
