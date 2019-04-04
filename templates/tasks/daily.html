@@ -1,7 +1,23 @@
 {% extends 'basic.html' %}
 {% block subTitle %}
-    每日任务
+    <h1 class="h2">每日任务</h1>
+    <div>
+        <form action="/tasks/daily" method="get">
+            <label>开始时间</label>
+            <input type="date" name="starttime" value="{{ today|date:'Y-m-d' }}">
+            <label>结束时间</label>
+            <input type="date" name="endtime" value="{{ tomorrow|date:'Y-m-d' }}">
+            {#                <select name="searchfield">#}
+            {#                    <option value="0">播放时间</option>#}
+            {#                    <option value="1">更新时间</option>#}
+            {#                </select>#}
+            <input type="submit" class="btn btn-success btn-sm" value="查询">
+            <button id="importex" type="button" class="btn btn-success btn-sm">导入execl</button>
+            <button id="exportex" type="button" class="btn btn-success btn-sm">导出execl</button>
+        </form>
+    </div>
 {% endblock %}
+
 {% block content %}
     <div class="table-responsive">
         <table class="table table-striped table-sm">
@@ -13,6 +29,7 @@
                 <th>启止时间</th>
                 <th>频道名称</th>
                 <th>节目名称</th>
+                <th>需求部门</th>
                 <th>责任人</th>
                 <th>业务类型</th>
                 <th>源地址</th>
@@ -23,7 +40,7 @@
             <tbody>
             {% for key,item in message.items %}
                 <tr>
-                {{ item }}
+                    {{ item }}
                     <td><a href="/admin/flows/video_flow/{{ item.id }}/change">{{ forloop.counter }}</a></td>
                     <td>
                         {{ item.startDate|date:"m-d H:i" }}
@@ -32,6 +49,9 @@
                     </td>
                     <td>{{ item.programChannel }}</td>
                     <td>{{ item.programName }}</td>
+                    <td>{{ item.adminStaff__department }}</td>
+                    <td>{{ item.adminStaff__staffName }}</td>
+                    <td>{{ item.adminStaff__staffName }}</td>
                     <td>{{ item.inPutStream }}</td>
                     <th>{{ item.inPutFirst }}</th>
                     <td>{{ item.outPutHttpFlow }}</td>
@@ -40,3 +60,66 @@
         </table>
     </div>
 {% endblock %}
+{#{% block customerjs %}#}
+{#    <script type="text/javascript">#}
+{#        $(document).ready(function () {#}
+{#            var mydate = new Date();#}
+{#            $("tr:gt(0)").each(function () {#}
+{#                if ($(this).children().eq(10).text() == '未开始') {#}
+{#                    $(this).css("background-color", "#8EC2F5");#}
+{#                }#}
+{#                else if ($(this).children().eq(10).text() == '正常') {#}
+{#                    $(this).css("background-color", "#C5DA01");#}
+{#                }#}
+{#                else if ($(this).children().eq(10).text() == '异常') {#}
+{#                    $(this).css("background-color", "#FF8C05");#}
+{#                }#}
+{#                else if ($(this).children().eq(10).text() == '取消') {#}
+{#                    $(this).css("background-color", "#FDD283");#}
+{#                }#}
+{#            });#}
+{#            $('#table_id').DataTable();#}
+{#            $("#exportex").click(function () {#}
+{#                var starttime = $("input[name='starttime']").val();#}
+{#                var endtime = $("input[name='endtime']").val();#}
+{#                var link = '/list/flowlistexport?starttime=' + starttime + '&endtime=' + endtime;#}
+{#                window.location.href = link#}
+{#            });#}
+{#            $("#importex").click(function () {#}
+{#                var link = '/list/flowlistimport';#}
+{#                window.location.href = link#}
+{#            });#}
+{#            $("tbody tr td[nid]").on('click', function () {#}
+{#                var parm = 'nid=' + $(this).attr('nid');#}
+{#                var nid = $(this).attr('nid');#}
+{#                var xmlHttp = new XMLHttpRequest();#}
+{#                xmlHttp.open("POST", "/list/flowstatuschange", true);#}
+{#                xmlHttp.setRequestHeader("cache-control", "no-cache");#}
+{#                xmlHttp.setRequestHeader("contentType", "text/html;charset=uft-8");//指定发送的编码#}
+{#                xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;");  //设置请求头信息#}
+{#                xmlHttp.send(parm);#}
+{#                alert($(this).text());#}
+{#                xmlHttp.onreadystatechange = function () {#}
+{#                    if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {#}
+{#                        var newstatus = xmlHttp.responseText;#}
+{#                        search_nid = "tbody tr td[nid=" + nid + "]";#}
+{#                        $(search_nid).parents().children().eq(10).text(newstatus);#}
+{#                        alert($(this).parents().children().eq(10).text());#}
+{#                        if (newstatus == '未开始') {#}
+{#                            $(search_nid).parent().css("background-color", "#8EC2F5");#}
+{#                        }#}
+{#                        else if (newstatus == '正常') {#}
+{#                            $(search_nid).parent().css("background-color", "#C5DA01");#}
+{#                        }#}
+{#                        else if (newstatus == '异常') {#}
+{#                            $(search_nid).parent().css("background-color", "#FF8C05");#}
+{#                        }#}
+{#                        else if (newstatus == '取消') {#}
+{#                            $(search_nid).parent().css("background-color", "#FDD283");#}
+{#                        }#}
+{#                    }#}
+{#                };#}
+{#            })#}
+{#        });#}
+{#    </script>#}
+{#{% endblock %}#}

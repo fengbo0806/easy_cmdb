@@ -108,14 +108,14 @@ def workDaily(request):
     if request.method == 'GET':
         searchStartTime = request.GET.get('starttime')
         searchEndTime = request.GET.get('endtime')
-        searchField = request.GET.get('searchfield')
+        # searchField = request.GET.get('searchfield')
         '''
-         = models.DateTimeField(verbose_name='实际开始时间', blank=True, null=True)
-    endDate'''
-        if searchField:
+        get the datetime
+        '''
+        if searchStartTime:
             searchEndTime = str(searchEndTime)
             searchStartTime = str(searchStartTime)
-            searchField = int(searchField)
+            # searchField = int(searchField)
             searchStartTime = datetime.datetime.strptime(searchStartTime, '%Y-%m-%d')
             searchStartTime = datetime.datetime(searchStartTime.year, searchStartTime.month,
                                                 searchStartTime.day, 00,
@@ -123,40 +123,47 @@ def workDaily(request):
             searchEndTime = datetime.datetime.strptime(searchEndTime, '%Y-%m-%d')
             searchEndTime = datetime.datetime(searchEndTime.year, searchEndTime.month, searchEndTime.day, 23,
                                               59, 59)
-        if searchField == 0:
-            message = WorkPackage.objects.filter(startDate__range=(searchStartTime, searchEndTime))
-        elif searchField == 1:
-            message = WorkPackage.objects.filter(updata_time__range=(searchStartTime, searchEndTime))
+        # if searchField == 0:
+        #     message = WorkPackage.objects.filter(startDate__range=(searchStartTime, searchEndTime))
+        # elif searchField == 1:
+        #     message = WorkPackage.objects.filter(updata_time__range=(searchStartTime, searchEndTime))
         else:
             today = datetime.datetime.now()
             tomorrow = datetime.datetime.now() + datetime.timedelta(days=1)
             search_today = today
-            search_today = datetime.datetime(search_today.year, search_today.month, search_today.day, 00, 00, 00)
+            searchStartTime = datetime.datetime(search_today.year, search_today.month, search_today.day, 00, 00, 00)
             search_today_end = datetime.datetime(search_today.year, search_today.month, search_today.day, 23, 59, 59)
-            search_tomorrow = datetime.datetime(tomorrow.year, tomorrow.month, tomorrow.day, 23, 59, 59)
-            message = WorkPackage.objects.filter(startDate__range=(search_today, search_tomorrow))
-            messageCount = WorkPackage.objects.filter(
-                startDate__range=(search_today, search_today_end)).aggregate(Count('id'))
-            searchStartTime = today
-            searchEndTime = tomorrow
-    messageCount = message.aggregate(Count('id'))
-    dictCount = 0
-    messagedict = dict()
-    for item in message.values('id', 'startDate', 'endDate', 'programChannel', 'programName', ):
-        print(item)
-        # taskMessage = item.values('id', 'startDate', 'endDate', 'programChannel', 'programName', )
-        # print(item.endDate)
-        programMessage = ProgramDetail.objects.filter(name=item['programChannel']).values('programStatus', 'inPutFirst',
-                                                                                          'outPutHttpFlow')
-        for subitem in programMessage:
-            print(subitem)
-            messagedict[dictCount] = item
-            messagedict[dictCount].update(subitem)
-        dictCount = dictCount + 1
+            searchEndTime = datetime.datetime(tomorrow.year, tomorrow.month, tomorrow.day, 23, 59, 59)
+        message = WorkPackage.objects.filter(startDate__range=(searchStartTime, searchEndTime))
+        # searchStartTime = today
+        # searchEndTime = tomorrow
+        '''
+        count the number 
+        '''
+        messageCount = message.aggregate(Count('id'))
+        dictCount = 0
+        messagedict = dict()
+        for item in message.values('id', 'startDate', 'endDate', 'programChannel', 'programName', 'inPutStream',
+                                   'isLive', 'isRecode', 'adminStaff__staffName', 'adminStaff__department'):
+            print(item)
+            # taskMessage = item.values('id', 'startDate', 'endDate', 'programChannel', 'programName', )
+            # print(item.endDate)
+            programMessage = ProgramDetail.objects.filter(name=item['programChannel']).values('programStatus',
+                                                                                              'inPutFirst',
+                                                                                              'outPutHttpFlow')
+            if programMessage:
+                for subitem in programMessage:
+                    # print(subitem)
+                    messagedict[dictCount] = item
+                    messagedict[dictCount].update(subitem)
+            else:
+                messagedict[dictCount] = item
+            dictCount = dictCount + 1
+
     print(messagedict)
     return render_to_response('tasks/daily.html',
                               {'message': messagedict, 'messageCount': messageCount, 'today': searchStartTime,
-                               'tomorrow': searchEndTime, 'searchField': searchField})
+                               'tomorrow': searchEndTime, })
 
 
 def exportTaskExcel(request):

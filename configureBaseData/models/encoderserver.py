@@ -56,6 +56,8 @@ class WorkPackage(models.Model):
     programStatus = models.IntegerField(verbose_name='频道状态', )
     programName = models.CharField(verbose_name='节目名称', max_length=255, )
     inPutStream = models.CharField(verbose_name='源地址', max_length=255, )
+    isLive = models.BooleanField(verbose_name='直播')
+    isRecode = models.BooleanField(verbose_name='收录')
     notes = models.TextField(verbose_name='备注', null=True, blank=True)
     adminStaff = models.ForeignKey('Staff', on_delete=None,blank=True,default=None)
 
@@ -66,17 +68,17 @@ class WorkPackage(models.Model):
 
 class Staff(models.Model):
     department = (
-        ('0', '体育中心'),
-        ('1', '微视频工作室'),
-        ('2', '少儿社区部'),
-        ('3', '央视新闻'),
-        ('4', '综艺社区部'),
-        ('5', '网络媒体事业部'),
-        ('6', '品牌部'),
-        ('7', '国际传播事业部'),
-        ('8', '舆论场'),
-        ('9', 'CGTN'),
-        ('10', '科教纪录中心'),
+        ('体育中心', '体育中心'),
+        ('微视频工作室', '微视频工作室'),
+        ('少儿社区部', '少儿社区部'),
+        ('央视新闻', '央视新闻'),
+        ('综艺社区部', '综艺社区部'),
+        ('网络媒体事业部', '网络媒体事业部'),
+        ('品牌部', '品牌部'),
+        ('国际传播事业部', '国际传播事业部'),
+        ('舆论场', '舆论场'),
+        ('CGTN', 'CGTN'),
+        ('科教纪录中心', '科教纪录中心'),
     )
     task = models.ManyToManyField(Task, blank=True, )
     department = models.CharField(verbose_name='需求部门', choices=department, blank=True, max_length=30)
