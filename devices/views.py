@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render ,redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from configureBaseData.models.devices import *
 from configureBaseData.models.ips import *
@@ -20,6 +20,7 @@ import xlrd
 import xlwt
 import json
 from web_scan.web_auth import EncoderOperater
+from web_scan.update import updateEncoder
 
 
 # import datetime
@@ -147,7 +148,7 @@ def workDaily(request):
         messagedict = dict()
         for item in message.values('id', 'startDate', 'endDate', 'programChannel', 'programName', 'inPutStream',
                                    'isLive', 'isRecode', 'adminStaff__staffName', 'adminStaff__department'):
-            print(item)
+
             # taskMessage = item.values('id', 'startDate', 'endDate', 'programChannel', 'programName', )
             # print(item.endDate)
             programMessage = ProgramDetail.objects.filter(name=item['programChannel']).values('programStatus',
@@ -162,7 +163,6 @@ def workDaily(request):
                 messagedict[dictCount] = item
             dictCount = dictCount + 1
 
-    print(messagedict)
     return render_to_response('tasks/daily.html',
                               {'message': messagedict, 'messageCount': messageCount, 'today': searchStartTime,
                                'tomorrow': searchEndTime, })
@@ -204,16 +204,13 @@ def getEncoderStatus(request):
         for keyid in midDict.keys():
             targetIp = IpV4.objects.filter(MachineIp=keyid, isHttpManage=True).values('ip')
             for ip in targetIp:
-                print(ip['ip'])
-                # eor = EncoderOperater(ipadd=ip['ip'], username='admin', passwd='cntv.cn@real', targetType='realmagic')
+                eor = EncoderOperater(ipadd=ip['ip'], username=' ', passwd=' ', targetType=' ')
                 # result = eor.doOption()
                 # print(result)
-        msg = {0: {'id': '0', 'status': 'ON', 'name': '移动直播01', },
-               1: {'id': '1', 'status': 'ON', 'name': '移动直播02', },
-               2: {'id': '2', 'status': 'ON', 'name': '移动直播03', },
-               3: {'id': '3', 'status': 'ON', 'name': '移动直播04', }, }
-
-        return HttpResponse(json.dumps({"msg": msg}))
+                # updater = updateEncoder(machine=keyid,messages=result)
+                # updater.updateInfo()
+        # return HttpResponse(json.dumps({"msg": msg}))
+        return redirect("/tasks/daily")
     else:
         return HttpResponse(None)
 

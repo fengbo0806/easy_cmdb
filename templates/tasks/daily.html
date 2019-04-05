@@ -29,6 +29,7 @@
                 <th>启止时间</th>
                 <th>频道名称</th>
                 <th>节目名称</th>
+                <th>状态</th>
                 <th>需求部门</th>
                 <th>责任人</th>
                 <th>业务类型</th>
@@ -40,7 +41,6 @@
             <tbody>
             {% for key,item in message.items %}
                 <tr>
-                    {{ item }}
                     <td><a href="/admin/flows/video_flow/{{ item.id }}/change">{{ forloop.counter }}</a></td>
                     <td>
                         {{ item.startDate|date:"m-d H:i" }}
@@ -49,14 +49,17 @@
                     </td>
                     <td>{{ item.programChannel }}</td>
                     <td>{{ item.programName }}</td>
+                    <td>
+                        <span class="badge badge-success" data-programstatus="{{ item.programStatus }}"></span>
+                    </td>
                     <td>{{ item.adminStaff__department }}</td>
                     <td>{{ item.adminStaff__staffName }}</td>
                     <td>
-                        <span class="badge badge-secondary" data-status="{{ item.isLive }}">收录</span>
-                        <span class="badge badge-secondary" data-status="{{ item.isRecode }}">直播</span>
+                        <span class="badge badge-secondary" data-usefor="{{ item.isLive }}">收录</span>
+                        <span class="badge badge-secondary" data-usefor="{{ item.isRecode }}">直播</span>
                     </td>
                     <td>{{ item.inPutStream }}</td>
-                    <th>{{ item.inPutFirst }}</th>
+                    <td>{{ item.inPutFirst }}</td>
                     <td>{{ item.outPutHttpFlow }}</td>
                 </tr>
             {% endfor %}
@@ -70,22 +73,42 @@
             var endTime = $("input[name='endtime']").val();
             var targetUrl = '/tasks/getEncoderStatus?starttime=' + startTime + '&endtime=' + endTime;
             $("span").each(function () {
-                if ($(this).data("status") == "True") {
+                if ($(this).data("usefor") == "True") {
                     //alert($(this).data("status"));
                     $(this).removeClass();
                     $(this).addClass("badge badge-success");
+                }
+                ;
+                if ($(this).data("programstatus") == "-1") {
+                    {#alert($(this));#}
+                    $(this).removeClass();
+                    $(this).addClass("badge badge-secondary");
+                    $(this).text('无流');
+                } else if ($(this).data("programstatus") == "1") {
+                    $(this).removeClass();
+                    $(this).addClass("badge badge-success");
+                    $(this).text('有流');
+                }
+            });
+            $("tr:gt(0)").each(function () {
+                alert($(this).children().eq(8).text());
+                alert($(this).children().eq(9).text())
+                if ($(this).children().eq(8).text() == $(this).children().eq(9).text()) {
+                    $(this).children().eq(9).css("background-color", "#8EC2F5");
+                } else if ($(this).children().eq(8).text() != $(this).children().eq(9).text()) {
+                    $(this).children().eq(9).css("background-color", "#f55991");
                 }
             });
 
             function getEncoderStatus() {
                 $.get(targetUrl, function (data) {
-                    alert("Data Loaded: " + data);
+                    {#alert("Data Loaded: " + data);#}
                 });
             }
 
             var timer = setInterval(function () {
-                getEncoderStatus();
-            }, 5000);
+                {#getEncoderStatus();#}
+            }, 15000);
         });
     </script>
 {% endblock %}

@@ -96,7 +96,7 @@ class EncoderOperater:
         resultdict = dict()
         encoderKeyValueCount = 0
         loopCheckNumber = 0
-        encoderKeyValue = ('id', 'switchstatus', 'name', 'programstatus', 'video', 'sound', 'load')
+        encoderKeyValue = ('rowid', 'switchStatus', 'name', 'programStatus', 'video', 'sound', 'load')
         con = soup.find(text=re.compile('频道'))
         con = con.parent.parent
         for sibling in con.next_siblings:
@@ -111,17 +111,17 @@ class EncoderOperater:
                 loopCheckNumber = loopCheckNumber + 1
                 encoderKeyValueCount = 0
         for item in resultdict:
-            if resultdict[item]['switchstatus'] == 'ON':
-                resultdict[item]['switchstatus'] = True
+            if resultdict[item]['switchStatus'] == 'ON':
+                resultdict[item]['switchStatus'] = True
             else:
-                resultdict[item]['switchstatus'] = False
+                resultdict[item]['switchStatus'] = False
             '''
-            some error with programstatus check,fix it Tomorrow
+            some error with programStatus check,fix it Tomorrow
             '''
-            if resultdict[item]['programstatus'] == '0[Q:0%]':
-                resultdict[item]['programstatus'] = -1
+            if resultdict[item]['programStatus'] == '0[Q:0%]':
+                resultdict[item]['programStatus'] = -1
             else:
-                resultdict[item]['programstatus'] = 1
+                resultdict[item]['programStatus'] = 1
         for item in resultdict:
             getEncUrl = "http://%s/chinese/index.cgi?enc_setup___%d" % (self.ipadd, item)
             responseEnc = requests.get(getEncUrl, auth=auth_values)
@@ -146,7 +146,7 @@ class EncoderOperater:
             deal with the in put part,get the value of inPutFirst
             '''
             resultdict[item]['inPutFirst'] = soupInput.find('input', attrs={'name': 'ipinput_address___%d' % (item)})[
-                "value"]
+                "value"].strip()
             '''
             deal with the out put part,get the value of outPutFirst,outPutSecond,outPutHttpFlow
             '''
