@@ -6,8 +6,8 @@ import datetime
 
 
 class ProgramDetail(models.Model):
-    machine = models.ForeignKey(Machine, on_delete=models.CASCADE, )
-    rowid = models.IntegerField()
+    machine = models.ForeignKey(Machine, on_delete=models.CASCADE,null=True )
+    rowid = models.IntegerField(null=True)
     name = models.CharField(max_length=255)
     switchStatus = models.BooleanField()
     programStatus = models.IntegerField()

@@ -96,7 +96,17 @@ class WorkPackage(models.Model):
         # for i in countnum:
         #     print(i)
         return render_to_response('tasks/listall.html', {'message': message, })
-
+    elif request.method == 'POST':
+        '''
+        update value on the page
+        '''
+        message = Task.objects.all().reverse().annotate(countnum=Count('workpackage__programName')).values('taskName',
+                                                                                                           'startDate',
+                                                                                                           'endDate',
+                                                                                                           'typeOf',
+                                                                                                           'id',
+                                                                                                           'countnum')
+        return render_to_response('tasks/listall.html', {'message': message, })
 
 def workPakgeList(request):
     if request.method == 'GET':

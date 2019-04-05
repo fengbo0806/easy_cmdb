@@ -2,6 +2,7 @@ import requests
 import re
 from bs4 import BeautifulSoup
 import hashlib
+from selenium import webdriver
 
 '''
 selenium
@@ -180,6 +181,17 @@ class EncoderOperater:
         arcvideo send the password with md5 auth
         :return: resultdict
         '''
+        driver = webdriver.Chrome()
+        driver.get("http://10.78.64.207/login")
+        driver.find_element_by_name("username_1").send_keys("Admin")
+        driver.find_element_by_name("password_1").send_keys("Arc123456")
+        driver.find_element_by_class_name("input_submit").click()
+        import time
+        time.sleep(1)
+        for link in driver.find_element_by_xpath("//*[@href]"):
+            print(link.get_attribute('href'))
+        print()
+
         resultdict = dict()
         md5Mess = hashlib.md5()
         md5Mess.update(self.passwd)
@@ -246,6 +258,6 @@ if __name__ == '__main__':
     '''
     use for test 
     '''
-    result = EncoderOperater(ipadd='ip', username='name', passwd='password', targetType='type')
+    result = EncoderOperater(ipadd='ip', username='name', passwd='password', targetType='arcvideo')
     valuesDict = result.doOption()
     print(valuesDict)

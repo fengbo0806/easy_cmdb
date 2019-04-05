@@ -74,13 +74,12 @@
             var targetUrl = '/tasks/getEncoderStatus?starttime=' + startTime + '&endtime=' + endTime;
             $("span").each(function () {
                 if ($(this).data("usefor") == "True") {
-                    //alert($(this).data("status"));
                     $(this).removeClass();
                     $(this).addClass("badge badge-success");
                 }
                 ;
                 if ($(this).data("programstatus") == "-1") {
-                    {#alert($(this));#}
+
                     $(this).removeClass();
                     $(this).addClass("badge badge-secondary");
                     $(this).text('无流');
@@ -91,8 +90,6 @@
                 }
             });
             $("tr:gt(0)").each(function () {
-                alert($(this).children().eq(8).text());
-                alert($(this).children().eq(9).text())
                 if ($(this).children().eq(8).text() == $(this).children().eq(9).text()) {
                     $(this).children().eq(9).css("background-color", "#8EC2F5");
                 } else if ($(this).children().eq(8).text() != $(this).children().eq(9).text()) {

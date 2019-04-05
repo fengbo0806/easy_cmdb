@@ -23,4 +23,6 @@ urlpatterns = [
     path('dashboard/', include(dashboard)),
     path('devices/', include(devices)),
     path('tasks/',include(devices)),
+    # url()
+
 ]
