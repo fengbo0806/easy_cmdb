@@ -1,4 +1,4 @@
-from django.shortcuts import render ,redirect
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from configureBaseData.models.devices import *
 from configureBaseData.models.ips import *
@@ -21,6 +21,7 @@ import xlwt
 import json
 from web_scan.web_auth import EncoderOperater
 from web_scan.update import updateEncoder
+from .forms import *
 
 
 # import datetime
@@ -68,45 +69,39 @@ def encoders(request):
 
 def taskList(request):
     '''
-
     :param request:
-    class Task(models.Model):
-    taskName=models.CharField(verbose_name='任务名称',max_length=255)
-    startDate = models.DateTimeField(verbose_name='计划开始时间', blank=True, null=True)
-    endDate = models.DateTimeField(verbose_name='计划结束时间', blank=True, null=True)
-    typeOf = models.ForeignKey('typeOfTask',on_delete=None)
-class typeOfTask(models.Model):
-    typeName=models.CharField(verbose_name='任务类型',max_length=255)
-class WorkPackage(models.Model):
-    task=models.ForeignKey(Task,on_delete=models.CASCADE)
-    startDate = models.DateTimeField(verbose_name='实际开始时间', blank=True, null=True)
-    endDate = models.DateTimeField(verbose_name='实际结束时间', blank=True, null=True)
-    programChannel= models.CharField(verbose_name='频道名称',max_length=255,)
-    programName= models.CharField(verbose_name='节目名称',max_length=255,)
     :return:
     '''
-    if request.method == 'GET':
-        message = Task.objects.all().reverse().annotate(countnum=Count('workpackage__programName')).values('taskName',
-                                                                                                           'startDate',
-                                                                                                           'endDate',
-                                                                                                           'typeOf',
-                                                                                                           'id',
-                                                                                                           'countnum')
-        # countnum = Task.objects.all()..values('taskName','num')
-        # for i in countnum:
-        #     print(i)
-        return render_to_response('tasks/listall.html', {'message': message, })
-    elif request.method == 'POST':
+
+    if request.method == 'POST':
         '''
         update value on the page
         '''
+        # create a form instance and populate it with data from the request:
+        getForm = TaskForm(request.POST)
+        # check whether it's valid:
+        if getForm.is_valid():
+            taskName = getForm.cleaned_data['taskName']
+            startDate = getForm.cleaned_data['startDate']
+            endDate = getForm.cleaned_data['endDate']
+            typeOf = getForm.cleaned_data['typeOf']
+            Task.objects.update_or_create(taskName=taskName, startDate=startDate, endDate=endDate, typeOf=typeOf)
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            return HttpResponseRedirect('/tasks/listalltask')
+    elif request.method == 'GET':
         message = Task.objects.all().reverse().annotate(countnum=Count('workpackage__programName')).values('taskName',
                                                                                                            'startDate',
                                                                                                            'endDate',
                                                                                                            'typeOf',
                                                                                                            'id',
                                                                                                            'countnum')
-        return render_to_response('tasks/listall.html', {'message': message, })
+        getForm = TaskForm()
+        return render(request, 'tasks/listall.html', {'message': message, 'getForm': getForm})
+    else:
+        return HttpResponseRedirect('/thanks/')
+
 
 def workPakgeList(request):
     if request.method == 'GET':

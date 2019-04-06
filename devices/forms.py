@@ -1,48 +1,45 @@
 from django import forms
+from configureBaseData.configureChoices import *
 
 
 class ProgramDetail(forms.Form):
-    machine = forms.IntegerField(null=True)
-    rowid = forms.IntegerField(null=True)
+    machine = forms.IntegerField()
+    rowid = forms.IntegerField()
     name = forms.CharField(max_length=255)
     switchStatus = forms.BooleanField()
     programStatus = forms.IntegerField()
     height = forms.IntegerField()
     width = forms.IntegerField()
     outbandwidth = forms.IntegerField()
-    inPutFirst = forms.CharField(max_length=255, null=True, blank=True)
-    inPutSecond = forms.CharField(max_length=255, null=True, blank=True)
-    outPutFirst = forms.CharField(max_length=255, null=True, blank=True)
-    outPutSecond = forms.CharField(max_length=255, null=True, blank=True)
+    inPutFirst = forms.CharField(max_length=255, )
+    inPutSecond = forms.CharField(max_length=255, )
+    outPutFirst = forms.CharField(max_length=255, )
+    outPutSecond = forms.CharField(max_length=255, )
     outPutHttpFlow = forms.URLField()
 
 
-class Task(forms.Form):
-    typeOfTask = (
-        ('项目型', '项目型'),
-        ('运营型', '运营型'),
-    )
-    taskName = forms.CharField(verbose_name='任务名称', max_length=255)
-    startDate = forms.DateTimeField(verbose_name='计划开始时间', blank=True, null=True)
-    endDate = forms.DateTimeField(verbose_name='计划结束时间', blank=True, null=True)
-    typeOf = forms.CharField(verbose_name='任务类型', choices=typeOfTask, max_length=255)
+class TaskForm(forms.Form):
+    taskName = forms.CharField(max_length=255)
+    startDate = forms.DateTimeField()
+    endDate = forms.DateTimeField()
+    typeOf = forms.ChoiceField(choices=typeOfTaskChoices, required=True,)
 
 
-class WorkPackage(forms.Form):
+class WorkPackageForm(forms.Form):
     task = forms.IntegerField()
-    startDate = forms.DateTimeField(verbose_name='实际开始时间', blank=True, null=True)
-    endDate = forms.DateTimeField(verbose_name='实际结束时间', blank=True, null=True)
-    programChannel = forms.CharField(verbose_name='频道名称', max_length=255, )
-    programStatus = forms.IntegerField(verbose_name='频道状态', )
-    programName = forms.CharField(verbose_name='节目名称', max_length=255, )
-    inPutStream = forms.CharField(verbose_name='源地址', max_length=255, )
+    startDate = forms.DateTimeField()
+    endDate = forms.DateTimeField()
+    programChannel = forms.CharField(max_length=255, )
+    programStatus = forms.IntegerField()
+    programName = forms.CharField(max_length=255, )
+    inPutStream = forms.CharField(max_length=255, )
     isLive = forms.BooleanField()
     isRecode = forms.BooleanField()
-    notes = forms.CharField(verbose_name='备注', null=True, blank=True)
-    adminStaff = forms.IntegerField(blank=True, default=None)
+    notes = forms.CharField()
+    adminStaff = forms.IntegerField()
 
 
-class Staff(forms.Form):
+class StaffForm(forms.Form):
     department = (
         ('体育中心', '体育中心'),
         ('微视频工作室', '微视频工作室'),
@@ -56,6 +53,6 @@ class Staff(forms.Form):
         ('CGTN', 'CGTN'),
         ('科教纪录中心', '科教纪录中心'),
     )
-    # task = forms.ManyToManyField(Task, blank=True, )
-    department = forms.CharField(verbose_name='需求部门', choices=department, blank=True, max_length=30)
-    staffName = forms.CharField(verbose_name='负责人', blank=True, max_length=30)
+    # task = forms.ManyToManyField(Task,  )
+    department = forms.CharField(max_length=30)
+    staffName = forms.CharField(max_length=30)

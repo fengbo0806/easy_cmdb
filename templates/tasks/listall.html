@@ -15,16 +15,43 @@
             </tr>
             </thead>
             <tbody>
-            {% for item in message %}
             <tr>
-                <td>{{ item.taskName }}</td>
-                <td>{{ item.startDate |date:"Y-m-d" }}</td>
-                <td>{{ item.endDate |date:"Y-m-d" }}</td>
-                <td>{{ item.typeOf__typeName }}</td>
-                <td><a href="/tasks/detailwork?tid={{ item.id }}">总计{{ item.countnum }}场</a></td>
+                <form action="/tasks/listalltask" method="post">
+                    {% csrf_token %}
+                    <td>{{ getForm.taskName }}</td>
+                    <td>{{ getForm.startDate }}</td>
+                    <td>{{ getForm.endDate }}</td>
+                    <td>{{ getForm.typeOf }}</td>
+                    <td><input type="submit" value="添加"></td>
+                </form>
             </tr>
+            {% for item in message %}
+                <tr>
+                    <td>{{ item.taskName }}</td>
+                    <td>{{ item.startDate |date:"Y-m-d" }}</td>
+                    <td>{{ item.endDate |date:"Y-m-d" }}</td>
+                    <td>{{ item.typeOf__typeName }}</td>
+                    <td>
+                        <a href="/tasks/detailwork?tid={{ item.id }}" role="button"
+                           class="btn btn-primary btn-sm" data-countnum="{{ item.countnum }}">总计{{ item.countnum }}场</a>
+                    </td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
+{% endblock %}
+{% block customerjs %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("input").addClass("form-control form-control-sm");
+            $("select").addClass("form-control form-control-sm");
+            $("a").each(function () {
+                if ($(this).data("countnum") == "0") {
+                    $(this).removeClass().addClass("btn btn-warning btn-sm")
+                }
+            })
+        });
+    </script>
+
 {% endblock %}

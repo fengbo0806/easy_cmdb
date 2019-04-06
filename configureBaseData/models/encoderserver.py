@@ -3,6 +3,7 @@ from django.utils import timezone
 from configureBaseData.models.devices import Machine
 from configureBaseData.models.businesses import Business
 import datetime
+from ..configureChoices import *
 
 
 class ProgramDetail(models.Model):
@@ -30,14 +31,11 @@ class ProgramDetail(models.Model):
 
 
 class Task(models.Model):
-    typeOfTask = (
-        ('项目型', '项目型'),
-        ('运营型', '运营型'),
-    )
+
     taskName = models.CharField(verbose_name='任务名称', max_length=255)
     startDate = models.DateTimeField(verbose_name='计划开始时间', blank=True, null=True)
     endDate = models.DateTimeField(verbose_name='计划结束时间', blank=True, null=True)
-    typeOf = models.CharField(verbose_name='任务类型',choices=typeOfTask,max_length=255)
+    typeOf = models.CharField(verbose_name='任务类型',choices=typeOfTaskChoices,max_length=255)
 
     def __str__(self):
         return self.taskName
@@ -69,21 +67,8 @@ class WorkPackage(models.Model):
 
 
 class Staff(models.Model):
-    department = (
-        ('体育中心', '体育中心'),
-        ('微视频工作室', '微视频工作室'),
-        ('少儿社区部', '少儿社区部'),
-        ('央视新闻', '央视新闻'),
-        ('综艺社区部', '综艺社区部'),
-        ('网络媒体事业部', '网络媒体事业部'),
-        ('品牌部', '品牌部'),
-        ('国际传播事业部', '国际传播事业部'),
-        ('舆论场', '舆论场'),
-        ('CGTN', 'CGTN'),
-        ('科教纪录中心', '科教纪录中心'),
-    )
     task = models.ManyToManyField(Task, blank=True, )
-    department = models.CharField(verbose_name='需求部门', choices=department, blank=True, max_length=30)
+    department = models.CharField(verbose_name='需求部门', choices=departmentChoices, blank=True, max_length=30)
     staffName = models.CharField(verbose_name='负责人', blank=True, max_length=30)
 
     class Meta:
