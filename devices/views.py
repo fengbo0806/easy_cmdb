@@ -107,9 +107,37 @@ def workPakgeList(request):
     if request.method == 'GET':
         searchId = request.GET.get('tid')
         message = WorkPackage.objects.filter(task__pk=searchId)
+        getForm = WorkPackageForm()
         # for i in message :
         #     print(i.programName)
-        return render(request, 'tasks/detail.html', {'message': message, })
+        return render(request, 'tasks/detail.html', {'message': message, 'getForm': getForm})
+    elif request.method == 'POST':
+        '''
+        update value on the page
+        '''
+        # create a form instance and populate it with data from the request:
+        getForm = WorkPackageForm(request.POST)
+        # check whether it's valid:
+        if getForm.is_valid():
+            task = getForm.cleaned_data['task']
+            startDate = getForm.cleaned_data['startDate']
+            endDate = getForm.cleaned_data['endDate']
+            programChannel = getForm.cleaned_data['programChannel']
+            programStatus = getForm.cleaned_data['programStatus']
+            programName = getForm.cleaned_data['programName']
+            inPutStream = getForm.cleaned_data['inPutStream']
+            isLive = getForm.cleaned_data['isLive']
+            isRecode = getForm.cleaned_data['isRecode']
+            notes = getForm.cleaned_data['notes']
+            adminStaff = getForm.cleaned_data['adminStaff']
+            WorkPackage.objects.update_or_create(task=task, startDate=startDate, endDate=endDate,
+                                                 programChannel=programChannel, programStatus=programStatus,
+                                                 programName=programName, inPutStream=inPutStream, isLive=isLive,
+                                                 isRecode=isRecode, notes=notes,adminStaff=adminStaff)
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            return HttpResponseRedirect('/tasks/listalltask')
 
 
 def workDaily(request):

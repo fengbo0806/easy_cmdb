@@ -2,7 +2,7 @@ from django import forms
 from configureBaseData.configureChoices import *
 
 
-class ProgramDetail(forms.Form):
+class ProgramDetailForm(forms.Form):
     machine = forms.IntegerField()
     rowid = forms.IntegerField()
     name = forms.CharField(max_length=255)
