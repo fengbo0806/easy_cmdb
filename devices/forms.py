@@ -20,15 +20,35 @@ class ProgramDetailForm(forms.Form):
 
 class TaskForm(forms.Form):
     taskName = forms.CharField(max_length=255)
-    startDate = forms.DateTimeField()
-    endDate = forms.DateTimeField()
-    typeOf = forms.ChoiceField(choices=typeOfTaskChoices, required=True,)
+    startDate = forms.DateTimeField(required=True,
+                                    input_formats=['%d/%m/%Y %H:%M'],
+                                    widget=forms.DateTimeInput(attrs={
+                                        'class': 'form-control datetimepicker-input',
+                                        'data-target': '#datetimepicker1'
+                                    })
+                                    )
+    endDate = forms.DateTimeField(required=True,
+                                  input_formats=['%d/%m/%Y %H:%M'],
+                                  widget=forms.DateTimeInput(attrs={
+                                      'class': 'form-control datetimepicker-input',
+                                      'data-target': '#datetimepicker2'
+                                  })
+                                  )
+    typeOf = forms.ChoiceField(choices=typeOfTaskChoices, required=True, )
 
 
 class WorkPackageForm(forms.Form):
     task = forms.IntegerField()
-    startDate = forms.DateTimeField()
-    endDate = forms.DateTimeField()
+    startDate = forms.DateTimeField(required=True,
+                                    input_formats=['%d/%m/%Y %H:%M'],
+                                    widget=forms.DateTimeInput(attrs={
+                                        'class': 'form-control datetimepicker-input',
+                                        'data-target': '#datetimepicker1'}))
+    endDate = forms.DateTimeField(required=True,
+                                  input_formats=['%d/%m/%Y %H:%M'],
+                                  widget=forms.DateTimeInput(attrs={
+                                      'class': 'form-control datetimepicker-input',
+                                      'data-target': '#datetimepicker2'}))
     programChannel = forms.CharField(max_length=255, )
     programStatus = forms.IntegerField()
     programName = forms.CharField(max_length=255, )

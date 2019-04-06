@@ -85,11 +85,13 @@ def taskList(request):
             startDate = getForm.cleaned_data['startDate']
             endDate = getForm.cleaned_data['endDate']
             typeOf = getForm.cleaned_data['typeOf']
+            print(taskName)
             Task.objects.update_or_create(taskName=taskName, startDate=startDate, endDate=endDate, typeOf=typeOf)
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
-            return HttpResponseRedirect('/tasks/listalltask')
+            return redirect('/tasks/listalltask')
+            # return HttpResponseRedirect('tasks/listall.html', {'getForm': getForm})
     elif request.method == 'GET':
         message = Task.objects.all().reverse().annotate(countnum=Count('workpackage__programName')).values('taskName',
                                                                                                            'startDate',
