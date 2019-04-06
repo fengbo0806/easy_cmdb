@@ -57,6 +57,7 @@
             <tr>
                 <form action="/tasks/detailwork" method="post">
                     {% csrf_token %}
+                    <td hidden>{{ tid }} {{ getForm.task }}</td>
                     <td>{{ getForm.programName }}</td>
                     <td>
                         <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
@@ -68,7 +69,7 @@
                     </td>
                     <td>
                         <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
-                            {{ getForm.startDate }}
+                            {{ getForm.endDate }}
                             <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>

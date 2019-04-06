@@ -110,9 +110,10 @@ def workPakgeList(request):
         searchId = request.GET.get('tid')
         message = WorkPackage.objects.filter(task__pk=searchId)
         getForm = WorkPackageForm()
+        getForm.task=searchId
         # for i in message :
         #     print(i.programName)
-        return render(request, 'tasks/detail.html', {'message': message, 'getForm': getForm})
+        return render(request, 'tasks/detail.html', {'message': message, 'getForm': getForm, 'tid': searchId})
     elif request.method == 'POST':
         '''
         update value on the page
@@ -135,7 +136,7 @@ def workPakgeList(request):
             WorkPackage.objects.update_or_create(task=task, startDate=startDate, endDate=endDate,
                                                  programChannel=programChannel, programStatus=programStatus,
                                                  programName=programName, inPutStream=inPutStream, isLive=isLive,
-                                                 isRecode=isRecode, notes=notes,adminStaff=adminStaff)
+                                                 isRecode=isRecode, notes=notes, adminStaff=adminStaff)
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
