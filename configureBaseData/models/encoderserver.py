@@ -50,7 +50,7 @@ class WorkPackage(models.Model):
     startDate = models.DateTimeField(verbose_name='实际开始时间', blank=True, null=True)
     endDate = models.DateTimeField(verbose_name='实际结束时间', blank=True, null=True)
     programChannel = models.CharField(verbose_name='频道名称', max_length=255, )
-    programStatus = models.IntegerField(verbose_name='频道状态', )
+    programStatus = models.IntegerField(verbose_name='频道状态', blank=True,null=True)
     programName = models.CharField(verbose_name='节目名称', max_length=255, )
     inPutStream = models.CharField(verbose_name='源地址', max_length=255, )
     isLive = models.BooleanField(verbose_name='直播')
