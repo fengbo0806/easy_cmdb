@@ -26,4 +26,5 @@ urlpatterns = [
     path('detailwork',views.workPakgeList),
     path('daily',views.workDaily),
     path('getEncoderStatus',views.getEncoderStatus),
+    path('deletework',views.workPakgeListDelete),
 ]

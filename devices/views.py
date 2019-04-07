@@ -110,7 +110,7 @@ def workPakgeList(request):
         searchId = request.GET.get('tid')
         message = WorkPackage.objects.filter(task__pk=searchId)
         getForm = WorkPackageForm()
-        getForm.task=searchId
+        getForm.task = searchId
         # for i in message :
         #     print(i.programName)
         return render(request, 'tasks/detail.html', {'message': message, 'getForm': getForm, 'tid': searchId})
@@ -141,6 +141,18 @@ def workPakgeList(request):
             # ...
             # redirect to a new URL:
             return HttpResponseRedirect('/tasks/listalltask')
+
+
+def workPakgeListDelete(request):
+    if request.method == 'POST':
+        tid = request.POST.get('tid')
+        wid = request.POST.get('wid')
+        print(tid)
+        # WorkPackage.objects.filter(task=tid, pk=wid).delete()
+        result = json.dumps({'wid': wid})
+        return HttpResponse(result)
+    else:
+        return None
 
 
 def workDaily(request):
