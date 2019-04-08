@@ -131,3 +131,5 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
+# my_project/settings.py
+LOGIN_REDIRECT_URL = '/dashboard/'
