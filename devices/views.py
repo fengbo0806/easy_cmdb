@@ -108,7 +108,9 @@ def taskList(request):
 def workPakgeList(request):
     if request.method == 'GET':
         searchId = request.GET.get('tid')
-        message = WorkPackage.objects.filter(task__pk=searchId)
+        message = WorkPackage.objects.filter(task__pk=searchId).values('programName', 'startDate', 'endDate', 'isLive',
+                                                                       'isRecode', 'programChannel', 'inPutStream',
+                                                                       'adminStaff__staffName', 'notes')
         getForm = WorkPackageForm(initial={'task': searchId})
         getForm.task = searchId
         # for i in message :
@@ -132,7 +134,8 @@ def workPakgeList(request):
             isRecode = getForm.cleaned_data['isRecode']
             notes = getForm.cleaned_data['notes']
             adminStaff = getForm.cleaned_data['adminStaff']
-            WorkPackage.objects.update_or_create(task=task, startDate=startDate, endDate=endDate,
+            taskId = Task.objects.get(id=task)
+            WorkPackage.objects.update_or_create(task=taskId, startDate=startDate, endDate=endDate,
                                                  programChannel=programChannel,
                                                  programName=programName, inPutStream=inPutStream, isLive=isLive,
                                                  isRecode=isRecode, notes=notes, adminStaff=adminStaff)

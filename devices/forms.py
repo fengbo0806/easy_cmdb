@@ -1,5 +1,6 @@
 from django import forms
 from configureBaseData.configureChoices import *
+from configureBaseData.models.encoderserver import Staff
 
 
 class ProgramDetailForm(forms.Form):
@@ -37,6 +38,12 @@ class TaskForm(forms.Form):
     typeOf = forms.ChoiceField(choices=typeOfTaskChoices, required=True, )
 
 
+def choiceAdminStaff():
+    choice = forms.ChoiceField(choices=[
+        (choice.pk, choice) for choice in Staff.objects.all()])
+    return choice
+
+
 class WorkPackageForm(forms.Form):
     task = forms.IntegerField()
     startDate = forms.DateTimeField(required=True,
@@ -50,13 +57,13 @@ class WorkPackageForm(forms.Form):
                                       'class': 'form-control datetimepicker-input',
                                       'data-target': '#datetimepicker2'}))
     programChannel = forms.CharField(max_length=255, )
-    programStatus = forms.IntegerField()
+    # programStatus = forms.IntegerField()
     programName = forms.CharField(max_length=255, )
     inPutStream = forms.CharField(max_length=255, )
-    isLive = forms.BooleanField()
-    isRecode = forms.BooleanField()
+    isLive = forms.BooleanField(widget=forms.CheckboxInput())
+    isRecode = forms.BooleanField(widget=forms.CheckboxInput())
     notes = forms.CharField()
-    adminStaff = forms.IntegerField()
+    adminStaff = forms.ModelChoiceField(queryset=Staff.objects.all())
 
 
 class StaffForm(forms.Form):

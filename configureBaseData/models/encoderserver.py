@@ -7,7 +7,7 @@ from ..configureChoices import *
 
 
 class ProgramDetail(models.Model):
-    machine = models.ForeignKey(Machine, on_delete=models.CASCADE,null=True )
+    machine = models.ForeignKey(Machine, on_delete=models.CASCADE, null=True)
     rowid = models.IntegerField(null=True)
     name = models.CharField(max_length=255)
     switchStatus = models.BooleanField()
@@ -31,11 +31,10 @@ class ProgramDetail(models.Model):
 
 
 class Task(models.Model):
-
     taskName = models.CharField(verbose_name='任务名称', max_length=255)
     startDate = models.DateTimeField(verbose_name='计划开始时间', blank=True, null=True)
     endDate = models.DateTimeField(verbose_name='计划结束时间', blank=True, null=True)
-    typeOf = models.CharField(verbose_name='任务类型',choices=typeOfTaskChoices,max_length=255)
+    typeOf = models.CharField(verbose_name='任务类型', choices=typeOfTaskChoices, max_length=255)
 
     def __str__(self):
         return self.taskName
@@ -50,7 +49,7 @@ class WorkPackage(models.Model):
     startDate = models.DateTimeField(verbose_name='实际开始时间', blank=True, null=True)
     endDate = models.DateTimeField(verbose_name='实际结束时间', blank=True, null=True)
     programChannel = models.CharField(verbose_name='频道名称', max_length=255, )
-    programStatus = models.IntegerField(verbose_name='频道状态', blank=True,null=True)
+    programStatus = models.IntegerField(verbose_name='频道状态', blank=True,default=0)
     programName = models.CharField(verbose_name='节目名称', max_length=255, )
     inPutStream = models.CharField(verbose_name='源地址', max_length=255, )
     isLive = models.BooleanField(verbose_name='直播')
@@ -75,6 +74,5 @@ class Staff(models.Model):
         verbose_name = '业务人员'
         verbose_name_plural = '业务人员'
 
-    class Meta:
-        verbose_name = '业务人员'
-        verbose_name_plural = '业务人员'
+    def __str__(self):
+        return self.staffName

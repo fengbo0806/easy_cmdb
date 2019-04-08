@@ -106,3 +106,5 @@ venv.bak/
 \.idea/
 
 configureBaseData/migrations/0002_auto_20190407_1500\.py
+
+configureBaseData/migrations/0003_auto_20190408_1412\.py
