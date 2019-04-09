@@ -22,14 +22,14 @@ class ProgramDetailForm(forms.Form):
 class TaskForm(forms.Form):
     taskName = forms.CharField(max_length=255)
     startDate = forms.DateTimeField(required=True,
-                                    input_formats=['%d/%m/%Y %H:%M'],
+                                    input_formats=['%Y-%m-%d'],
                                     widget=forms.DateTimeInput(attrs={
                                         'class': 'form-control datetimepicker-input',
                                         'data-target': '#datetimepicker1'
                                     })
                                     )
     endDate = forms.DateTimeField(required=True,
-                                  input_formats=['%d/%m/%Y %H:%M'],
+                                  input_formats=['%Y-%m-%d'],
                                   widget=forms.DateTimeInput(attrs={
                                       'class': 'form-control datetimepicker-input',
                                       'data-target': '#datetimepicker2'
@@ -56,12 +56,12 @@ class WorkPackageForm(forms.Form):
                                   widget=forms.DateTimeInput(attrs={
                                       'class': 'form-control datetimepicker-input',
                                       'data-target': '#datetimepicker2'}))
-    programChannel = forms.CharField(max_length=255, )
+    programChannel = forms.ChoiceField(choices=programChannelChoices)
     # programStatus = forms.IntegerField()
     programName = forms.CharField(max_length=255, )
     inPutStream = forms.CharField(max_length=255, )
-    isLive = forms.BooleanField(widget=forms.CheckboxInput())
-    isRecode = forms.BooleanField(widget=forms.CheckboxInput())
+    isLive = forms.BooleanField(widget=forms.CheckboxInput(), required=False, )
+    isRecode = forms.BooleanField(widget=forms.CheckboxInput(), required=False, )
     notes = forms.CharField()
     adminStaff = forms.ModelChoiceField(queryset=Staff.objects.all())
 
