@@ -83,31 +83,128 @@ python3.6 manage.py migrate
 #configure uwsgi
 #uwsgi --http :8001 --chdir /root/easy_cmdb/easy_cmdb  --module wsgi.py
 uwsgi --http :8001 --chdir /root/easy_cmdb/  --wsgi-file easy_cmdb/wsgi.py
-#restart server
+
+uwsgi --http :8001 --chdir /root/easy_cmdb/  --wsgi-file easy_cmdb/wsgi.py 
+#--static-map /static=/root/easy_cmdb/statci
+#--check-static /root/easy_cmdb/statci
+
+#_________configure web server uwsgi_____________
+# uwsgi --http :8001 --chdir /root/easy_cmdb/  --wsgi-file easy_cmdb/wsgi.py
+
+mkdir /root/easy_cmdb/
+touch /root/easy_cmdb/uwsgi.ini
+
+#__________the document in uwsgi.ini____________
+
+[uwsgi]
+#socket = /root/easy_cmdb/easy_cmdb.sock
+http = 172.20.51.160:8001
+chdir = /root/easy_cmdb/
+wsgi-file = easy_cmdb/wsgi.py
+touch-reload = /root/easy_cmdb/reload
+static-map = /static=/root/easy_cmdb/static
+processes = 2
+threads = 4
+
+chmod-socket = 664
+#chown-socket = root:www-data
+uid = root
+gid = root
+vacuum = true
+
+#___________end of uwsgi.ini__________
+
+#___________teset ini file____________
+uwsgi --ini uwsgi.ini
+#_________configure supervisord_________________
+echo_supervisord_conf > /etc/supervisord.conf
+
+[program:easy_cmdb]
+#command=/bin/uwsgi --http :8001 --chdir /root/easy_cmdb/  --wsgi-file easy_cmdb/wsgi.py
+command=/bin/uwsgi --ini /root/easy_cmdb/uwsgi.ini
+directory=/root/easy_cmdb
+startsecs=0
+stopwaitsecs=0
+autostart=true
+autorestart=true
+
+#________operate to supervisord___________
+#supervisord -c /etc/supervisord.conf
+#supervisorctl -c /etc/supervisord.conf restart easy_cmdb
+#supervisorctl -c /etc/supervisord.conf [start|stop|restart] [program-name|all]
+
+#_________the part of nginx is not finished________
+
+mkdir /etc/nginx/sites-available/
+touch easy_cmdb.conf
+vim /etc/nginx/sites-available/easy_cmdb.conf
+
+# the upstream component nginx needs to connect to
+upstream django {
+    # server unix:///path/to/your/mysite/mysite.sock; # for a file socket
+    server 127.0.0.1:8001; # for a web port socket (we'll use this first)
+}
+
+# configuration of the server
+#----------------------
+server {
+    # the port your site will be served on
+    listen      8000;
+    # the domain name it will serve for
+    server_name easy_cmdb.com; # substitute your machine's IP address or FQDN
+    charset     utf-8;
+
+    # max upload size
+    client_max_body_size 75M;   # adjust to taste
+
+    # Django media
+    location /media/  {
+        alias /root/easy_cmdb/media;  # your Django project's media files - amend as required
+    }
+
+    location /static/ {
+        alias /root/easy_cmdb/static/; # your Django project's static files - amend as required
+    }
+
+    # Finally, send all non-media requests to the Django server.
+    location / {
+        uwsgi_pass  unix:///root/easy_cmdb/easy_cmdb.sock;
+        include     /etc/nginx/uwsgi_params; # the uwsgi_params file you installed
+    }
+}
+#---
+#user root
+/etc/nginx/nginx.conf
+include /etc/nginx/sites-enabled/*.conf;
+ln -s ~/path/to/your/mysite/mysite_nginx.conf /etc/nginx/sites-enabled/
+ln -s /etc/nginx/sites-available/easy_cmdb.conf /etc/nginx/sites-enabled/
+#change the default configure
+
+service nginx reload
 
 #start process
 #configure Nginx
 vim /usr/lib/systemd/system/nginx.servcie
 
-#nginx·þÎñÅäÖÃµ½¸ÃÎÄ¼þÖÐ
-#·þÎñÃèÊöÐÔµÄÅäÖÃ
+#nginxï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
+#ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ôµï¿½ï¿½ï¿½ï¿½ï¿½
 [Unit]
 Description=nginx - high performance web server
 Documentation=http://nginx.org/en/docs/
 After=network.target remote-fs.target nss-lookup.target
-#·þÎñ¹Ø¼üÅäÖÃ
+#ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ï¿½ï¿½ï¿½ï¿½
 [Service]
 Type=forking
-#pidÎÄ¼þÎ»ÖÃ 
-#ÒªÓënginxÅäÖÃÎÄ¼þÖÐµÄpidÅäÖÃÂ·¾¶Ò»ÖÂ£¬Õâ¸öºÜÖØÒª£¬·ñÔò»á·þÎñÆô¶¯Ê§°Ü
+#pidï¿½Ä¼ï¿½Î»ï¿½ï¿½
+#Òªï¿½ï¿½nginxï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ðµï¿½pidï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½Ò»ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½
 PIDFile=/var/run/nginx.pid
-#Æô¶¯Ç°¼ì²â nginxÅäÖÃÎÄ¼þ ÊÇ·ñÕýÈ·
+#ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ nginxï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ ï¿½Ç·ï¿½ï¿½ï¿½È·
 ExecStartPre=/usr/sbin/nginx -t -c /usr/local/nginx/conf/nginx.conf
-#Æô¶¯
+#ï¿½ï¿½ï¿½ï¿½
 ExecStart=/usr/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
-#ÖØÆô
+#ï¿½ï¿½ï¿½ï¿½
 ExecReload=/bin/kill -s HUP $MAINPID
-#¹Ø±Õ
+#ï¿½Ø±ï¿½
 ExecStop=/bin/kill -s QUIT $MAINPID
 PrivateTmp=true
 [Install]
@@ -115,22 +212,4 @@ WantedBy=multi-user.target
 
 systemctl start nginx.service
 systemctl enable nginx.service
-
-uwsgi --http :8001 --chdir /root/easy_cmdb/  --wsgi-file easy_cmdb/wsgi.py 
-#--static-map /static=/root/easy_cmdb/statci
-#--check-static /root/easy_cmdb/statci
-
-#¹ÜÀí supervisor
-echo_supervisord_conf > /etc/supervisord.conf
-vim
-[program:ecmdb]
-command=/path/to/uwsgi --http :8001 --chdir /root/easy_cmdb/  --wsgi-file easy_cmdb/wsgi.py 
-directory=/path/to/zqxt
-startsecs=0
-stopwaitsecs=0
-autostart=true
-autorestart=true
-
-
-
 
