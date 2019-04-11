@@ -22,6 +22,7 @@ import json
 from web_scan.web_auth import EncoderOperater
 from web_scan.update import updateEncoder
 from .forms import *
+from django.contrib.auth.decorators import login_required
 
 
 # import datetime
@@ -104,7 +105,7 @@ def taskList(request):
     else:
         return HttpResponseRedirect('/thanks/')
 
-
+@login_required
 def workPakgeList(request):
     if request.method == 'GET':
         searchId = request.GET.get('tid')
@@ -146,6 +147,7 @@ def workPakgeList(request):
             # redirect to a new URL:
             returnUrl = '/tasks/detailwork?tid=' + str(task)
             return HttpResponseRedirect(returnUrl)
+
 
 
 def workPakgeListDelete(request):

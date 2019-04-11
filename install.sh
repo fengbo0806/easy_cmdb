@@ -2,13 +2,12 @@
 if [ "$UID" != "0" ]; then
 echo "Please run this script by root "
 exit 1
-#intsll yum package
+#_________intsll yum package_____________
 yum -y update
 yum install -y yum-utils
 yum groupinstall -y development
 yum install -y https://centos7.iuscommunity.org/ius-release.rpm
-
-#python3.6 pip devel
+#_________intsll python3.6 pip devel_____________
 
 yum install -y vim python36u python36u-pip python36u-devel mariadb mariadb-server
  
@@ -119,14 +118,14 @@ uwsgi --ini uwsgi.ini
 #_________configure supervisord_________________
 echo_supervisord_conf > /etc/supervisord.conf
 
-[program:easy_cmdb]
+echo "[program:easy_cmdb]" >> etc/supervisord.conf
 #command=/bin/uwsgi --http :8001 --chdir /root/easy_cmdb/  --wsgi-file easy_cmdb/wsgi.py
-command=/bin/uwsgi --ini /root/easy_cmdb/uwsgi.ini
-directory=/root/easy_cmdb
-startsecs=0
-stopwaitsecs=0
-autostart=true
-autorestart=true
+echo "command=/bin/uwsgi --ini /root/easy_cmdb/uwsgi.ini" >> etc/supervisord.conf
+echo "directory=/root/easy_cmdb" >> etc/supervisord.conf
+echo "startsecs=0" >> etc/supervisord.conf
+echo "stopwaitsecs=0" >> etc/supervisord.conf
+echo "autostart=true" >> etc/supervisord.conf
+echo "autorestart=true" >> etc/supervisord.conf
 
 #________operate to supervisord___________
 #supervisord -c /etc/supervisord.conf
