@@ -1,11 +1,11 @@
 {% extends 'basic.html' %}
 {% block subTitle %}
     <div class="btn-group" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-secondary"><a href="#"></a>卫星接收机</button>
-        <button type="button" class="btn btn-secondary"><a href="#"></a>编码器</button>
+        <button type="button" class="btn btn-secondary" id='used'>使用中</button>
+        <button type="button" class="btn btn-secondary" id='unused'>未使用</button>
     </div>
     <div class="btn-group" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-secondary"><a href="#"></a>更新</button>
+        <button type="button" class="btn btn-secondary" id='update'>更新</button>
     </div>
 {% endblock %}
 {% block content %}
@@ -35,4 +35,37 @@
             </tbody>
         </table>
     </div>
+{% endblock %}
+{% block customerjs %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("button[id=used]").click(function () {
+                $("td").each(function () {
+                        if ($(this).is(':hidden') && $(this).text() == 'True') {
+                            $(this).parent().show();
+                            $(this).show();
+                        } else if ($(this).text() == 'True') {
+                            $(this).hide();
+                            $(this).parent().hide()
+                        }
+                    }
+                )
+            });
+            $("button[id=unused]").click(function () {
+                $("td").each(function () {
+                        if ($(this).is(':hidden') && $(this).text() == 'False') {
+                            $(this).parent().show();
+                            $(this).show();
+                        } else if ($(this).text() == 'False') {
+                            $(this).hide();
+                            $(this).parent().hide()
+                        }
+                    }
+                )
+            });
+
+
+        });
+    </script>
+
 {% endblock %}

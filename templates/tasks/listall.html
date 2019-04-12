@@ -9,7 +9,11 @@
     <script src={% static 'tempus/js/tempusdominus-bootstrap-4.min.js' %}></script>
 {% endblock %}
 {% block subTitle %}
-    重点任务保障
+        <div class="btn-group" role="group" aria-label="Basic example">
+       <a href="/tasks/listalltask" type="button" class="btn btn-primary btn-sm">重点任务保障</a>
+        <a href="/tasks/staff" type="button" class="btn btn-primary btn-sm">业务部门</a>
+    </div>
+
 {% endblock %}
 {% block content %}
     <div >

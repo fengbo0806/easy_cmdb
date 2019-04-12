@@ -85,6 +85,33 @@ def updateEncoders(request):
     else:
         return None
 
+@login_required
+def staff(request):
+    if request.method == 'POST':
+        '''
+        update value on the page
+        '''
+        # create a form instance and populate it with data from the request:
+        getForm = StaffForm(request.POST)
+
+        # check whether it's valid:
+        if getForm.is_valid():
+            department = getForm.cleaned_data['department']
+            staffName = getForm.cleaned_data['staffName']
+            phoneNumber = getForm.cleaned_data['phoneNumber']
+            note = getForm.cleaned_data['note']
+            Staff.objects.update_or_create(department=department, staffName=staffName, phoneNumber=phoneNumber, note=note)
+            # process the data in form.cleaned_data as required
+            # ...
+            # redirect to a new URL:
+            return redirect('/tasks/staff')
+            # return HttpResponseRedirect('tasks/listall.html', {'getForm': getForm})
+    elif request.method == 'GET':
+        message = Staff.objects.all().order_by('department')
+        getForm = StaffForm()
+        return render(request, 'tasks/staff.html', {'message': message, 'getForm': getForm})
+    else:
+        return HttpResponseRedirect('/thanks/')
 
 def taskList(request):
     '''

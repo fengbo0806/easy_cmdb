@@ -10,8 +10,8 @@ class ProgramDetail(models.Model):
     machine = models.ForeignKey(Machine, on_delete=models.CASCADE, null=True)
     rowid = models.IntegerField(null=True)
     name = models.CharField(max_length=255)
-    switchStatus = models.BooleanField()
-    programStatus = models.IntegerField()
+    switchStatus = models.BooleanField(default=False)
+    programStatus = models.IntegerField(default=-1)
     height = models.IntegerField()
     width = models.IntegerField()
     outbandwidth = models.IntegerField()
@@ -49,11 +49,11 @@ class WorkPackage(models.Model):
     startDate = models.DateTimeField(verbose_name='实际开始时间', blank=True, null=True)
     endDate = models.DateTimeField(verbose_name='实际结束时间', blank=True, null=True)
     programChannel = models.CharField(verbose_name='频道名称', max_length=255, )
-    programStatus = models.IntegerField(verbose_name='频道状态', blank=True,default=0)
+    programStatus = models.IntegerField(verbose_name='频道状态', blank=True, default=0)
     programName = models.CharField(verbose_name='节目名称', max_length=255, )
     inPutStream = models.CharField(verbose_name='源地址', max_length=255, )
-    isLive = models.BooleanField(verbose_name='直播',default=False,blank=True)
-    isRecode = models.BooleanField(verbose_name='收录',default=False,blank=True)
+    isLive = models.BooleanField(verbose_name='直播', default=False, blank=True)
+    isRecode = models.BooleanField(verbose_name='收录', default=False, blank=True)
     notes = models.TextField(verbose_name='备注', null=True, blank=True)
     adminStaff = models.ForeignKey('Staff', on_delete=None, blank=True, default=None)
 
@@ -69,6 +69,8 @@ class Staff(models.Model):
     task = models.ManyToManyField(Task, blank=True, )
     department = models.CharField(verbose_name='需求部门', choices=departmentChoices, blank=True, max_length=30)
     staffName = models.CharField(verbose_name='负责人', blank=True, max_length=30)
+    phoneNumber = models.IntegerField(verbose_name='电话', blank=True)
+    note = models.CharField(verbose_name='备注', blank=True, null=True, max_length=60)
 
     class Meta:
         verbose_name = '业务人员'
