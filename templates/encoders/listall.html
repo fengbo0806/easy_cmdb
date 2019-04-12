@@ -1,6 +1,12 @@
 {% extends 'basic.html' %}
 {% block subTitle %}
-    明细
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-secondary"><a href="#"></a>卫星接收机</button>
+        <button type="button" class="btn btn-secondary"><a href="#"></a>编码器</button>
+    </div>
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <button type="button" class="btn btn-secondary"><a href="#"></a>更新</button>
+    </div>
 {% endblock %}
 {% block content %}
     <div class="table-responsive">
@@ -9,18 +15,22 @@
             <tr>
                 <th>设备ip</th>
                 <th>频道名称</th>
+                <th>启停</th>
+                <th>分辨率</th>
                 <th>输出组播</th>
                 <th>播放连接</th>
             </tr>
             </thead>
             <tbody>
-            {% for item in programlist %}
-            <tr>
-                <td>{{ item.machine__ipv4__ip }}</td>
-                <td>{{ item.name }}</td>
-                <td></td>
-                <td></td>
-            </tr>
+            {% for item in queryencoders %}
+                <tr>
+                    <td>{{ item.ipv4__ip }}</td>
+                    <td>{{ item.programdetail__name }}</td>
+                    <td>{{ item.programdetail__switchStatus }}</td>
+                    <td>{{ item.programdetail__width }}*{{ item.programdetail__height }}</td>
+                    <td>{{ item.programdetail__outPutFirst }}</td>
+                    <td>{{ item.programdetail__outPutHttpFlow }}</td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>

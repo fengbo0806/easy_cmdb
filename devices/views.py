@@ -56,15 +56,33 @@ def encoders(request):
     :return:
     '''
     if request.method == 'GET':
-        query4 = ProgramDetail.objects.filter(machine__ipv4__isHttpManage='True',
-                                              machine__machineType__name='编码器').order_by(
-            'machine', 'rowid').values('name', 'machine__machineAssetNumber',
-                                       'machine__ipv4__ip')
-
+        # query4 = ProgramDetail.objects.filter(machine__ipv4__isHttpManage='True',
+        #                                       machine__machineType__name='编码器').order_by(
+        #     'machine', 'rowid').values('name', 'machine__machineAssetNumber',
+        #                                'machine__ipv4__ip', 'height', 'width', 'outPutHttpFlow', 'outPutFirst')
+        queryEncoders = Machine.objects.filter(machineType__name='编码器', ipv4__isHttpManage='True').order_by(
+            'id', 'programdetail__rowid').values('machineAssetNumber', 'programdetail__name', 'programdetail__height',
+                                                 'programdetail__width', 'programdetail__outPutHttpFlow', 'ipv4__ip',
+                                                 'programdetail__switchStatus', 'programdetail__outPutFirst')
         # from web_scan import update
         # update.updateEncoderInfo()
-        return render(request, 'encoders/listall.html', {'programlist': query4})
+        return render(request, 'encoders/listall.html', {'queryencoders': queryEncoders})
     elif request.method == 'POST':
+        return None
+
+
+def updateEncoders(request):
+    if request.method == 'GET':
+        queryEncoders = Machine.objects.filter(machineType__name='编码器', ipv4__isHttpManage='True').values('id',
+                                                                                                          'ipv4__ip', )
+        for items in queryEncoders:
+
+            eor = EncoderOperater(ipadd=items['ipv4__ip'], username='admin', passwd='cntv.cn@real', targetType='realmagic')
+            result = eor.doOption()
+            updater = updateEncoder(machine=items['id'], messages=result)
+            updater.updateInfo()
+
+    else:
         return None
 
 
@@ -104,6 +122,7 @@ def taskList(request):
         return render(request, 'tasks/listall.html', {'message': message, 'getForm': getForm})
     else:
         return HttpResponseRedirect('/thanks/')
+
 
 @login_required
 def workPakgeList(request):
@@ -147,7 +166,6 @@ def workPakgeList(request):
             # redirect to a new URL:
             returnUrl = '/tasks/detailwork?tid=' + str(task)
             return HttpResponseRedirect(returnUrl)
-
 
 
 def workPakgeListDelete(request):
