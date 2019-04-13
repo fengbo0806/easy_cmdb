@@ -21,6 +21,7 @@ urlpatterns = [
     path('listall/', views.listAllDev),
     path('reboot', views.rebootDev),
     path('detail', views.detailDev),
+    path('encodersupdate', views.updateEncoders),
     path('encoders', views.encoders),
     path('listalltask', views.taskList),
     path('detailwork', views.workPakgeList),
@@ -28,4 +29,5 @@ urlpatterns = [
     path('getEncoderStatus', views.getEncoderStatus),
     path('deletework', views.workPakgeListDelete),
     path('staff', views.staff),
+    path('deletestaff', views.staffDelete),
 ]

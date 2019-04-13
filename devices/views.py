@@ -72,15 +72,17 @@ def encoders(request):
 
 
 def updateEncoders(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
         queryEncoders = Machine.objects.filter(machineType__name='编码器', ipv4__isHttpManage='True').values('id',
                                                                                                           'ipv4__ip', )
         for items in queryEncoders:
-
-            eor = EncoderOperater(ipadd=items['ipv4__ip'], username='admin', passwd='cntv.cn@real', targetType='realmagic')
-            result = eor.doOption()
-            updater = updateEncoder(machine=items['id'], messages=result)
-            updater.updateInfo()
+            print(items['ipv4__ip'])
+            #
+            # eor = EncoderOperater(ipadd=items['ipv4__ip'], username='admin', passwd='cntv.cn@real', targetType='realmagic')
+            # result = eor.doOption()
+            # updater = updateEncoder(machine=items['id'], messages=result)
+            # updater.updateInfo()
+        return HttpResponseRedirect('/thanks/')
 
     else:
         return None
@@ -112,6 +114,16 @@ def staff(request):
         return render(request, 'tasks/staff.html', {'message': message, 'getForm': getForm})
     else:
         return HttpResponseRedirect('/thanks/')
+@login_required
+def staffDelete(request):
+    if request.method == 'POST':
+        sid = request.POST.get('sid')
+        Staff.objects.filter(id=sid).delete()
+        result = json.dumps({'sid': sid})
+        return HttpResponse(result)
+    else:
+        return None
+
 
 def taskList(request):
     '''

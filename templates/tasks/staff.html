@@ -2,7 +2,7 @@
 {% load static %}
 {% block subTitle %}
     <div class="btn-group" role="group" aria-label="Basic example">
-       <a href="/tasks/listalltask" type="button" class="btn btn-primary btn-sm">重点任务保障</a>
+        <a href="/tasks/listalltask" type="button" class="btn btn-primary btn-sm">重点任务保障</a>
         <a href="/tasks/staff" type="button" class="btn btn-primary btn-sm">业务部门</a>
     </div>
 {% endblock %}
@@ -34,6 +34,10 @@
                     <td>{{ item.staffName }}</td>
                     <td>{{ item.phoneNumber }}</td>
                     <td>{{ item.note }}</td>
+                    <td>
+                        <button type="button" class="btn btn-danger" data-sid="{{ item.id }}"">删除
+                        </button>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -45,7 +49,23 @@
         $(document).ready(function () {
             $("input").addClass("form-control form-control-sm");
             $("select").addClass("form-control form-control-sm");
+
+              $("button").click(function () {
+                var sid = $(this).data("sid");
+                var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+                data = {
+                    csrfmiddlewaretoken: csrftoken,
+                    sid: sid,
+                };
+                $.post("/tasks/deletestaff", data, function (result) {
+                        var jsonarray = $.parseJSON(result);
+                        var targetwid = "button[data-sid=" + jsonarray["sid"] + "]";
+                        $(targetwid).parent().parent().remove();
+                    }
+                );
+            });
         });
+
     </script>
 
 {% endblock %}

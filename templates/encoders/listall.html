@@ -5,7 +5,8 @@
         <button type="button" class="btn btn-secondary" id='unused'>未使用</button>
     </div>
     <div class="btn-group" role="group" aria-label="Basic example">
-        <button type="button" class="btn btn-secondary" id='update'>更新</button>
+     {% csrf_token %}
+        <button type="button" class="btn btn-secondary" id='updateall'>更新</button>
     </div>
 {% endblock %}
 {% block content %}
@@ -63,7 +64,19 @@
                     }
                 )
             });
-
+            $("button[id=updateall]").click(function () {
+                {#var sid = $(this).data("sid");#}
+                var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+                data = {
+                    csrfmiddlewaretoken: csrftoken,
+                };
+                $.post("/tasks/encodersupdate", data, function (result) {
+                        {#var jsonarray = $.parseJSON(result);#}
+                        {#var targetwid = "button[data-sid=" + jsonarray["sid"] + "]";#}
+                        {#$(targetwid).parent().parent().remove();#}
+                    }
+                );
+            });
 
         });
     </script>
