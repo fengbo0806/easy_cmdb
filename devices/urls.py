@@ -27,6 +27,7 @@ urlpatterns = [
     path('detailwork', views.workPakgeList),
     path('daily', views.workDaily),
     path('exportworks', views.exportTaskExcel),
+    path('inportworks', views.inportTaskExcel),
     path('getEncoderStatus', views.getEncoderStatus),
     path('deletework', views.workPakgeListDelete),
     path('staff', views.staff),

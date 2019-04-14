@@ -1,0 +1,84 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block subTitle %}
+    <div class="form-inline">
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <a href="/tasks/daily" type="button" class="btn btn-primary btn-sm">返回</a>
+    </div>
+    </div>
+    <div class="form-inline">
+    <p>
+        清流EXCEL上传
+    </p>
+        <form action="/list/flowlistimport" method="POST" enctype="multipart/form-data">
+            <input type="file" name="importfile">
+            <input type="submit" class="btn btn-success btn-sm" value="提交">
+            </button>
+        </form>
+    </div>
+{% endblock %}
+{% block content %}
+    <div>
+        <h5>参考格式</h5>
+        <table class="table table-striped table-sm">
+            <thead>
+            <tr>
+                <th>开始日期</th>
+                <th>开始时间</th>
+                <th>结束日期</th>
+                <th>结束时间</th>
+                <th>活动名称</th>
+                <th>节目名称</th>
+                <th>源地址</th>
+                <th>使用频道</th>
+                <th>需求部门</th>
+                <th>负责人</th>
+                <th>收录</th>
+                <th>直播</th>
+                <th>备注</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <th>开始日期</th>
+            <th>开始时间</th>
+            <th>结束日期</th>
+            <th>结束时间</th>
+            <th>活动名称</th>
+            <th>节目名称</th>
+            <th>源地址</th>
+            <th>使用频道</th>
+            <th>需求部门</th>
+            <th>负责人</th>
+            <th>收录</th>
+            <th>直播</th>
+            <th>备注</th>
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block customerjs %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("input").addClass("form-control form-control-sm");
+            $("select").addClass("form-control form-control-sm");
+
+            $("button").click(function () {
+                var sid = $(this).data("sid");
+                var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+                data = {
+                    csrfmiddlewaretoken: csrftoken,
+                    sid: sid,
+                };
+                $.post("/tasks/deletestaff", data, function (result) {
+                        var jsonarray = $.parseJSON(result);
+                        var targetwid = "button[data-sid=" + jsonarray["sid"] + "]";
+                        $(targetwid).parent().parent().remove();
+                    }
+                );
+            });
+        });
+
+    </script>
+
+{% endblock %}

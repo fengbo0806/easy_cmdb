@@ -343,7 +343,7 @@ def exportTaskExcel(request):
     if request.method == 'GET':
         searchStartTime = request.GET.get('starttime')
         searchEndTime = request.GET.get('endtime')
-        print(searchEndTime,searchStartTime)
+        print(searchEndTime, searchStartTime)
         if searchStartTime:
             searchEndTime = str(searchEndTime)
             searchStartTime = str(searchStartTime)
@@ -355,16 +355,16 @@ def exportTaskExcel(request):
             searchEndTime = datetime.datetime(searchEndTime.year, searchEndTime.month, searchEndTime.day, 23,
                                               59, 59)
             message = WorkPackage.objects.filter(startDate__range=(searchStartTime, searchEndTime)).values('startDate',
-                                                                                                   'task__taskName',
-                                                                                                   'adminStaff__staffName',
-                                                                                                   'adminStaff__department',
-                                                                                                   'isRecode',
-                                                                                                   'isLive',
-                                                                                                   'notes',
-                                                                                                   'inPutStream',
-                                                                                                   'programChannel',
-                                                                                                   'endDate',
-                                                                                                   'programName',)
+                                                                                                           'task__taskName',
+                                                                                                           'adminStaff__staffName',
+                                                                                                           'adminStaff__department',
+                                                                                                           'isRecode',
+                                                                                                           'isLive',
+                                                                                                           'notes',
+                                                                                                           'inPutStream',
+                                                                                                           'programChannel',
+                                                                                                           'endDate',
+                                                                                                           'programName', )
 
             activity_list = message.aggregate(Count('id'))
             response = HttpResponse(content_type="application/ms-excel")
@@ -375,7 +375,8 @@ def exportTaskExcel(request):
             icon = 1
             dateFormat = xlwt.XFStyle()
             dateFormat.num_format_str = 'yyyy/mm/dd hh:mm'
-            list_title = [u'开始日期', u'开始时间', u'结束日期', u'结束时间', u'节目名称', u'需求部门', u'源地址', u'使用频道', u'负责人', u'收录',u'直播', u'备注']
+            list_title = [u'开始日期', u'开始时间', u'结束日期', u'结束时间', u'节目名称', u'需求部门', u'源地址', u'使用频道', u'负责人', u'收录', u'直播',
+                          u'备注']
             for i in range(0, len(list_title)):
                 '''
                 wirte excel title
@@ -408,6 +409,54 @@ def exportTaskExcel(request):
                 icon += 1
             wb.save(response)
             return response
+
+@login_required
+def inportTaskExcel(request):
+    if request.method == 'POST':
+        obj = request.FILES.get('importfile')
+        if not obj:
+            return HttpResponse('不能提交空表格')
+        file_path = os.path.join('static', 'upload', obj.name)
+        f = open(file_path, 'wb')
+        for chunk in obj.chunks():
+            f.write(chunk)
+        f.close()
+        xldata = xlrd.open_workbook(file_path)
+        xltable = xldata.sheets()[0]
+        nrows = xltable.nrows
+        for i in range(nrows):
+            if i == 0:
+                continue
+            firstsell = xlrd.xldate_as_datetime(xltable.row_values(i)[0], 0)
+            secondsell = xlrd.xldate_as_datetime(xltable.row_values(i)[1], 0)
+            thirdsell = xlrd.xldate_as_datetime(xltable.row_values(i)[2], 0)
+            fourthsell = xlrd.xldate_as_datetime(xltable.row_values(i)[3], 0)
+            startdate = datetime.datetime(firstsell.year, firstsell.month, firstsell.day, secondsell.hour,
+                                          secondsell.minute)
+            enddate = datetime.datetime(thirdsell.year, thirdsell.month, thirdsell.day, fourthsell.hour,
+                                        fourthsell.minute)
+            # if len(xltable.row_values(i)) >= 11:
+            #     write_notes = xltable.row_values(i)[10]
+            # else:
+            #     write_notes = None
+            tagTask = Task.objects.get_or_create(taskName=xltable.row_values(i)[4])
+            tagStaff = Staff.objects.get_or_create(department=xltable.row_values(i)[8],staffName=xltable.row_values(i)[9])
+            WorkPackage.objects.create(
+                startDate=startdate,
+                endDate=enddate,
+                programName=xltable.row_values(i)[5],
+                programChannel=xltable.row_values(i)[6],
+                inPutStream=xltable.row_values(i)[7],
+                isRecode=xltable.row_values(i)[10],
+                isLive=xltable.row_values(i)[11],
+                notes=xltable.row_values(i)[12],
+                task=tagTask,
+                adminStaff=tagStaff,
+            )
+        # print obj.name ,obj.size
+        return redirect('tasks/inportexcel.html')
+    elif request.method == 'GET':
+        return render(request, 'tasks/inportexcel.html')
 
 
 '''
