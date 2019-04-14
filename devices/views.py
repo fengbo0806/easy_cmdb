@@ -410,9 +410,20 @@ def exportTaskExcel(request):
             wb.save(response)
             return response
 
+
+def handle_uploaded_file(f):
+    with open('some/file/name.txt', 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+
 @login_required
 def inportTaskExcel(request):
     if request.method == 'POST':
+        # form = UploadFileForm(request.POST, request.FILES)
+        # if form.is_valid():
+        #     handle_uploaded_file(request.FILES['file'])
+        #     return HttpResponseRedirect('/success/url/')
         obj = request.FILES.get('importfile')
         if not obj:
             return HttpResponse('不能提交空表格')
@@ -427,10 +438,13 @@ def inportTaskExcel(request):
         for i in range(nrows):
             if i == 0:
                 continue
+            # print(xltable.row_values(i)[0])
             firstsell = xlrd.xldate_as_datetime(xltable.row_values(i)[0], 0)
-            secondsell = xlrd.xldate_as_datetime(xltable.row_values(i)[1], 0)
-            thirdsell = xlrd.xldate_as_datetime(xltable.row_values(i)[2], 0)
-            fourthsell = xlrd.xldate_as_datetime(xltable.row_values(i)[3], 0)
+
+            print(firstsell)
+            secondsell = xlrd.xldate_as_datetime(xltable.row_values(i)[1].value, 1)
+            thirdsell = xlrd.xldate_as_datetime(xltable.row_values(i)[2].value, 1)
+            fourthsell = xlrd.xldate_as_datetime(xltable.row_values(i)[3].value, 1)
             startdate = datetime.datetime(firstsell.year, firstsell.month, firstsell.day, secondsell.hour,
                                           secondsell.minute)
             enddate = datetime.datetime(thirdsell.year, thirdsell.month, thirdsell.day, fourthsell.hour,
@@ -440,7 +454,8 @@ def inportTaskExcel(request):
             # else:
             #     write_notes = None
             tagTask = Task.objects.get_or_create(taskName=xltable.row_values(i)[4])
-            tagStaff = Staff.objects.get_or_create(department=xltable.row_values(i)[8],staffName=xltable.row_values(i)[9])
+            tagStaff = Staff.objects.get_or_create(department=xltable.row_values(i)[8],
+                                                   staffName=xltable.row_values(i)[9])
             WorkPackage.objects.create(
                 startDate=startdate,
                 endDate=enddate,
@@ -453,8 +468,8 @@ def inportTaskExcel(request):
                 task=tagTask,
                 adminStaff=tagStaff,
             )
-        # print obj.name ,obj.size
-        return redirect('tasks/inportexcel.html')
+        # # print obj.name ,obj.size
+        return redirect('/tasks/inportexcel')
     elif request.method == 'GET':
         return render(request, 'tasks/inportexcel.html')
 

@@ -57,6 +57,7 @@ local_settings.py
 db.sqlite3
 *[0-9]_auto_[0-9]*\.py
 *[0-9]_initial\.py
+upload/
 
 # Flask stuff:
 instance/

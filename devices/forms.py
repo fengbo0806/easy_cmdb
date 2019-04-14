@@ -72,3 +72,8 @@ class StaffForm(forms.Form):
     staffName = forms.CharField(max_length=30)
     phoneNumber = forms.IntegerField(required=False)
     note = forms.CharField(required=False)
+
+
+class UploadFileForm(forms.Form):
+    title = forms.CharField(max_length=50)
+    file = forms.FileField()
