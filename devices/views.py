@@ -87,6 +87,7 @@ def updateEncoders(request):
     else:
         return None
 
+
 @login_required
 def staff(request):
     if request.method == 'POST':
@@ -102,7 +103,8 @@ def staff(request):
             staffName = getForm.cleaned_data['staffName']
             phoneNumber = getForm.cleaned_data['phoneNumber']
             note = getForm.cleaned_data['note']
-            Staff.objects.update_or_create(department=department, staffName=staffName, phoneNumber=phoneNumber, note=note)
+            Staff.objects.update_or_create(department=department, staffName=staffName, phoneNumber=phoneNumber,
+                                           note=note)
             # process the data in form.cleaned_data as required
             # ...
             # redirect to a new URL:
@@ -114,6 +116,8 @@ def staff(request):
         return render(request, 'tasks/staff.html', {'message': message, 'getForm': getForm})
     else:
         return HttpResponseRedirect('/thanks/')
+
+
 @login_required
 def staffDelete(request):
     if request.method == 'POST':
@@ -349,7 +353,18 @@ def exportTaskExcel(request):
             searchEndTime = datetime.datetime.strptime(searchEndTime, '%Y-%m-%d')
             searchEndTime = datetime.datetime(searchEndTime.year, searchEndTime.month, searchEndTime.day, 23,
                                               59, 59)
-            message = WorkPackage.objects.filter(startDate__range=(searchStartTime, searchEndTime))
+            message = WorkPackage.objects.filter(startDate__range=(searchStartTime, searchEndTime)).values('startDate',
+                                                                                                   'task__taskName',
+                                                                                                   'adminStaff__staffName',
+                                                                                                   'adminStaff__department',
+                                                                                                   'isRecode',
+                                                                                                   'isLive',
+                                                                                                   'notes',
+                                                                                                   'inPutStream',
+                                                                                                   'programChannel',
+                                                                                                   'endDate',
+                                                                                                   'programName',)
+
             activity_list = message.aggregate(Count('id'))
             response = HttpResponse(content_type="application/ms-excel")
             response['Content-Disposition'] = 'attachment; filename=file.xls'
@@ -371,23 +386,34 @@ def exportTaskExcel(request):
                 task,startDate,endDate,programChannel,programStatus,programName,inPutStream,notes,adminStaff
                 to excel and download it
                 '''
-                plan_start_day = infor.plan_start_date.replace(tzinfo=None)
+                'startDate',
+                'task__taskName',
+                'adminStaff__staffName',
+                'adminStaff__department',
+                'isRecode',
+                'isLive',
+                'notes',
+                'inPutStream',
+                'programChannel',
+                'endDate',
+                'programName',
+                plan_start_day = infor['startDate'].replace(tzinfo=None)
                 plan_start_day = plan_start_day + datetime.timedelta(hours=8)
                 plan_start_time = plan_start_day.strftime('%H:%m')
                 ws.write(icon, 0, plan_start_day.strftime('%Y/%m/%d'), dateFormat)
                 ws.write(icon, 1, plan_start_time, dateFormat)
-                plan_end_day = infor.plan_end_date.replace(tzinfo=None)
+                plan_end_day = infor['endDate'].replace(tzinfo=None)
                 plan_end_day = plan_end_day + datetime.timedelta(hours=8)
                 plan_end_time = plan_end_day.strftime('%H:%m')
                 ws.write(icon, 2, plan_end_day.strftime('%Y/%m/%d'), dateFormat)
                 ws.write(icon, 3, plan_end_time, dateFormat)
-                ws.write(icon, 4, infor.program_name)
-                ws.write(icon, 5, infor.get_department_display())
-                ws.write(icon, 6, infor.source_addr)
-                ws.write(icon, 7, infor.video_id)
-                ws.write(icon, 8, infor.admin_name)
-                ws.write(icon, 9, infor.get_use_for_display())
-                ws.write(icon, 10, infor.notes)
+                ws.write(icon, 4, infor['inPutStream'])
+                ws.write(icon, 5, infor['adminStaff__department'])
+                ws.write(icon, 6, infor['programChannel'])
+                ws.write(icon, 7, infor['isRecode'])
+                ws.write(icon, 8, infor['adminStaff__staffName'])
+                ws.write(icon, 9, infor['isLive'])
+                ws.write(icon, 10, infor['notes'])
                 icon += 1
             wb.save(response)
             return response
