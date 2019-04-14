@@ -40,7 +40,7 @@
 {% endblock %}
 {% block subTitle %}
     <h1 class="h2">每日任务</h1>
-    <div>
+    <div class="form-inline">
         <form action="/tasks/daily" method="get" class="form-inline" role="form">
 
             <div class="form-group date" id="datetimepicker1" data-target-input="nearest">
@@ -66,10 +66,13 @@
             {#            <button id="importex" type="button" class="btn btn-success btn-sm">导入execl</button>#}
             {#            <button id="exportex" type="button" class="btn btn-success btn-sm">导出execl</button>#}
         </form>
+
+        <button id="exportexcel" class="btn btn-success btn-sm">导出表格</button>
+        {#    <a type="button" class="btn btn-secondary btn-sm" href="/tasks/exportworks?starttime={{ today|date:'Y-m-d' }}&endtime={{ tomorrow|date:'Y-m-d' }}">导出表格</a>#}
+
     </div>
-    <div>
-    <a type="button" class="btn btn-secondary" href="/tasks/exportworks">导出表格</a>
-    </div>
+
+
 {% endblock %}
 
 {% block content %}
@@ -130,6 +133,12 @@
             var startTime = $("input[name='starttime']").val();
             var endTime = $("input[name='endtime']").val();
             var targetUrl = '/tasks/getEncoderStatus?starttime=' + startTime + '&endtime=' + endTime;
+            var exportUrl = "/tasks/exportworks?starttime={{ today|date:'Y-m-d' }}&endtime={{ tomorrow|date:'Y-m-d' }}";
+            $("button[id=exportexcel]").click(function () {
+                {#$.get(exportUrl)#}
+                window.location.href = exportUrl
+            });
+
             $("span").each(function () {
                 if ($(this).data("usefor") == "True") {
                     $(this).removeClass();

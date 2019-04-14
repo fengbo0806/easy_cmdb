@@ -343,6 +343,7 @@ def exportTaskExcel(request):
     if request.method == 'GET':
         searchStartTime = request.GET.get('starttime')
         searchEndTime = request.GET.get('endtime')
+        print(searchEndTime,searchStartTime)
         if searchStartTime:
             searchEndTime = str(searchEndTime)
             searchStartTime = str(searchStartTime)
@@ -374,7 +375,7 @@ def exportTaskExcel(request):
             icon = 1
             dateFormat = xlwt.XFStyle()
             dateFormat.num_format_str = 'yyyy/mm/dd hh:mm'
-            list_title = [u'开始日期', u'开始时间', u'结束日期', u'结束时间', u'节目名称', u'需求部门', u'源地址', u'输出地址', u'负责人', u'用途', u'备注']
+            list_title = [u'开始日期', u'开始时间', u'结束日期', u'结束时间', u'节目名称', u'需求部门', u'源地址', u'使用频道', u'负责人', u'收录',u'直播', u'备注']
             for i in range(0, len(list_title)):
                 '''
                 wirte excel title
@@ -386,17 +387,6 @@ def exportTaskExcel(request):
                 task,startDate,endDate,programChannel,programStatus,programName,inPutStream,notes,adminStaff
                 to excel and download it
                 '''
-                'startDate',
-                'task__taskName',
-                'adminStaff__staffName',
-                'adminStaff__department',
-                'isRecode',
-                'isLive',
-                'notes',
-                'inPutStream',
-                'programChannel',
-                'endDate',
-                'programName',
                 plan_start_day = infor['startDate'].replace(tzinfo=None)
                 plan_start_day = plan_start_day + datetime.timedelta(hours=8)
                 plan_start_time = plan_start_day.strftime('%H:%m')
@@ -407,13 +397,14 @@ def exportTaskExcel(request):
                 plan_end_time = plan_end_day.strftime('%H:%m')
                 ws.write(icon, 2, plan_end_day.strftime('%Y/%m/%d'), dateFormat)
                 ws.write(icon, 3, plan_end_time, dateFormat)
-                ws.write(icon, 4, infor['inPutStream'])
+                ws.write(icon, 4, infor['programName'])
                 ws.write(icon, 5, infor['adminStaff__department'])
-                ws.write(icon, 6, infor['programChannel'])
-                ws.write(icon, 7, infor['isRecode'])
+                ws.write(icon, 6, infor['inPutStream'])
+                ws.write(icon, 7, infor['programChannel'])
                 ws.write(icon, 8, infor['adminStaff__staffName'])
-                ws.write(icon, 9, infor['isLive'])
-                ws.write(icon, 10, infor['notes'])
+                ws.write(icon, 9, infor['isRecode'])
+                ws.write(icon, 10, infor['isLive'])
+                ws.write(icon, 11, infor['notes'])
                 icon += 1
             wb.save(response)
             return response
