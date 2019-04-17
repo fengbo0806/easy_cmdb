@@ -2,8 +2,13 @@ import requests
 import re
 from bs4 import BeautifulSoup
 import hashlib
-from selenium import webdriver
 import os
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import os
+import random
 
 '''
 selenium
@@ -198,24 +203,13 @@ class EncoderOperater:
         arcvideo send the password with md5 auth
         :return: resultdict
         '''
-        chromeDir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'chromedriver')
-        driver = webdriver.Chrome(chromeDir)
-        driver.get("http://ipadd/login")
-        driver.find_element_by_name("username_1").send_keys("Admin")
-        driver.find_element_by_name("password_1").send_keys("Arc123456")
-        driver.find_element_by_class_name("input_submit").click()
-        import time
-        time.sleep(1)
-        for link in driver.find_element_by_xpath("//*[@href]"):
-            print(link.get_attribute('href'))
-        print()
-
         resultdict = dict()
+        keyvalue = 1
         md5Mess = hashlib.md5()
         md5Mess.update(self.passwd)
         self.passwd = md5Mess.hexdigest()
         urllogin = 'http://%s/login' % (self.ipadd,)
-        urlauth = "http://%s/auth" % (self.ipadd,)
+        urlaction = "http://%s/listTask.action" % (self.ipadd,)
         # form_data = [('username',''),('password','')]
         # s=requests.Session()
         # print(s.get(url11).headers)
@@ -241,125 +235,151 @@ class EncoderOperater:
             'Upgrade-Insecure-Requests': '1',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36',
         }
+        chromeDir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'chromedriver')
+        option = webdriver.ChromeOptions()
+        option.add_argument("headless")
+        driver = webdriver.Chrome(chromeDir, chrome_options=option)
+        driver.get(urllogin)
+        driver.find_element_by_name("username_1").send_keys(self.username)
+        driver.find_element_by_name("password_1").send_keys(self.passwd)
+        driver.find_element_by_class_name("input_submit").click()
+        driver.implicitly_wait(5)
+        driver.get(urlaction)
+        '''
+        '''
+        soup = BeautifulSoup(driver.page_source, "html.parser", )
+        con = soup.find('table', attrs={'class': 'appui_listview single_selection'})
+        contr = con.find('tr')
+        for sibling in contr.next_siblings:
+            if sibling.name == 'tr':
+                if sibling.find('a') is not None:
+                    valuea = sibling.find('a').get_text()
+                    resultdict[valuea] = valuea
+                    keyvalue = valuea
+                    resultdict[valuea]['rowid'] = valuea
+                if sibling.find('div', attrs={'class': 'appui_text_ellipsis'}) is not None:
+                    valuediv = sibling.find('div', attrs={'class': 'appui_text_ellipsis'}).get_text()
+                    resultdict[keyvalue]['name'] = valuediv
+        for keys in resultdict.keys():
+            getEncUrl = 'http://%s/viewTask?taskId=%d&rnd=%f' % (self.ipadd, keys, random.random())
+            driver.get(getEncUrl)
+            soup = BeautifulSoup(driver.page_source, "html.parser", )
+        driver.close()
         return resultdict
 
+    class GetEncoderStatus:
+        def __init__(self, ipadd, username, passwd, targetType):
+            self.ipadd = ipadd
+            self.username = username
+            self.passwd = passwd
+            self.target = targetType
+            self.loginURL = None
+            self.getInfoURL = None
 
-class GetEncoderStatus:
-    def __init__(self, ipadd, username, passwd, targetType):
-        self.ipadd = ipadd
-        self.username = username
-        self.passwd = passwd
-        self.target = targetType
-        self.loginURL = None
-        self.getInfoURL = None
+        def doOption(self):
+            judgeEncoder = {
+                'powersmart': self.powersmart,
+                'realmagic': self.realmagic,
+                'arcvideo': self.arcvideo,
+            }
+            func = judgeEncoder.get(self.target, 'error')
+            return func()
 
-    def doOption(self):
-        judgeEncoder = {
-            'powersmart': self.powersmart,
-            'realmagic': self.realmagic,
-            'arcvideo': self.arcvideo,
-        }
-        func = judgeEncoder.get(self.target, 'error')
-        return func()
+        def powersamrt(self):
+            pass
 
-    def powersamrt(self):
-        pass
+        def realmagic(self):
+            pass
 
-    def realmagic(self):
-        pass
+        def arcvideo(self):
+            pass
 
-    def arcvideo(self):
-        pass
+    if __name__ == '__main__':
+        '''
+        use for test 
+        '''
+        from selenium import webdriver
+        from selenium.webdriver.common.by import By
+        from selenium.webdriver.support.ui import WebDriverWait
+        from selenium.webdriver.support import expected_conditions as EC
+        import os
 
-
-if __name__ == '__main__':
-    '''
-    use for test 
-    '''
-    from selenium import webdriver
-    from selenium.webdriver.common.by import By
-    from selenium.webdriver.support.ui import WebDriverWait
-    from selenium.webdriver.support import expected_conditions as EC
-    import os
-
-    ''' 
-    chromeDir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'chromedriver')
-    print(chromeDir)
-    # driver = webdriver.Chrome('/path/to/chromedriver')
-
-    option = webdriver.ChromeOptions()
-    option.add_argument("headless")
-    driver = webdriver.Chrome(chromeDir, chrome_options=option)
-    url = "https://www.baidu.com"
-    driver.get("http://ipadd/login")
-    driver.find_element_by_name("username_1").send_keys("")
-    driver.find_element_by_name("password_1").send_keys("")
-    driver.find_element_by_class_name("input_submit").click()
-    driver.implicitly_wait(5)
-    driver.get("http://ipadd/listTask.action")
+        ''' 
+        chromeDir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'chromedriver')
+        print(chromeDir)
+        # driver = webdriver.Chrome('/path/to/chromedriver')
     
-    "http://ipadd/viewTask?taskId=323&rnd=0.4677657860893727"
-    
-    '''
-    from bs4 import BeautifulSoup
+        option = webdriver.ChromeOptions()
+        option.add_argument("headless")
+        driver = webdriver.Chrome(chromeDir, chrome_options=option)
+        url = "https://www.baidu.com"
+        driver.get("http://ipadd/login")
+        driver.find_element_by_name("username_1").send_keys("")
+        driver.find_element_by_name("password_1").send_keys("")
+        driver.find_element_by_class_name("input_submit").click()
+        driver.implicitly_wait(5)
+        driver.get("http://ipadd/listTask.action")
+        
+        "http://ipadd/viewTask?taskId=323&rnd=0.4677657860893727"
+        
+        '''
+        from bs4 import BeautifulSoup
 
-    with open('hongruan.html') as htmlts:
-        soup = BeautifulSoup(htmlts, "html.parser", )
-        # soup.find()
-        con = soup.find('table', attrs={'class': 'appui_listview single_selection'})
-        # print(con)
-        con2 = con.find('tr')
-        # print(con2)
-        for sibling in con2.next_siblings:
-            # if sibling.find('div')==-1:
-            #     print(sibling)
-            # elif sibling.find('div')==None:
-            #     print(sibling)
-            # if len(sibling) > 1:
-            if sibling.name == 'tr':
-                # print(sibling)
-                if sibling.find('a') is not None:
-                    print(sibling.find('a').get_text())
-                if sibling.find('div', attrs={'class': 'appui_text_ellipsis'}) is not None:
-                    print(sibling.find('div', attrs={'class': 'appui_text_ellipsis'}).get_text())
-                # if sibling.find('tr', attrs={'class': 'tab_content odd'}):
+        with open('hongruan.html') as htmlts:
+            soup = BeautifulSoup(htmlts, "html.parser", )
+            # soup.find()
+            con = soup.find('table', attrs={'class': 'appui_listview single_selection'})
+            # print(con)
+            con2 = con.find('tr')
+            # print(con2)
+            for sibling in con2.next_siblings:
+                # if sibling.find('div')==-1:
                 #     print(sibling)
-                # print(sibling)
-                # print(sibling.find('div',attrs={'class': 'appui_text_ellipsis'}).getText())
+                # elif sibling.find('div')==None:
+                #     print(sibling)
+                # if len(sibling) > 1:
+                if sibling.name == 'tr':
+                    # print(sibling)
+                    if sibling.find('a') is not None:
+                        print(sibling.find('a').get_text())
+                    if sibling.find('div', attrs={'class': 'appui_text_ellipsis'}) is not None:
+                        print(sibling.find('div', attrs={'class': 'appui_text_ellipsis'}).get_text())
+                '''
+                19: {'rowid': '19', 'switchStatus': True, 'name': '移动直播20', 'programStatus': -1, 'outbandwidth': '4000',
+                     'width': '960', 'height': '540',
+                     'inPutFirst': 'rtmp://vlive.people.com.cn/2010/1-18-11-29-1500/live_2 ',
+                     'outPutFirst': 'udp://@228.1.2.145:5000', 'outPutSecond': 'http://10.78.64.195:1254/live20',
+                     'outPutHttpFlow': 'http://10.78.64.195:1254/live20'}}
+                     '''
 
-            #     print(sibling.find('tr'))
-            # print(sibling.find('tr', attrs={'class': 'tab_content odd'}))
-            # print(sibling.find_all('div',attrs={'class': 'appui_text_ellipsis'}))
-            print('--------------------------------')
+                # for sibling in con.next_siblings:
+                #     print(sibling)
+                # class ="tab_content even" value="331" >
+                # < div
+                #
+                #
+                # class ="appui_text_ellipsis" style="display:inline-block;vertical-align:middle;" > 阿里云-CCTV5+HD < / div >
+                # print(driver.page_source)
+                # print(driver.find_element_by_tag_name('table').text)
+                # try:
+                #     WebDriverWait(driver.get("http://ipadd/#listTask.action"), 5)
+                #
+                # finally:
+                #     driver.quit()
+                # print(driver.page_source)
+                # for link in driver.find_element_by_xpath("//*[@href]"):
+                #     print(link.get_attribute('href'))
+                # driver.get(url)
+                # print(driver.title)
 
-        # for sibling in con.next_siblings:
-        #     print(sibling)
-    # class ="tab_content even" value="331" >
-    # < div
-    #
-    #
-    # class ="appui_text_ellipsis" style="display:inline-block;vertical-align:middle;" > 阿里云-CCTV5+HD < / div >
-    # print(driver.page_source)
-    # print(driver.find_element_by_tag_name('table').text)
-    # try:
-    #     WebDriverWait(driver.get("http://ipadd/#listTask.action"), 5)
-    #
-    # finally:
-    #     driver.quit()
-    # print(driver.page_source)
-    # for link in driver.find_element_by_xpath("//*[@href]"):
-    #     print(link.get_attribute('href'))
-    # driver.get(url)
-    # print(driver.title)
+                # result = EncoderOperater(ipadd='ip', username='name', passwd='password', targetType='arcvideo')
+                # valuesDict = result.doOption()
+                # print(valuesDict)
+                # driver = webdriver.Firefox()
 
-    # result = EncoderOperater(ipadd='ip', username='name', passwd='password', targetType='arcvideo')
-    # valuesDict = result.doOption()
-    # print(valuesDict)
-    # driver = webdriver.Firefox()
-
-    # import time
-    #
-    # time.sleep(1)
-    # print(pagedata.page_source)
-    # for link in driver.find_element_by_xpath("//*[@href]"):
-    #     print(link.get_attribute('href'))
+                # import time
+                #
+                # time.sleep(1)
+                # print(pagedata.page_source)
+                # for link in driver.find_element_by_xpath("//*[@href]"):
+                #     print(link.get_attribute('href'))

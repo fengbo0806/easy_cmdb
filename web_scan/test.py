@@ -97,12 +97,16 @@ dataenco = {0: {'rowid': '0', 'switchStatus': True, 'name': '移动直播01', 'p
                  'outPutFirst': 'udp://@228.1.2.145:5000', 'outPutSecond': 'http://10.78.64.195:1254/live20',
                  'outPutHttpFlow': 'http://10.78.64.195:1254/live20'}}
 
-ls1 = [0, 1, 2, 3, 4, ]
-dic1 = {0: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10}
-
-print(list(dic1.keys()))
-difflist = list(set(dic1).difference(set(ls1)))
-for i in difflist:
-    dic1.pop(i)
-print(dic1)
+# ls1 = [0, 1, 2, 3, 4, ]
+# dic1 = {0: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10: 10}
+#
+# print(list(dic1.keys()))
+# difflist = list(set(dic1).difference(set(ls1)))
+# for i in difflist:
+#     dic1.pop(i)
+# print(dic1)
+'0.4677657860893727'
+import  random
+print(random.random())
+print('0.4677657860893727')
 
