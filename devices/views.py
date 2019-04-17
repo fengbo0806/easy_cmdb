@@ -474,6 +474,22 @@ def inportTaskExcel(request):
         return render(request, 'tasks/inportexcel.html')
 
 
+def machineroom(request):
+    if request.method == 'GET':
+        message = MachineRoom.objects.all().annotate(countnum=Count('machinerack')).values('name', 'address', 'note','countnum')
+        return render(request, 'machinerooms/listall.html', {'message': message, })
+    elif request.method == 'POST':
+        '''
+        update value on the page
+        '''
+        # create a form instance and populate it with data from the request:
+        getForm = WorkPackageForm(request.POST)
+        # check whether it's valid:
+        if getForm.is_valid():
+            return HttpResponse('404')
+            # return HttpResponseRedirect(returnUrl)
+
+
 '''
 def change_status_flow(request):
     if request.method=='POST':

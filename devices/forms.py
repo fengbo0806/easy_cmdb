@@ -1,6 +1,7 @@
 from django import forms
 from configureBaseData.configureChoices import *
 from configureBaseData.models.encoderserver import Staff
+from configureBaseData.models.devices import MachineRoom,MachineRack
 
 
 class ProgramDetailForm(forms.Form):
@@ -77,3 +78,35 @@ class StaffForm(forms.Form):
 class UploadFileForm(forms.Form):
     title = forms.CharField(max_length=50)
     file = forms.FileField()
+
+
+'''
+machine rooms
+'''
+
+
+class MachineRoomForm(forms.Form):
+    '''
+    describ the address of IDC, maybe some detail information for contant of the service stuff
+    '''
+    name = forms.CharField(max_length=255)
+    address = forms.CharField(max_length=255)
+    note = forms.CharField(max_length=255)
+
+
+class MachineRackForm(forms.Form):
+    '''
+    describe the detail maching rack locate
+    '''
+    floor = forms.IntegerField()
+    locate = forms.CharField(max_length=30)
+    note = forms.CharField(max_length=30)
+    room = forms.ModelChoiceField(queryset=MachineRoom.objects.all(), )
+
+
+class MachineLocateForm(forms.Form):
+    '''
+    describe the macing locate
+    '''
+    Ulocate = forms.IntegerField()
+    rack = forms.ModelChoiceField(queryset=MachineRack.objects.all(), )

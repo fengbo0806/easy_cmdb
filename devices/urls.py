@@ -32,4 +32,5 @@ urlpatterns = [
     path('deletework', views.workPakgeListDelete),
     path('staff', views.staff),
     path('deletestaff', views.staffDelete),
+    path('machineroom', views.machineroom),
 ]
