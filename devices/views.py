@@ -74,11 +74,17 @@ def encoders(request):
 def updateEncoders(request):
     if request.method == 'POST':
         queryEncoders = Machine.objects.filter(machineType__name='编码器', ipv4__isHttpManage='True').values('id',
-                                                                                                          'ipv4__ip', )
+                                                                                                          'httpadminp',
+                                                                                                          'httpadmin',
+                                                                                                          'ipv4__ip',
+                                                                                                        'machineVender__englishname')
+        print(list(queryEncoders))
         for items in queryEncoders:
-            print(items['ipv4__ip'])
+            for j in items:
+                print(j, end=',')
+
             #
-            # eor = EncoderOperater(ipadd=items['ipv4__ip'], username='admin', passwd='cntv.cn@real', targetType='realmagic')
+            # eor = EncoderOperater(ipadd=items['ipv4__ip'], username=items['httpadmin'], passwd=items['httpadminp'], targetType=items['machineVender__englishname'])
             # result = eor.doOption()
             # updater = updateEncoder(machine=items['id'], messages=result)
             # updater.updateInfo()
@@ -476,7 +482,8 @@ def inportTaskExcel(request):
 
 def machineroom(request):
     if request.method == 'GET':
-        message = MachineRoom.objects.all().annotate(countnum=Count('machinerack')).values('name', 'address', 'note','countnum')
+        message = MachineRoom.objects.all().annotate(countnum=Count('machinerack')).values('name', 'address', 'note',
+                                                                                           'countnum')
         return render(request, 'machinerooms/listall.html', {'message': message, })
     elif request.method == 'POST':
         '''

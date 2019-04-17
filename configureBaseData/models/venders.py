@@ -7,12 +7,13 @@ class Vender(models.Model):
     '''
     vender
     '''
-    name = models.CharField(max_length=255)
+    chinaname = models.CharField(max_length=255)
+    englishname = models.CharField(max_length=255)
     note = models.TextField(blank=True)
     business = models.ForeignKey('Business', on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
-        return str(self.name)
+        return str(self.chinaname)
 
     class Meta:
         verbose_name = '厂商'

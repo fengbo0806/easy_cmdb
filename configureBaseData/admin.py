@@ -127,10 +127,10 @@ class VenderStaffLine(admin.StackedInline):  # TabularInline
 
 
 @admin.register(Vender)
-class machineRoomAdmin(admin.ModelAdmin):
-    fieldsets = ((None, {'fields': (('name', 'note'),), }),)
+class VenderAdmin(admin.ModelAdmin):
+    fieldsets = ((None, {'fields': (('chinaname', 'englishname','note'),), }),)
     inlines = [VenderStaffLine, ]
-    list_display = ('name', 'note')
+    list_display = ('chinaname', 'note')
 
 
 '''

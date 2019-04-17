@@ -16,7 +16,7 @@ class EncoderOperater:
     :return resultdict
     '''
 
-    def __init__(self, ipadd=None, username=None, passwd=None, targetType=None , rawid='all'):
+    def __init__(self, ipadd=None, username=None, passwd=None, targetType=None, rawid='all'):
         self.ipadd = ipadd
         self.username = username
         self.passwd = passwd
@@ -33,6 +33,15 @@ class EncoderOperater:
         }
         func = judgeEncoder.get(self.target, 'error')
         return func()
+
+    def getRawIds(self, tagdic):
+        if self.rawdi == 'all':
+            return tagdic
+        else:
+            difflist = list(set(tagdic).difference(set(self.rawdi)))
+            for keys in difflist:
+                tagdic.pop(keys)
+            return tagdic
 
     def powersmart(self):
         orderId = 0
@@ -270,7 +279,7 @@ if __name__ == '__main__':
     from selenium import webdriver
     import os
 
-    chromeDir = os.path.join(os.path.dirname(os.path.abspath(__file__)),'chromedriver')
+    chromeDir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'chromedriver')
     print(chromeDir)
     # driver = webdriver.Chrome('/path/to/chromedriver')
 
@@ -278,17 +287,22 @@ if __name__ == '__main__':
     option.add_argument("headless")
     driver = webdriver.Chrome(chromeDir, chrome_options=option)
     url = "https://www.baidu.com"
-    driver.get(url)
+    driver.get("http://10.78.64.207/login")
+    driver.find_element_by_name("username_1").send_keys("Admin")
+    driver.find_element_by_name("password_1").send_keys("Arc123456")
+    driver.find_element_by_class_name("input_submit").click()
+    driver.get("http://10.78.64.207/#listTask.action")
+    print(driver.current_url)
+    # for link in driver.find_element_by_xpath("//*[@href]"):
+    #     print(link.get_attribute('href'))
+    # driver.get(url)
     print(driver.title)
 
     # result = EncoderOperater(ipadd='ip', username='name', passwd='password', targetType='arcvideo')
     # valuesDict = result.doOption()
     # print(valuesDict)
     # driver = webdriver.Firefox()
-    # driver.get("http://10.78.64.207/login")
-    # driver.find_element_by_name("username_1").send_keys("Admin")
-    # driver.find_element_by_name("password_1").send_keys("Arc123456")
-    # pagedata = driver.find_element_by_class_name("input_submit").click()
+
     # import time
     #
     # time.sleep(1)
