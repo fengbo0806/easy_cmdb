@@ -16,6 +16,8 @@ class Machine(models.Model):
     loginUser = models.CharField(max_length=255, blank=True, null=True)
     loginMethod = models.CharField(max_length=255, blank=True, null=True)
     loginPort = models.IntegerField()
+    httpadmin = models.CharField(max_length=255, blank=True, null=True)
+    httpadminp = models.CharField(max_length=255, blank=True, null=True)
 
     # machine_service = models.CharField()
     # machine_admin = models.CharField()

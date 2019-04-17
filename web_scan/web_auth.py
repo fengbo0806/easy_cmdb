@@ -258,17 +258,31 @@ if __name__ == '__main__':
     '''
     use for test 
     '''
+    from selenium import webdriver
+    import os
+
+    chromeDir = os.path.join(os.path.dirname(os.path.abspath(__file__)),'chromedriver')
+    print(chromeDir)
+    # driver = webdriver.Chrome('/path/to/chromedriver')
+
+    option = webdriver.ChromeOptions()
+    option.add_argument("headless")
+    driver = webdriver.Chrome(chromeDir, chrome_options=option)
+    url = "https://www.baidu.com"
+    driver.get(url)
+    print(driver.title)
+
     # result = EncoderOperater(ipadd='ip', username='name', passwd='password', targetType='arcvideo')
     # valuesDict = result.doOption()
     # print(valuesDict)
-    driver = webdriver.Firefox()
-    driver.get("http://10.78.64.207/login")
-    driver.find_element_by_name("username_1").send_keys("Admin")
-    driver.find_element_by_name("password_1").send_keys("Arc123456")
-    pagedata = driver.find_element_by_class_name("input_submit").click()
-    import time
-
-    time.sleep(1)
-    print(pagedata.page_source)
+    # driver = webdriver.Firefox()
+    # driver.get("http://10.78.64.207/login")
+    # driver.find_element_by_name("username_1").send_keys("Admin")
+    # driver.find_element_by_name("password_1").send_keys("Arc123456")
+    # pagedata = driver.find_element_by_class_name("input_submit").click()
+    # import time
+    #
+    # time.sleep(1)
+    # print(pagedata.page_source)
     # for link in driver.find_element_by_xpath("//*[@href]"):
     #     print(link.get_attribute('href'))
