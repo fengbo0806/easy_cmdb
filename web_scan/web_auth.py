@@ -3,6 +3,7 @@ import re
 from bs4 import BeautifulSoup
 import hashlib
 from selenium import webdriver
+import os
 
 '''
 selenium
@@ -15,13 +16,14 @@ class EncoderOperater:
     :return resultdict
     '''
 
-    def __init__(self, ipadd, username, passwd, targetType):
+    def __init__(self, ipadd=None, username=None, passwd=None, targetType=None , rawid='all'):
         self.ipadd = ipadd
         self.username = username
         self.passwd = passwd
         self.target = targetType
         self.loginURL = None
         self.getInfoURL = None
+        self.rawdi = rawid
 
     def doOption(self):
         judgeEncoder = {
@@ -123,6 +125,12 @@ class EncoderOperater:
                 resultdict[item]['programStatus'] = -1
             else:
                 resultdict[item]['programStatus'] = 1
+        if self.rawdi == 'all':
+            pass
+        else:
+            difflist = list(set(resultdict).difference(set(self.rawdi)))
+            for keys in difflist:
+                resultdict.pop(keys)
         for item in resultdict:
             getEncUrl = "http://%s/chinese/index.cgi?enc_setup___%d" % (self.ipadd, item)
             responseEnc = requests.get(getEncUrl, auth=auth_values)
@@ -181,7 +189,8 @@ class EncoderOperater:
         arcvideo send the password with md5 auth
         :return: resultdict
         '''
-        driver = webdriver.Chrome()
+        chromeDir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'chromedriver')
+        driver = webdriver.Chrome(chromeDir)
         driver.get("http://10.78.64.207/login")
         driver.find_element_by_name("username_1").send_keys("Admin")
         driver.find_element_by_name("password_1").send_keys("Arc123456")
