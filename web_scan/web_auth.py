@@ -296,6 +296,7 @@ class EncoderOperater:
             getEncUrl = 'http://%s/viewTask?taskId=%d&rnd=%f' % (self.ipadd, int(keys), random.random())
             driver.get(getEncUrl)
             soup = BeautifulSoup(driver.page_source, "html.parser", )
+
         driver.close()
         return resultdict
 
