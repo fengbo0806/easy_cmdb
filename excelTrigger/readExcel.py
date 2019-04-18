@@ -69,6 +69,6 @@ if __name__ == '__main__':
     # obj = readExcel(path, filename)
     # testdict = obj.typeOfExcel()
     # print(testdict)
-    a = {1: 2, 3: 4, 5: 6}
-    for i in a:
-        print(i)
+
+    print(re.split('/','2019/04/10'))
+    print(re.split(':', '18:04'))

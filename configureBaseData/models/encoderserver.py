@@ -69,7 +69,7 @@ class Staff(models.Model):
     task = models.ManyToManyField(Task, blank=True, )
     department = models.CharField(verbose_name='需求部门', choices=departmentChoices, blank=True, max_length=30)
     staffName = models.CharField(verbose_name='负责人', blank=True, max_length=30)
-    phoneNumber = models.IntegerField(verbose_name='电话', blank=True)
+    phoneNumber = models.IntegerField(verbose_name='电话', null=True, blank=True)
     note = models.CharField(verbose_name='备注', blank=True, null=True, max_length=60)
 
     class Meta:

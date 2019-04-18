@@ -317,12 +317,13 @@ def getEncoderStatus(request):
                 else:
                     machineDict[item['machine_id']] = list()
                     machineDict[item['machine_id']].append(item['rowid'])
-        print(machineDict)
+        # print(machineDict)
         pass
         '''{1: [0, 7]}'''
         for key in machineDict:
-            targetMachine = Machine.objects.filter(id=key, ipv4__isHttpManage=True).values('id', 'ipv4__ip', 'httpadmin', 'httpadminp', )
-            print(targetMachine[0]['id'])
+            targetMachine = Machine.objects.filter(id=key, ipv4__isHttpManage=True).values('id', 'ipv4__ip',
+                                                                                           'httpadmin', 'httpadminp', )
+            # print(targetMachine[0]['id'])
             eor = EncoderOperater(ipadd=targetMachine[0]['ipv4__ip'], username=targetMachine[0]['httpadmin'],
                                   passwd=targetMachine[0]['httpadminp'], targetType='realmagic', rawid=machineDict[key])
             result = eor.doOption()
@@ -427,36 +428,38 @@ def inportTaskExcel(request):
         for chunk in obj.chunks():
             f.write(chunk)
         f.close()
-        print(file_path,obj.name)
+        print(file_path, obj.name)
         getInportObj = readExcel(filepath=file_path, filename=obj.name)
         objDict = getInportObj.typeOfExcel()
         print(objDict)
         for item in objDict:
-            firstsell = item[0]
-            secondsell = item[1]
-            thirdsell = item[2]
-            fourthsell = item[3]
-            startdate = datetime.datetime(firstsell.year, firstsell.month, firstsell.day, secondsell.hour,
-                                          secondsell.minute)
-            enddate = datetime.datetime(thirdsell.year, thirdsell.month, thirdsell.day, fourthsell.hour,
-                                        fourthsell.minute)
-            tagTask = Task.objects.get_or_create(taskName=item[4])
-            tagStaff = Staff.objects.get_or_create(department=item[5],
-                                                   staffName=item[6])
+            if item == 0:
+                continue
+            print(objDict[item][0])
+            firstsell = re.split('/', objDict[item][0])
+            secondsell = re.split(':', objDict[item][1])
+            thirdsell = re.split('/', objDict[item][2])
+            fourthsell = re.split(':', objDict[item][3])
+            startdate = datetime.datetime(int(firstsell[0]), int(firstsell[1]), int(firstsell[2]), int(secondsell[0]),
+                                          int(secondsell[1]))
+            enddate = datetime.datetime(int(thirdsell[0]), int(thirdsell[1]), int(thirdsell[2]), int(fourthsell[0]),
+                                        int(fourthsell[1]))
+            Task.objects.get_or_create(taskName=objDict[item][4])
+            Staff.objects.get_or_create(department=objDict[item][8], staffName=objDict[item][9])
             WorkPackage.objects.create(
                 startDate=startdate,
                 endDate=enddate,
-                programName=item[7],
-                programChannel=item[8],
-                inPutStream=item[9],
-                isRecode=item[10],
-                isLive=item[11],
-                notes=item[12],
-                task=tagTask,
-                adminStaff=tagStaff,
+                programName=objDict[item][7],
+                programChannel=objDict[item][8],
+                inPutStream=objDict[item][9],
+                isRecode=objDict[item][10],
+                isLive=objDict[item][11],
+                notes=objDict[item][12],
+                task=Task.objects.get(taskName=objDict[item][4]),
+                adminStaff=Staff.objects.get(department=objDict[item][8], staffName=objDict[item][9]),
             )
         # # # print obj.name ,obj.size
-        return redirect('/tasks/inportexcel')
+        return redirect('/tasks/inportworks')
     elif request.method == 'GET':
         return render(request, 'tasks/inportexcel.html')
 
