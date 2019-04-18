@@ -23,6 +23,7 @@ from web_scan.web_auth import EncoderOperater
 from web_scan.update import updateEncoder
 from .forms import *
 from django.contrib.auth.decorators import login_required
+from excelTrigger.readExcel import readExcel
 
 
 # import datetime
@@ -77,7 +78,7 @@ def updateEncoders(request):
                                                                                                           'httpadminp',
                                                                                                           'httpadmin',
                                                                                                           'ipv4__ip',
-                                                                                                        'machineVender__englishname')
+                                                                                                          'machineVender__englishname')
         print(list(queryEncoders))
         for items in queryEncoders:
             for j in items:
@@ -438,39 +439,29 @@ def inportTaskExcel(request):
         for chunk in obj.chunks():
             f.write(chunk)
         f.close()
-        xldata = xlrd.open_workbook(file_path)
-        xltable = xldata.sheets()[0]
-        nrows = xltable.nrows
-        for i in range(nrows):
-            if i == 0:
-                continue
-            # print(xltable.row_values(i)[0])
-            firstsell = xlrd.xldate_as_datetime(xltable.row_values(i)[0], 0)
-
-            print(firstsell)
-            secondsell = xlrd.xldate_as_datetime(xltable.row_values(i)[1].value, 1)
-            thirdsell = xlrd.xldate_as_datetime(xltable.row_values(i)[2].value, 1)
-            fourthsell = xlrd.xldate_as_datetime(xltable.row_values(i)[3].value, 1)
+        getInportObj = readExcel(filepath=file_path, filename=obj.name)
+        objDict = getInportObj.typeOfExcel()
+        for item in objDict:
+            firstsell = item[0]
+            secondsell = item[1]
+            thirdsell = item[2]
+            fourthsell = item[3]
             startdate = datetime.datetime(firstsell.year, firstsell.month, firstsell.day, secondsell.hour,
                                           secondsell.minute)
             enddate = datetime.datetime(thirdsell.year, thirdsell.month, thirdsell.day, fourthsell.hour,
                                         fourthsell.minute)
-            # if len(xltable.row_values(i)) >= 11:
-            #     write_notes = xltable.row_values(i)[10]
-            # else:
-            #     write_notes = None
-            tagTask = Task.objects.get_or_create(taskName=xltable.row_values(i)[4])
-            tagStaff = Staff.objects.get_or_create(department=xltable.row_values(i)[8],
-                                                   staffName=xltable.row_values(i)[9])
+            tagTask = Task.objects.get_or_create(taskName=item[4])
+            tagStaff = Staff.objects.get_or_create(department=item[5],
+                                                   staffName=item[6])
             WorkPackage.objects.create(
                 startDate=startdate,
                 endDate=enddate,
-                programName=xltable.row_values(i)[5],
-                programChannel=xltable.row_values(i)[6],
-                inPutStream=xltable.row_values(i)[7],
-                isRecode=xltable.row_values(i)[10],
-                isLive=xltable.row_values(i)[11],
-                notes=xltable.row_values(i)[12],
+                programName=item[7],
+                programChannel=item[8],
+                inPutStream=item[9],
+                isRecode=item[10],
+                isLive=item[11],
+                notes=item[12],
                 task=tagTask,
                 adminStaff=tagStaff,
             )

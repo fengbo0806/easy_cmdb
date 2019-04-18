@@ -14,11 +14,12 @@ openpyxl.utils.exceptions.InvalidFileException: openpyxl does not support the ol
 '''
 
 
-class readExcel:
+class readExcel(object):
     def __init__(self, filepath, filename):
         self.filepath = filepath
         self.filename = filename
         self.fileType = None
+        self.excelDict = dict()
 
     def typeOfExcel(self):
         judgeExcel = {
@@ -26,52 +27,46 @@ class readExcel:
             'xls': self.readXlsx,
         }
         self.fileType = re.split('\.', self.filename)[-1]
+        print(self.fileType)
         func = judgeExcel.get(self.fileType, 'error')
         return func()
 
     def readXls(self):
-        xldata = xlrd.open_workbook('testfile.xls')
+        xldata = xlrd.open_workbook(self.filepath)
         xltable = xldata.sheets()[0]
         nrows = xltable.nrows
         ncols = xltable.ncols
-        for i in range(nrows):
-            if i == 0:
+        for row in range(nrows):
+            if row == 0:
                 continue
-            for j in range(ncols):
-                print(type(xltable.row_values(i)[j]))
-            print('-----')
-        print(xltable.row_values(i)[0])
-        print(type(xltable.row_values(i)[0]))
-        firstsell = xlrd.xldate_as_datetime(xltable.row_values(i)[0], 0)
-        print(firstsell)
-        secondsell = xlrd.xldate_as_datetime(xltable.row_values(i)[1], 1)
-        print(secondsell)
-        thirdsell = xlrd.xldate_as_datetime(xltable.row_values(i)[2].value, 1)
-        fourthsell = xlrd.xldate_as_datetime(xltable.row_values(i)[3].value, 1)
-        startdate = datetime.datetime(firstsell.year, firstsell.month, firstsell.day, secondsell.hour,
-                                      secondsell.minute)
-        enddate = datetime.datetime(thirdsell.year, thirdsell.month, thirdsell.day, fourthsell.hour,
-                                    fourthsell.minute)
+            for col in range(ncols):
+                self.excelDict[row][col] = xltable.row_values(row)[col]
+        return self.excelDict
 
     def readXlsx(self):
-        sheetObj = load_workbook(self.filepath).active
+        print(self.filepath)
+        workBooktObj = load_workbook(self.filepath)
+        sheetNames = workBooktObj.get_sheet_names()
+        sheetObj = workBooktObj.get_sheet_by_name(sheetNames[0])
         maxCol = sheetObj.max_column
         maxRow = sheetObj.max_row
-        excelDict = dict()
-        print('tttttt')
+
         # Loop will print all columns name
         for row in range(2, maxRow + 1):
             for col in range(1, maxCol + 1):
-                excelDict[row][col]=sheetObj.cell(row=row, column=col).value
+                self.excelDict[row][col] = sheetObj.cell(row=row, column=col).value
                 # cell_obj = sheetObj.cell(row=row, column=col)
                 # print(cell_obj.value)
-        return excelDict
+        return self.excelDict
 
 
 if __name__ == '__main__':
-    path = os.path.abspath('testfile.xlsx')
-    filename = 'testfile.xlsx'
-    obj = readExcel(path, filename)
-    testdict = obj.fileType()
-    print(testdict)
-
+    # path = os.path.abspath('testfile.xlsx')
+    # print(path)
+    # filename = 'testfile.xlsx'
+    # obj = readExcel(path, filename)
+    # testdict = obj.typeOfExcel()
+    # print(testdict)
+    a = {1: 2, 3: 4, 5: 6}
+    for i in a:
+        print(i)
