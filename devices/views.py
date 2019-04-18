@@ -298,48 +298,36 @@ def getEncoderStatus(request):
         get id,time,programChannel,
         :return id, program status
         '''
-        # eor = EncoderOperater()
-        # searchStartTime = request.GET.get('starttime')
-        # searchEndTime = request.GET.get('endtime')
-        #
-        '''
-        get the datetime
-        '''
-        # if searchStartTime == None:
-        #     return None
-        # searchEndTime = str(searchEndTime)
-        # searchStartTime = str(searchStartTime)
-        # searchStartTime = datetime.datetime.strptime(searchStartTime, '%Y-%m-%d')
-        # searchStartTime = datetime.datetime(searchStartTime.year, searchStartTime.month,
-        #                                     searchStartTime.day, 00,
-        #                                     00, 00)
-        # searchEndTime = datetime.datetime.strptime(searchEndTime, '%Y-%m-%d')
-        # searchEndTime = datetime.datetime(searchEndTime.year, searchEndTime.month, searchEndTime.day, 23,
-        #                                   59, 59)
-        #
-        # message = WorkPackage.objects.filter(startDate__range=(searchStartTime, searchEndTime)).values('id',
-        #                                                                                                'programChannel')
-        # midDict = dict()
-        # for items in message:
-        #     mid = ProgramDetail.objects.filter(name=items['programChannel']).values('machine_id')
-        #     if mid == None:
-        #         continue
-        #     for subitem in mid:
-        #         midDict[subitem['machine_id']] = None
-        # for keyid in midDict.keys():
-        #     targetIp = IpV4.objects.filter(MachineIp=keyid, isHttpManage=True).values('ip')
-        #     for ip in targetIp:
-        #         eor = EncoderOperater(ipadd=ip['10.78.64.193'], username='admin', passwd='cntv.cn@real', targetType='realmagic')
-        #         result = eor.doOption()
-        #         print(result)
-        #         updater = updateEncoder(machine=keyid,messages=result)
-        #         updater.updateInfo()
-
-        targetMachine = Machine.objects.get(ipv4__ip='10.78.64.193')
-        eor = EncoderOperater(ipadd='10.78.64.193', username='admin', passwd='cntv.cn@real', targetType='realmagic')
-        result = eor.doOption()
-        updater = updateEncoder(machine=targetMachine.id, messages=result)
-        updater.updateInfo()
+        today = datetime.datetime.now()
+        tomorrow = datetime.datetime.now() + datetime.timedelta(days=1)
+        search_today = today
+        searchStartTime = datetime.datetime(search_today.year, search_today.month, search_today.day, 00, 00, 00)
+        search_today_end = datetime.datetime(search_today.year, search_today.month, search_today.day, 23, 59, 59)
+        searchEndTime = datetime.datetime(tomorrow.year, tomorrow.month, tomorrow.day, 23, 59, 59)
+        message = WorkPackage.objects.filter(startDate__range=(searchStartTime, searchEndTime))
+        machineDict = dict()
+        for item in message.values('id', 'programChannel', ):
+            programMessage = ProgramDetail.objects.filter(name=item['programChannel']).values(
+                'rowid', 'machine_id', )
+            for item in programMessage:
+                # print(item['machine_id'])
+                # print(item['rowid'])
+                if item['machine_id'] in machineDict:
+                    machineDict[item['machine_id']].append(item['rowid'])
+                else:
+                    machineDict[item['machine_id']] = list()
+                    machineDict[item['machine_id']].append(item['rowid'])
+        print(machineDict)
+        pass
+        '''{1: [0, 7]}'''
+        for key in machineDict:
+            targetMachine = Machine.objects.filter(id=key, ipv4__isHttpManage=True).values('id', 'ipv4__ip', 'httpadmin', 'httpadminp', )
+            print(targetMachine[0]['id'])
+            eor = EncoderOperater(ipadd=targetMachine[0]['ipv4__ip'], username=targetMachine[0]['httpadmin'],
+                                  passwd=targetMachine[0]['httpadminp'], targetType='realmagic', rawid=machineDict[key])
+            result = eor.doOption()
+            updater = updateEncoder(machine=targetMachine[0]['id'], messages=result)
+            updater.updateInfo()
         # return HttpResponse(json.dumps({"msg": msg}))
         return redirect("/tasks/daily")
     else:
