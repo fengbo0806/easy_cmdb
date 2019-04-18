@@ -9,6 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import os
 import random
+import time
 
 '''
 selenium
@@ -30,6 +31,9 @@ class EncoderOperater:
         self.target = targetType
         self.loginURL = None
         self.getInfoURL = None
+        self.inputUsr = None
+        self.inputPas = None
+        self.inputClick = None
         self.rawdi = rawid
 
     def doOption(self):
@@ -50,7 +54,53 @@ class EncoderOperater:
                 tagdic.pop(keys)
             return tagdic
 
+    def loginTag(self):
+        chromeDir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'chromedriver')
+        option = webdriver.ChromeOptions()
+        option.add_argument("headless")
+        option.add_argument('lang=zh_CN.UTF-8')
+        driver = webdriver.Chrome(chromeDir, chrome_options=option)
+        driver.get(self.loginURL)
+        time.sleep(3)
+        driver.implicitly_wait(1)
+        print(self.inputUsr)
+        '''
+        by_id= "id"
+by_xpath = "xpath"
+by_link_text = "link text"
+by_partial_text = "partial link text"
+by_name = "name"
+by_tag_name = "tag name"
+by_class_name = "class name"
+by_css_selector = "css selector"
+        '''
+        max_time = time.time() + 30
+        while time.time() < max_time:
+            if driver.find_element(By.ID, self.inputUsr[1]):
+                # driver.find_element(By.ID, self.inputUsr[1]).send_keys(self.username)
+                break
+            time.sleep(0.2)
+        else:
+            print('locator %s not found' % 'sss')
+        if self.inputPas is not None:
+            driver.find_element(self.inputPas[0], self.inputPas[1]).send_keys(self.passwd)
+        driver.find_element(self.inputClick[0], self.inputClick[1]).click()
+        driver.implicitly_wait(1)
+        return driver
+
     def powersmart(self):
+        self.loginURL = 'http://%s/html/encoder/index.html' % (self.ipadd,)
+        self.getInfoURL = 'http://%s/html/encoder/maininfo2.html?referer=1' % (self.ipadd,)
+        self.inputUsr = [By.ID, 'loginname']
+        self.inputPas = [By.ID, 'password']
+        self.inputClick = [By.ID, 'Login_IndexImage']
+        driver = self.loginTag()
+        driver.implicitly_wait(1)
+        driver.get(self.getInfoURL)
+        driver.implicitly_wait(2)
+        print(driver.page_source)
+
+    def oldpowersmart(self):
         orderId = 0
         self.getInfoURL = 'http://%s/encoder_status_new.cgi' % (self.ipadd,)
         self.getDeatilURL = 'http://%s/html/encoder/setup3.html?referer=1&id=%d' % (self.ipadd, orderId)
@@ -333,7 +383,7 @@ if __name__ == '__main__':
     use for test 
     '''
 
-    testobj = EncoderOperater(ipadd='10.78.64.117', username=None, passwd=None, targetType='powersmart', )
+    testobj = EncoderOperater(ipadd='10.78.64.117', username='manager', passwd='powersmart', targetType='powersmart', )
     result = testobj.doOption()
     print(result)
     '''
