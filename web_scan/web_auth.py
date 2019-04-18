@@ -98,7 +98,7 @@ by_css_selector = "css selector"
         driver.implicitly_wait(1)
         driver.get(self.getInfoURL)
         driver.implicitly_wait(2)
-        print(driver.page_source)
+        print(driver)
 
     def oldpowersmart(self):
         orderId = 0
