@@ -78,19 +78,16 @@ def updateEncoders(request):
                                                                                                           'httpadminp',
                                                                                                           'httpadmin',
                                                                                                           'ipv4__ip',
-                                                                                                          'machineVender__englishname')
-        print(list(queryEncoders))
+                                                                                                          'machineVender__englishname',
+                                                                                                          )
+        '''[{'id': , 'httpadminp': , 'httpadmin': , 'ipv4__ip': ,'machineVender__englishname': }]'''
         for items in queryEncoders:
-            for j in items:
-                print(j, end=',')
-
-            #
-            # eor = EncoderOperater(ipadd=items['ipv4__ip'], username=items['httpadmin'], passwd=items['httpadminp'], targetType=items['machineVender__englishname'])
-            # result = eor.doOption()
-            # updater = updateEncoder(machine=items['id'], messages=result)
-            # updater.updateInfo()
+            eor = EncoderOperater(ipadd=items['ipv4__ip'], username=items['httpadmin'],
+                                  passwd=items['httpadminp'], targetType=items['machineVender__englishname'],)
+            result = eor.doOption()
+            updater = updateEncoder(machine=items['id'], messages=result)
+            updater.updateInfo()
         return HttpResponseRedirect('/thanks/')
-
     else:
         return None
 
@@ -327,6 +324,7 @@ def getEncoderStatus(request):
             eor = EncoderOperater(ipadd=targetMachine[0]['ipv4__ip'], username=targetMachine[0]['httpadmin'],
                                   passwd=targetMachine[0]['httpadminp'], targetType='realmagic', rawid=machineDict[key])
             result = eor.doOption()
+            print(result)
             updater = updateEncoder(machine=targetMachine[0]['id'], messages=result)
             updater.updateInfo()
         # return HttpResponse(json.dumps({"msg": msg}))

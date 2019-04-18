@@ -19,6 +19,8 @@ class EncoderOperater:
     '''
     use to log in the encoder server with http, and get the value from the web page,
     :return resultdict
+    {0: {'rowid': , 'switchStatus': , 'name': , 'programStatus': , 'outbandwidth': , 'width': , 'height': , 'inPutFirst':,
+     'inPutSecond': , 'outPutFirst': , 'outPutHttpFlow': , 'outPutSecond': }}
     '''
 
     def __init__(self, ipadd=None, username=None, passwd=None, targetType=None, rawid='all'):
@@ -62,8 +64,8 @@ class EncoderOperater:
         soup = BeautifulSoup(con, "html.parser", )
         # print(soup.encoder.id.get_text())
         resultdict = dict()
-        resultdict[soup.encoder.id.get_text()] = {'id': soup.encoder.id.get_text(),
-                                                  'status': soup.encoder.status.get_text(),
+        resultdict[soup.encoder.id.get_text()] = {'rowid': soup.encoder.id.get_text(),
+                                                  'switchStatus': soup.encoder.status.get_text(),
                                                   'name': soup.encoder.find('name').get_text(),
                                                   'width': soup.encoder.width.get_text(),
                                                   'height': soup.encoder.height.get_text(),
@@ -75,8 +77,8 @@ class EncoderOperater:
             next tag is 'bs4.element.Tag' or'bs4.element.NavigableString'
             '''
             if len(sibling) > 1:
-                resultdict[sibling.id.get_text()] = {'id': sibling.id.get_text(),
-                                                     'status': sibling.status.get_text(),
+                resultdict[sibling.id.get_text()] = {'rowid': sibling.id.get_text(),
+                                                     'switchStatus': sibling.status.get_text(),
                                                      'name': sibling.find('name').get_text(),
                                                      'width': sibling.width.get_text(),
                                                      'height': sibling.height.get_text(),
@@ -85,20 +87,48 @@ class EncoderOperater:
         for key in resultdict.keys():
             import random
             orderId = key
+            # print(type(key),key)
             '''
             powersmart always send the get URL with a random number, like get_device.cgi?rnd= + Math.random()
             '''
+            'http://10.78.64.117/html/encoder/setup3.html?referer=1&id=0'
             RequestURL = 'http://%s/get_encoder_1109.cgi?rnd=%f' % (self.ipadd, round(random.random(), 15))
+            # RequestURL = 'http://%s/html/encoder/setup3.html?referer=1&id=%d' % (self.ipadd, int(key))
             con = req.get(RequestURL, headers={"If-Modified-Since": "0",
                                                'Host': '%s' % (self.ipadd),
                                                'Referer': self.getDeatilURL
                                                }, cookies={'logined': 'gg'}).content
             soup = BeautifulSoup(con, "html.parser", )
-            import re
-            for line in soup.prettify():
+            'channelCGIInfo[0]["OutputURL_HTTP"]="http://10.78.64.117:8088/ts0";'
+            '''
+            channelCGIInfo[0]["TSUDPIP"]="228.1.2.115";
+            channelCGIInfo[0]["TSUDPPort"]=3000;
+            '''
+            searchHttpout = str(key) + '.*OutputURL_HTTP"]="http'
+            searchUdpout = str(key) + '.*TSUDPIP"]="\d'
+            searchUdpoutPort = str(key) + '.*TSUDPPort"]=\d'
+            resultdict[key]['outPutFirst'] = None
+            resultdict[key]['outPutSecond'] = None
+            resultdict[key]['outPutSecond'] = None
+            '''
+            'inPutFirst':,
+     'inPutSecond': , 'outPutFirst': , 'outPutHttpFlow': , 'outPutSecond'
+            '''
+            # print(soup.contents[0])
+            for line in re.split('\n', soup.contents[0]):
                 if not line:
                     break
-                re.split()
+                if re.search(searchHttpout, line, ):
+                    resultdict[key]['outPutFirst'] = re.split('"', line)[-2]
+                    print(line)
+                if re.search(searchUdpout, line, ):
+                    resultdict[key]['outPutSecond'] = re.split('"', line)[-2]
+                    # print(line)
+                if re.search(searchUdpoutPort, line, ):
+                    resultdict[key]['outPutSecond'] = resultdict[key]['outPutSecond'] + ':' + str(
+                        re.split('[=;]', line)[-2])
+                    print(line)
+
         return resultdict
 
     def realmagic(self):
@@ -170,6 +200,8 @@ class EncoderOperater:
             '''
             resultdict[item]['inPutFirst'] = soupInput.find('input', attrs={'name': 'ipinput_address___%d' % (item)})[
                 "value"].strip()
+            resultdict[item]['inPutSecond'] = soupInput.find('input', attrs={'name': 'ipinput_address2___%d' % (item)})[
+                "value"].strip()
             '''
             deal with the out put part,get the value of outPutFirst,outPutSecond,outPutHttpFlow
             '''
@@ -205,9 +237,9 @@ class EncoderOperater:
         '''
         resultdict = dict()
         keyvalue = 1
-        md5Mess = hashlib.md5()
-        md5Mess.update(self.passwd)
-        self.passwd = md5Mess.hexdigest()
+        # md5Mess = hashlib.md5()
+        # md5Mess.update(self.passwd)
+        # self.passwd = md5Mess.hexdigest()
         urllogin = 'http://%s/login' % (self.ipadd,)
         urlaction = "http://%s/listTask.action" % (self.ipadd,)
         # form_data = [('username',''),('password','')]
@@ -254,14 +286,14 @@ class EncoderOperater:
             if sibling.name == 'tr':
                 if sibling.find('a') is not None:
                     valuea = sibling.find('a').get_text()
-                    resultdict[valuea] = valuea
+                    resultdict[valuea] = dict()
                     keyvalue = valuea
                     resultdict[valuea]['rowid'] = valuea
                 if sibling.find('div', attrs={'class': 'appui_text_ellipsis'}) is not None:
                     valuediv = sibling.find('div', attrs={'class': 'appui_text_ellipsis'}).get_text()
                     resultdict[keyvalue]['name'] = valuediv
         for keys in resultdict.keys():
-            getEncUrl = 'http://%s/viewTask?taskId=%d&rnd=%f' % (self.ipadd, keys, random.random())
+            getEncUrl = 'http://%s/viewTask?taskId=%d&rnd=%f' % (self.ipadd, int(keys), random.random())
             driver.get(getEncUrl)
             soup = BeautifulSoup(driver.page_source, "html.parser", )
         driver.close()
@@ -299,6 +331,19 @@ if __name__ == '__main__':
     '''
     use for test 
     '''
+
+    testobj = EncoderOperater(ipadd='10.78.64.117', username=None, passwd=None, targetType='powersmart', )
+    result = testobj.doOption()
+    print(result)
+    '''
+    use to log in the encoder server with http, and get the value from the web page,
+    :return resultdict
+    {0: {'rowid': , 'switchStatus': , 'name': , 'programStatus': , 'outbandwidth': , 'width': , 'height': , 'inPutFirst':,
+     'inPutSecond': , 'outPutFirst': , 'outPutHttpFlow': , 'outPutSecond': }}
+     {'0': {'id': '0', 'status': '0', 'name': 'CCTV4HD-卫星备2017', 'width': '640', 'height': '360', 'outbandwidth': '308'}, '1': {'id': '1', 'status': '0', 'name': 'CCTV5HD-总控备', 'width': '640', 'height': '360', 'outbandwidth': '308'}, '2': {'id': '2', 'status': '0', 'name': 'CCTV4HD-卫星备2017', 'width': '1920', 'height': '1080', 'outbandwidth': '8000'}, '3': {'id': '3', 'status': '0', 'name': 'CCTV5HD-总控备', 'width': '1920', 'height': '1080', 'outbandwidth': '8000'}}
+
+    '''
+
     from selenium import webdriver
     from selenium.webdriver.common.by import By
     from selenium.webdriver.support.ui import WebDriverWait
@@ -324,63 +369,63 @@ if __name__ == '__main__':
     "http://ipadd/viewTask?taskId=323&rnd=0.4677657860893727"
     
     '''
-    from bs4 import BeautifulSoup
+    # from bs4 import BeautifulSoup
+    #
+    # with open('hongruan.html') as htmlts:
+    #     soup = BeautifulSoup(htmlts, "html.parser", )
+    #     # soup.find()
+    #     con = soup.find('table', attrs={'class': 'appui_listview single_selection'})
+    #     # print(con)
+    #     con2 = con.find('tr')
+    #     # print(con2)
+    #     for sibling in con2.next_siblings:
+    #         # if sibling.find('div')==-1:
+    #         #     print(sibling)
+    #         # elif sibling.find('div')==None:
+    #         #     print(sibling)
+    #         # if len(sibling) > 1:
+    #         if sibling.name == 'tr':
+    #             # print(sibling)
+    #             if sibling.find('a') is not None:
+    #                 print(sibling.find('a').get_text())
+    #             if sibling.find('div', attrs={'class': 'appui_text_ellipsis'}) is not None:
+    #                 print(sibling.find('div', attrs={'class': 'appui_text_ellipsis'}).get_text())
+'''
+19: {'rowid': '19', 'switchStatus': True, 'name': '移动直播20', 'programStatus': -1, 'outbandwidth': '4000',
+     'width': '960', 'height': '540',
+     'inPutFirst': 'rtmp://vlive.people.com.cn/2010/1-18-11-29-1500/live_2 ',
+     'outPutFirst': 'udp://@228.1.2.145:5000', 'outPutSecond': 'http://10.78.64.195:1254/live20',
+     'outPutHttpFlow': 'http://10.78.64.195:1254/live20'}}
+     '''
 
-    with open('hongruan.html') as htmlts:
-        soup = BeautifulSoup(htmlts, "html.parser", )
-        # soup.find()
-        con = soup.find('table', attrs={'class': 'appui_listview single_selection'})
-        # print(con)
-        con2 = con.find('tr')
-        # print(con2)
-        for sibling in con2.next_siblings:
-            # if sibling.find('div')==-1:
-            #     print(sibling)
-            # elif sibling.find('div')==None:
-            #     print(sibling)
-            # if len(sibling) > 1:
-            if sibling.name == 'tr':
-                # print(sibling)
-                if sibling.find('a') is not None:
-                    print(sibling.find('a').get_text())
-                if sibling.find('div', attrs={'class': 'appui_text_ellipsis'}) is not None:
-                    print(sibling.find('div', attrs={'class': 'appui_text_ellipsis'}).get_text())
-            '''
-            19: {'rowid': '19', 'switchStatus': True, 'name': '移动直播20', 'programStatus': -1, 'outbandwidth': '4000',
-                 'width': '960', 'height': '540',
-                 'inPutFirst': 'rtmp://vlive.people.com.cn/2010/1-18-11-29-1500/live_2 ',
-                 'outPutFirst': 'udp://@228.1.2.145:5000', 'outPutSecond': 'http://10.78.64.195:1254/live20',
-                 'outPutHttpFlow': 'http://10.78.64.195:1254/live20'}}
-                 '''
+# for sibling in con.next_siblings:
+#     print(sibling)
+# class ="tab_content even" value="331" >
+# < div
+#
+#
+# class ="appui_text_ellipsis" style="display:inline-block;vertical-align:middle;" > 阿里云-CCTV5+HD < / div >
+# print(driver.page_source)
+# print(driver.find_element_by_tag_name('table').text)
+# try:
+#     WebDriverWait(driver.get("http://ipadd/#listTask.action"), 5)
+#
+# finally:
+#     driver.quit()
+# print(driver.page_source)
+# for link in driver.find_element_by_xpath("//*[@href]"):
+#     print(link.get_attribute('href'))
+# driver.get(url)
+# print(driver.title)
 
-            # for sibling in con.next_siblings:
-            #     print(sibling)
-            # class ="tab_content even" value="331" >
-            # < div
-            #
-            #
-            # class ="appui_text_ellipsis" style="display:inline-block;vertical-align:middle;" > 阿里云-CCTV5+HD < / div >
-            # print(driver.page_source)
-            # print(driver.find_element_by_tag_name('table').text)
-            # try:
-            #     WebDriverWait(driver.get("http://ipadd/#listTask.action"), 5)
-            #
-            # finally:
-            #     driver.quit()
-            # print(driver.page_source)
-            # for link in driver.find_element_by_xpath("//*[@href]"):
-            #     print(link.get_attribute('href'))
-            # driver.get(url)
-            # print(driver.title)
+# result = EncoderOperater(ipadd='ip', username='name', passwd='password', targetType='arcvideo')
+# valuesDict = result.doOption()
+# print(valuesDict)
+# driver = webdriver.Firefox()
 
-            # result = EncoderOperater(ipadd='ip', username='name', passwd='password', targetType='arcvideo')
-            # valuesDict = result.doOption()
-            # print(valuesDict)
-            # driver = webdriver.Firefox()
-
-            # import time
-            #
-            # time.sleep(1)
-            # print(pagedata.page_source)
-            # for link in driver.find_element_by_xpath("//*[@href]"):
-            #     print(link.get_attribute('href'))
+# import time
+#
+# time.sleep(1)
+# print(pagedata.page_source)
+# for link in driver.find_element_by_xpath("//*[@href]"):
+#     print(link.get_attribute('href'))

@@ -28,6 +28,8 @@ python3.6 -m pip install bs4==0.0.1
 python3.6 -m pip install xlrd==1.2.0
 #xlwt version 1.3.0
 python3.6 -m pip install xlwt==1.3.0
+#openpyxl version 2.6.2
+python3.6 -m pip install openpyxl==2.6.2
 #requests version 2.18.4
 python3.6 -m pip install requests==2.18.4
 #selenium version 3.141.0
@@ -36,6 +38,7 @@ python3.6 -m pip install selenium==3.141.0
 #yum list | grep mariadb
 systemctl start mariadb
 systemctl enable mariadb
+
 
 #msyql_secure_installation set password
 #mysql -u root -p  testlogin

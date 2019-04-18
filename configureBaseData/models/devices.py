@@ -18,6 +18,7 @@ class Machine(models.Model):
     loginPort = models.IntegerField()
     httpadmin = models.CharField(max_length=255, blank=True, null=True)
     httpadminp = models.CharField(max_length=255, blank=True, null=True)
+    onmantaince = models.BooleanField(verbose_name='维修', default=False, blank=True)
 
     # machine_service = models.CharField()
     # machine_admin = models.CharField()
