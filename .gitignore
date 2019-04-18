@@ -114,3 +114,9 @@ venv.bak/
 web_scan/hongruan\.html
 
 web_scan/test\.html
+
+excelTrigger/testfile\.xls
+
+excelTrigger/testfile\.xlsx
+
+excelTrigger/testfile2\.xlsx

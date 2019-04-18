@@ -294,92 +294,93 @@ class EncoderOperater:
         def arcvideo(self):
             pass
 
-    if __name__ == '__main__':
-        '''
-        use for test 
-        '''
-        from selenium import webdriver
-        from selenium.webdriver.common.by import By
-        from selenium.webdriver.support.ui import WebDriverWait
-        from selenium.webdriver.support import expected_conditions as EC
-        import os
 
-        ''' 
-        chromeDir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'chromedriver')
-        print(chromeDir)
-        # driver = webdriver.Chrome('/path/to/chromedriver')
+if __name__ == '__main__':
+    '''
+    use for test 
+    '''
+    from selenium import webdriver
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+    import os
+
+    ''' 
+    chromeDir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'chromedriver')
+    print(chromeDir)
+    # driver = webdriver.Chrome('/path/to/chromedriver')
+
+    option = webdriver.ChromeOptions()
+    option.add_argument("headless")
+    driver = webdriver.Chrome(chromeDir, chrome_options=option)
+    url = "https://www.baidu.com"
+    driver.get("http://ipadd/login")
+    driver.find_element_by_name("username_1").send_keys("")
+    driver.find_element_by_name("password_1").send_keys("")
+    driver.find_element_by_class_name("input_submit").click()
+    driver.implicitly_wait(5)
+    driver.get("http://ipadd/listTask.action")
     
-        option = webdriver.ChromeOptions()
-        option.add_argument("headless")
-        driver = webdriver.Chrome(chromeDir, chrome_options=option)
-        url = "https://www.baidu.com"
-        driver.get("http://ipadd/login")
-        driver.find_element_by_name("username_1").send_keys("")
-        driver.find_element_by_name("password_1").send_keys("")
-        driver.find_element_by_class_name("input_submit").click()
-        driver.implicitly_wait(5)
-        driver.get("http://ipadd/listTask.action")
-        
-        "http://ipadd/viewTask?taskId=323&rnd=0.4677657860893727"
-        
-        '''
-        from bs4 import BeautifulSoup
+    "http://ipadd/viewTask?taskId=323&rnd=0.4677657860893727"
+    
+    '''
+    from bs4 import BeautifulSoup
 
-        with open('hongruan.html') as htmlts:
-            soup = BeautifulSoup(htmlts, "html.parser", )
-            # soup.find()
-            con = soup.find('table', attrs={'class': 'appui_listview single_selection'})
-            # print(con)
-            con2 = con.find('tr')
-            # print(con2)
-            for sibling in con2.next_siblings:
-                # if sibling.find('div')==-1:
-                #     print(sibling)
-                # elif sibling.find('div')==None:
-                #     print(sibling)
-                # if len(sibling) > 1:
-                if sibling.name == 'tr':
-                    # print(sibling)
-                    if sibling.find('a') is not None:
-                        print(sibling.find('a').get_text())
-                    if sibling.find('div', attrs={'class': 'appui_text_ellipsis'}) is not None:
-                        print(sibling.find('div', attrs={'class': 'appui_text_ellipsis'}).get_text())
-                '''
-                19: {'rowid': '19', 'switchStatus': True, 'name': '移动直播20', 'programStatus': -1, 'outbandwidth': '4000',
-                     'width': '960', 'height': '540',
-                     'inPutFirst': 'rtmp://vlive.people.com.cn/2010/1-18-11-29-1500/live_2 ',
-                     'outPutFirst': 'udp://@228.1.2.145:5000', 'outPutSecond': 'http://10.78.64.195:1254/live20',
-                     'outPutHttpFlow': 'http://10.78.64.195:1254/live20'}}
-                     '''
+    with open('hongruan.html') as htmlts:
+        soup = BeautifulSoup(htmlts, "html.parser", )
+        # soup.find()
+        con = soup.find('table', attrs={'class': 'appui_listview single_selection'})
+        # print(con)
+        con2 = con.find('tr')
+        # print(con2)
+        for sibling in con2.next_siblings:
+            # if sibling.find('div')==-1:
+            #     print(sibling)
+            # elif sibling.find('div')==None:
+            #     print(sibling)
+            # if len(sibling) > 1:
+            if sibling.name == 'tr':
+                # print(sibling)
+                if sibling.find('a') is not None:
+                    print(sibling.find('a').get_text())
+                if sibling.find('div', attrs={'class': 'appui_text_ellipsis'}) is not None:
+                    print(sibling.find('div', attrs={'class': 'appui_text_ellipsis'}).get_text())
+            '''
+            19: {'rowid': '19', 'switchStatus': True, 'name': '移动直播20', 'programStatus': -1, 'outbandwidth': '4000',
+                 'width': '960', 'height': '540',
+                 'inPutFirst': 'rtmp://vlive.people.com.cn/2010/1-18-11-29-1500/live_2 ',
+                 'outPutFirst': 'udp://@228.1.2.145:5000', 'outPutSecond': 'http://10.78.64.195:1254/live20',
+                 'outPutHttpFlow': 'http://10.78.64.195:1254/live20'}}
+                 '''
 
-                # for sibling in con.next_siblings:
-                #     print(sibling)
-                # class ="tab_content even" value="331" >
-                # < div
-                #
-                #
-                # class ="appui_text_ellipsis" style="display:inline-block;vertical-align:middle;" > 阿里云-CCTV5+HD < / div >
-                # print(driver.page_source)
-                # print(driver.find_element_by_tag_name('table').text)
-                # try:
-                #     WebDriverWait(driver.get("http://ipadd/#listTask.action"), 5)
-                #
-                # finally:
-                #     driver.quit()
-                # print(driver.page_source)
-                # for link in driver.find_element_by_xpath("//*[@href]"):
-                #     print(link.get_attribute('href'))
-                # driver.get(url)
-                # print(driver.title)
+            # for sibling in con.next_siblings:
+            #     print(sibling)
+            # class ="tab_content even" value="331" >
+            # < div
+            #
+            #
+            # class ="appui_text_ellipsis" style="display:inline-block;vertical-align:middle;" > 阿里云-CCTV5+HD < / div >
+            # print(driver.page_source)
+            # print(driver.find_element_by_tag_name('table').text)
+            # try:
+            #     WebDriverWait(driver.get("http://ipadd/#listTask.action"), 5)
+            #
+            # finally:
+            #     driver.quit()
+            # print(driver.page_source)
+            # for link in driver.find_element_by_xpath("//*[@href]"):
+            #     print(link.get_attribute('href'))
+            # driver.get(url)
+            # print(driver.title)
 
-                # result = EncoderOperater(ipadd='ip', username='name', passwd='password', targetType='arcvideo')
-                # valuesDict = result.doOption()
-                # print(valuesDict)
-                # driver = webdriver.Firefox()
+            # result = EncoderOperater(ipadd='ip', username='name', passwd='password', targetType='arcvideo')
+            # valuesDict = result.doOption()
+            # print(valuesDict)
+            # driver = webdriver.Firefox()
 
-                # import time
-                #
-                # time.sleep(1)
-                # print(pagedata.page_source)
-                # for link in driver.find_element_by_xpath("//*[@href]"):
-                #     print(link.get_attribute('href'))
+            # import time
+            #
+            # time.sleep(1)
+            # print(pagedata.page_source)
+            # for link in driver.find_element_by_xpath("//*[@href]"):
+            #     print(link.get_attribute('href'))
