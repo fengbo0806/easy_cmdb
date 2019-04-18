@@ -23,8 +23,8 @@ class readExcel(object):
 
     def typeOfExcel(self):
         judgeExcel = {
-            'xlsx': self.readXls,
-            'xls': self.readXlsx,
+            'xlsx': self.readXlsx,
+            'xls': self.readXls,
         }
         self.fileType = re.split('\.', self.filename)[-1]
         print(self.fileType)
@@ -36,11 +36,10 @@ class readExcel(object):
         xltable = xldata.sheets()[0]
         nrows = xltable.nrows
         ncols = xltable.ncols
+        countnum = 0
         for row in range(nrows):
-            if row == 0:
-                continue
-            for col in range(ncols):
-                self.excelDict[row][col] = xltable.row_values(row)[col]
+            self.excelDict[countnum]=tuple(xltable.row_values(row))
+            countnum = countnum + 1
         return self.excelDict
 
     def readXlsx(self):
@@ -50,11 +49,14 @@ class readExcel(object):
         sheetObj = workBooktObj.get_sheet_by_name(sheetNames[0])
         maxCol = sheetObj.max_column
         maxRow = sheetObj.max_row
-
+        countnum = 0
         # Loop will print all columns name
-        for row in range(2, maxRow + 1):
-            for col in range(1, maxCol + 1):
-                self.excelDict[row][col] = sheetObj.cell(row=row, column=col).value
+        for items in sheetObj.values:
+            self.excelDict[countnum]=items
+            countnum=countnum+1
+        # for row in range(1, maxRow + 1):
+        #     for col in range(1, maxCol + 1):
+        #         self.excelDict[row][col] = sheetObj.cell(row=row, column=col).value
                 # cell_obj = sheetObj.cell(row=row, column=col)
                 # print(cell_obj.value)
         return self.excelDict

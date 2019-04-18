@@ -427,8 +427,10 @@ def inportTaskExcel(request):
         for chunk in obj.chunks():
             f.write(chunk)
         f.close()
+        print(file_path,obj.name)
         getInportObj = readExcel(filepath=file_path, filename=obj.name)
         objDict = getInportObj.typeOfExcel()
+        print(objDict)
         for item in objDict:
             firstsell = item[0]
             secondsell = item[1]
@@ -453,7 +455,7 @@ def inportTaskExcel(request):
                 task=tagTask,
                 adminStaff=tagStaff,
             )
-        # # print obj.name ,obj.size
+        # # # print obj.name ,obj.size
         return redirect('/tasks/inportexcel')
     elif request.method == 'GET':
         return render(request, 'tasks/inportexcel.html')
