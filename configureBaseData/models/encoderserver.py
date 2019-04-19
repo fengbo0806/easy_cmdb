@@ -78,3 +78,22 @@ class Staff(models.Model):
 
     def __str__(self):
         return self.staffName
+
+
+class SourceFlow(models.Model):
+    programName = models.CharField(verbose_name='节目名称', max_length=255, )
+    inPutType = models.CharField(verbose_name='类型', max_length=255,)
+    inPutStream = models.CharField(verbose_name='源地址', max_length=255, )
+    port = models.IntegerField(default=0, blank=True)
+    height = models.IntegerField(default=0, blank=True)
+    width = models.IntegerField(default=0, blank=True)
+    flowPid = models.CharField(default=0, blank=True)
+    bandWidth = models.IntegerField(default=0, blank=True)
+    notes = models.TextField(verbose_name='备注', null=True, blank=True)
+
+    def __str__(self):
+        return self.programName
+
+    class Meta:
+        verbose_name = '信源'
+        verbose_name_plural = '信源'
