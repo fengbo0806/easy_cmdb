@@ -419,7 +419,7 @@ if __name__ == '__main__':
     use for test 
     '''
 
-    testobj = EncoderOperater(ipadd='10.78.64.207', username='Admin', passwd='Arc123456', targetType='arcvideo', )
+    testobj = EncoderOperater()
     result = testobj.doOption()
     # print(result.)
     '''
