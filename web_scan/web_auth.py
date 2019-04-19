@@ -57,26 +57,15 @@ class EncoderOperater:
     def loginTag(self):
         chromeDir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'chromedriver')
         option = webdriver.ChromeOptions()
-        option.add_argument("headless")
+        # option.add_argument("headless")
         option.add_argument('lang=zh_CN.UTF-8')
         driver = webdriver.Chrome(chromeDir, chrome_options=option)
         driver.get(self.loginURL)
-        time.sleep(3)
         driver.implicitly_wait(1)
-        print(self.inputUsr)
-        '''
-        by_id= "id"
-by_xpath = "xpath"
-by_link_text = "link text"
-by_partial_text = "partial link text"
-by_name = "name"
-by_tag_name = "tag name"
-by_class_name = "class name"
-by_css_selector = "css selector"
-        '''
         max_time = time.time() + 30
         while time.time() < max_time:
             if driver.find_element(By.ID, self.inputUsr[1]):
+                print('load success')
                 # driver.find_element(By.ID, self.inputUsr[1]).send_keys(self.username)
                 break
             time.sleep(0.2)
@@ -88,19 +77,40 @@ by_css_selector = "css selector"
         driver.implicitly_wait(1)
         return driver
 
-    def powersmart(self):
+    def __powersmart(self):
         self.loginURL = 'http://%s/html/encoder/index.html' % (self.ipadd,)
         self.getInfoURL = 'http://%s/html/encoder/maininfo2.html?referer=1' % (self.ipadd,)
+        self.getDeatilURL = 'http://%s/html/encoder/setup3.html?referer=1&id=0' % (self.ipadd,)
         self.inputUsr = [By.ID, 'loginname']
         self.inputPas = [By.ID, 'password']
         self.inputClick = [By.ID, 'Login_IndexImage']
         driver = self.loginTag()
+        driver.find_element(By.ID, 'ChannelInfo_SettingImage1').click()
+        time.sleep(1)
+        driver.find_element(By.ID, 'leftEncodep').click()
         driver.implicitly_wait(1)
-        driver.get(self.getInfoURL)
-        driver.implicitly_wait(2)
-        print(driver)
+        # html =driver.find_element_by_xpath("*")
+        html = driver.find_element_by_tag_name('html')
 
-    def oldpowersmart(self):
+        # html = driver.execute_script("return document.getElementsByTagName('html')[0].innerHTML")
+        print(html.get_attribute('innerHTML'))
+        time.sleep(4)
+
+        # driver.implicitly_wait(1)
+        # driver.get(self.getDeatilURL)
+        # while True:
+        #     if driver.find_element(By.ID, 'Setup_ChannelName'):
+        #         print('load success')
+        #         # driver.find_element(By.ID, self.inputUsr[1]).send_keys(self.username)
+        #         break
+        #     time.sleep(0.2)
+        driver.implicitly_wait(1)
+        # print(driver.page_source)
+        # driver.implicitly_wait(2)
+        # print(driver)
+        driver.quit()
+
+    def powersmart(self):
         orderId = 0
         self.getInfoURL = 'http://%s/encoder_status_new.cgi' % (self.ipadd,)
         self.getDeatilURL = 'http://%s/html/encoder/setup3.html?referer=1&id=%d' % (self.ipadd, orderId)
@@ -342,11 +352,37 @@ by_css_selector = "css selector"
                 if sibling.find('div', attrs={'class': 'appui_text_ellipsis'}) is not None:
                     valuediv = sibling.find('div', attrs={'class': 'appui_text_ellipsis'}).get_text()
                     resultdict[keyvalue]['name'] = valuediv
+                if sibling.find('td', attrs={'class': 'TaskStatusDesc TaskStatusGrey'}):
+                    resultdict[keyvalue]['switchStatus'] = False
+                    # valuetd = sibling.find('td', attrs={'class': 'TaskStatusDesc'}).get_text()
+                    # if valuetd == '取消' or valuetd == '就绪':
+                elif sibling.find('td', attrs={'class': 'TaskStatusDesc TaskStatusOrange'}):
+                    resultdict[keyvalue]['switchStatus'] = True
+                elif sibling.find('td', attrs={'class': 'TaskStatusDesc TaskStatusGreen'}):
+                    resultdict[keyvalue]['switchStatus'] = True
         for keys in resultdict.keys():
             getEncUrl = 'http://%s/viewTask?taskId=%d&rnd=%f' % (self.ipadd, int(keys), random.random())
             driver.get(getEncUrl)
             soup = BeautifulSoup(driver.page_source, "html.parser", )
-
+            # print(soup.contents)
+            fistset = str(keys) + '_0'
+            secondset = str(keys) + '_1'
+            if soup.find('div', id=fistset):
+                resultdict[keys]['outPutFirst'] = soup.find('div', id=fistset).find('input', id='UrlBase')["value"] + \
+                                                  soup.find('div', id=fistset).find('input', id='OutputLocation')[
+                                                      "value"]
+            if soup.find('div', id=secondset):
+                resultdict[keys]['outPutSecond'] = soup.find('div', id=secondset).find('input', id='OutputLocation')[
+                    "value"]
+            # resultdict[keys]['outPutHttpFlow'] = None
+            # resultdict[keys]['width'] = None
+            # resultdict[keys]['height'] = None
+            if soup.find('div', id='iSrcMediaInfoContainer').find('span', attrs={'class': 'media_url'}):
+                resultdict[keys]['inPutFirst'] = soup.find('div', id='iSrcMediaInfoContainer').find('span', attrs={
+                    'class': 'media_url'}).get_text()
+            if soup.find('div', id='optional_inputs').find('span', attrs={'class': 'media_url'}):
+                resultdict[keys]['inPutSecond'] = soup.find('div', id='optional_inputs').find('span', attrs={
+                    'class': 'media_url'}).get_text()
         driver.close()
         return resultdict
 
@@ -383,9 +419,9 @@ if __name__ == '__main__':
     use for test 
     '''
 
-    testobj = EncoderOperater(ipadd='10.78.64.117', username='manager', passwd='powersmart', targetType='powersmart', )
+    testobj = EncoderOperater(ipadd='10.78.64.207', username='Admin', passwd='Arc123456', targetType='arcvideo', )
     result = testobj.doOption()
-    print(result)
+    # print(result.)
     '''
     use to log in the encoder server with http, and get the value from the web page,
     :return resultdict

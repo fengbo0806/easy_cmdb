@@ -63,7 +63,7 @@ def encoders(request):
         #                                'machine__ipv4__ip', 'height', 'width', 'outPutHttpFlow', 'outPutFirst')
         queryEncoders = Machine.objects.filter(machineType__name='编码器', ipv4__isHttpManage='True').order_by(
             'id', 'programdetail__rowid').values('machineAssetNumber', 'programdetail__name', 'programdetail__height',
-                                                 'programdetail__width', 'programdetail__outPutHttpFlow', 'ipv4__ip',
+                                                 'programdetail__width', 'programdetail__outPutSecond', 'ipv4__ip',
                                                  'programdetail__switchStatus', 'programdetail__outPutFirst')
         # from web_scan import update
         # update.updateEncoderInfo()
@@ -87,7 +87,7 @@ def updateEncoders(request):
             result = eor.doOption()
             updater = updateEncoder(machine=items['id'], messages=result)
             updater.updateInfo()
-        return HttpResponseRedirect('/thanks/')
+        return redirect('/devices/encoders')
     else:
         return None
 

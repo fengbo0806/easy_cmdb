@@ -18,8 +18,8 @@
                 <th>频道名称</th>
                 <th>启停</th>
                 <th>分辨率</th>
-                <th>输出组播</th>
-                <th>播放连接</th>
+                <th>输出1</th>
+                <th>输出2</th>
             </tr>
             </thead>
             <tbody>
@@ -30,7 +30,7 @@
                     <td>{{ item.programdetail__switchStatus }}</td>
                     <td>{{ item.programdetail__width }}*{{ item.programdetail__height }}</td>
                     <td>{{ item.programdetail__outPutFirst }}</td>
-                    <td>{{ item.programdetail__outPutHttpFlow }}</td>
+                    <td>{{ item.programdetail__outPutSecond }}</td>
                 </tr>
             {% endfor %}
             </tbody>
