@@ -87,7 +87,7 @@ class SourceFlow(models.Model):
     port = models.IntegerField(default=0, blank=True)
     height = models.IntegerField(default=0, blank=True)
     width = models.IntegerField(default=0, blank=True)
-    flowPid = models.CharField(default=0, blank=True)
+    flowPid = models.CharField(default=0, blank=True,max_length=255,)
     bandWidth = models.IntegerField(default=0, blank=True)
     notes = models.TextField(verbose_name='备注', null=True, blank=True)
 

@@ -364,7 +364,8 @@ class EncoderOperater:
             getEncUrl = 'http://%s/viewTask?taskId=%d&rnd=%f' % (self.ipadd, int(keys), random.random())
             driver.get(getEncUrl)
             soup = BeautifulSoup(driver.page_source, "html.parser", )
-            # print(soup.contents)
+            print(soup.contents)
+            # break
             fistset = str(keys) + '_0'
             secondset = str(keys) + '_1'
             if soup.find('div', id=fistset):
@@ -374,9 +375,18 @@ class EncoderOperater:
             if soup.find('div', id=secondset):
                 resultdict[keys]['outPutSecond'] = soup.find('div', id=secondset).find('input', id='OutputLocation')[
                     "value"]
-            # resultdict[keys]['outPutHttpFlow'] = None
-            # resultdict[keys]['width'] = None
-            # resultdict[keys]['height'] = None
+            '''
+            get width and height
+            '''
+            encodespan = soup.find('div', id='356_0').findAll('span', )[-1]
+            encodespanitem = list(filter(None, re.split('[\n|\t]', encodespan.get_text())))
+            '''
+             ['H264', '1920x1080', '@25fps', 'VBR', '3800Kbps ', '    ', 'MP2', '48.0kHz', '2', 'channels', '256',
+                 'Kbps']
+            '''
+            wAndH = re.split('x', encodespanitem[1])
+            resultdict[keys]['width'], resultdict[keys]['height'] = wAndH[0], wAndH[1]
+            resultdict[keys]['outbandwidth'] = int(re.sub("\D", "", encodespanitem[4]))
             if soup.find('div', id='iSrcMediaInfoContainer').find('span', attrs={'class': 'media_url'}):
                 resultdict[keys]['inPutFirst'] = soup.find('div', id='iSrcMediaInfoContainer').find('span', attrs={
                     'class': 'media_url'}).get_text()
@@ -419,7 +429,7 @@ if __name__ == '__main__':
     use for test 
     '''
 
-    testobj = EncoderOperater()
+    testobj = EncoderOperater(ipadd='10.78.64.207', username='Admin', passwd='Arc123456', targetType='arcvideo', )
     result = testobj.doOption()
     # print(result.)
     '''
