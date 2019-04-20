@@ -77,7 +77,7 @@ class EncoderOperater:
         driver.implicitly_wait(1)
         return driver
 
-    def __powersmart(self):
+    def powersmart(self):
         self.loginURL = 'http://%s/html/encoder/index.html' % (self.ipadd,)
         self.getInfoURL = 'http://%s/html/encoder/maininfo2.html?referer=1' % (self.ipadd,)
         self.getDeatilURL = 'http://%s/html/encoder/setup3.html?referer=1&id=0' % (self.ipadd,)
@@ -90,11 +90,23 @@ class EncoderOperater:
         driver.find_element(By.ID, 'leftEncodep').click()
         driver.implicitly_wait(1)
         # html =driver.find_element_by_xpath("*")
+        httpout = driver.find_element_by_id('OutputURL_HTTP').text
+        httpsubout = driver.find_element_by_id('TSUDPIP_sub1').text
+        print(httpout,httpsubout)
         html = driver.find_element_by_tag_name('html')
+        # print(driver.execute_script("return document.documentElement.outerHTML"))
 
+        # 获得整个文档的HTML
+        # print(driver.find_element_by_xpath("//*").get_attribute("outerHTML"))
+        # 不要用 driver.page_source，那样得到的页面源码不标准
+        # 获取单个元素具体的HTML源文件
+        # webElement.getAttribute("outerHTML")
+        # print(html.find_element_by_xpath("*"))
+        # soup=BeautifulSoup(html,"html.parser",)
+        # print(soup.contents)
         # html = driver.execute_script("return document.getElementsByTagName('html')[0].innerHTML")
-        print(html.get_attribute('innerHTML'))
-        time.sleep(4)
+        # print(html.get_attribute('innerHTML'))
+        # time.sleep(4)
 
         # driver.implicitly_wait(1)
         # driver.get(self.getDeatilURL)
@@ -110,7 +122,7 @@ class EncoderOperater:
         # print(driver)
         driver.quit()
 
-    def powersmart(self):
+    def __powersmart(self):
         orderId = 0
         self.getInfoURL = 'http://%s/encoder_status_new.cgi' % (self.ipadd,)
         self.getDeatilURL = 'http://%s/html/encoder/setup3.html?referer=1&id=%d' % (self.ipadd, orderId)
@@ -364,7 +376,7 @@ class EncoderOperater:
             getEncUrl = 'http://%s/viewTask?taskId=%d&rnd=%f' % (self.ipadd, int(keys), random.random())
             driver.get(getEncUrl)
             soup = BeautifulSoup(driver.page_source, "html.parser", )
-            print(soup.contents)
+            # print(soup.contents)
             # break
             fistset = str(keys) + '_0'
             secondset = str(keys) + '_1'
@@ -378,15 +390,17 @@ class EncoderOperater:
             '''
             get width and height
             '''
-            encodespan = soup.find('div', id='356_0').findAll('span', )[-1]
+            encodespan = soup.find('div', id=fistset).findAll('span', )[-1]
             encodespanitem = list(filter(None, re.split('[\n|\t]', encodespan.get_text())))
             '''
              ['H264', '1920x1080', '@25fps', 'VBR', '3800Kbps ', '    ', 'MP2', '48.0kHz', '2', 'channels', '256',
                  'Kbps']
             '''
-            wAndH = re.split('x', encodespanitem[1])
-            resultdict[keys]['width'], resultdict[keys]['height'] = wAndH[0], wAndH[1]
-            resultdict[keys]['outbandwidth'] = int(re.sub("\D", "", encodespanitem[4]))
+            if len(encodespanitem)>5:
+                wAndH = re.split('x', encodespanitem[1])
+                resultdict[keys]['width'], resultdict[keys]['height'] = wAndH[0], wAndH[1]
+                resultdict[keys]['outbandwidth'] = int(re.sub("\D", "", encodespanitem[4]))
+
             if soup.find('div', id='iSrcMediaInfoContainer').find('span', attrs={'class': 'media_url'}):
                 resultdict[keys]['inPutFirst'] = soup.find('div', id='iSrcMediaInfoContainer').find('span', attrs={
                     'class': 'media_url'}).get_text()
@@ -429,7 +443,7 @@ if __name__ == '__main__':
     use for test 
     '''
 
-    testobj = EncoderOperater(ipadd='10.78.64.207', username='Admin', passwd='Arc123456', targetType='arcvideo', )
+    testobj = EncoderOperater(ipadd='10.78.64.117', passwd='powersmart', targetType='powersmart', )
     result = testobj.doOption()
     # print(result.)
     '''
@@ -440,89 +454,3 @@ if __name__ == '__main__':
      {'0': {'id': '0', 'status': '0', 'name': 'CCTV4HD-卫星备2017', 'width': '640', 'height': '360', 'outbandwidth': '308'}, '1': {'id': '1', 'status': '0', 'name': 'CCTV5HD-总控备', 'width': '640', 'height': '360', 'outbandwidth': '308'}, '2': {'id': '2', 'status': '0', 'name': 'CCTV4HD-卫星备2017', 'width': '1920', 'height': '1080', 'outbandwidth': '8000'}, '3': {'id': '3', 'status': '0', 'name': 'CCTV5HD-总控备', 'width': '1920', 'height': '1080', 'outbandwidth': '8000'}}
 
     '''
-
-    from selenium import webdriver
-    from selenium.webdriver.common.by import By
-    from selenium.webdriver.support.ui import WebDriverWait
-    from selenium.webdriver.support import expected_conditions as EC
-    import os
-
-    ''' 
-    chromeDir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'chromedriver')
-    print(chromeDir)
-    # driver = webdriver.Chrome('/path/to/chromedriver')
-
-    option = webdriver.ChromeOptions()
-    option.add_argument("headless")
-    driver = webdriver.Chrome(chromeDir, chrome_options=option)
-    url = "https://www.baidu.com"
-    driver.get("http://ipadd/login")
-    driver.find_element_by_name("username_1").send_keys("")
-    driver.find_element_by_name("password_1").send_keys("")
-    driver.find_element_by_class_name("input_submit").click()
-    driver.implicitly_wait(5)
-    driver.get("http://ipadd/listTask.action")
-    
-    "http://ipadd/viewTask?taskId=323&rnd=0.4677657860893727"
-    
-    '''
-    # from bs4 import BeautifulSoup
-    #
-    # with open('hongruan.html') as htmlts:
-    #     soup = BeautifulSoup(htmlts, "html.parser", )
-    #     # soup.find()
-    #     con = soup.find('table', attrs={'class': 'appui_listview single_selection'})
-    #     # print(con)
-    #     con2 = con.find('tr')
-    #     # print(con2)
-    #     for sibling in con2.next_siblings:
-    #         # if sibling.find('div')==-1:
-    #         #     print(sibling)
-    #         # elif sibling.find('div')==None:
-    #         #     print(sibling)
-    #         # if len(sibling) > 1:
-    #         if sibling.name == 'tr':
-    #             # print(sibling)
-    #             if sibling.find('a') is not None:
-    #                 print(sibling.find('a').get_text())
-    #             if sibling.find('div', attrs={'class': 'appui_text_ellipsis'}) is not None:
-    #                 print(sibling.find('div', attrs={'class': 'appui_text_ellipsis'}).get_text())
-'''
-19: {'rowid': '19', 'switchStatus': True, 'name': '移动直播20', 'programStatus': -1, 'outbandwidth': '4000',
-     'width': '960', 'height': '540',
-     'inPutFirst': 'rtmp://vlive.people.com.cn/2010/1-18-11-29-1500/live_2 ',
-     'outPutFirst': 'udp://@228.1.2.145:5000', 'outPutSecond': 'http://10.78.64.195:1254/live20',
-     'outPutHttpFlow': 'http://10.78.64.195:1254/live20'}}
-     '''
-
-# for sibling in con.next_siblings:
-#     print(sibling)
-# class ="tab_content even" value="331" >
-# < div
-#
-#
-# class ="appui_text_ellipsis" style="display:inline-block;vertical-align:middle;" > 阿里云-CCTV5+HD < / div >
-# print(driver.page_source)
-# print(driver.find_element_by_tag_name('table').text)
-# try:
-#     WebDriverWait(driver.get("http://ipadd/#listTask.action"), 5)
-#
-# finally:
-#     driver.quit()
-# print(driver.page_source)
-# for link in driver.find_element_by_xpath("//*[@href]"):
-#     print(link.get_attribute('href'))
-# driver.get(url)
-# print(driver.title)
-
-# result = EncoderOperater(ipadd='ip', username='name', passwd='password', targetType='arcvideo')
-# valuesDict = result.doOption()
-# print(valuesDict)
-# driver = webdriver.Firefox()
-
-# import time
-#
-# time.sleep(1)
-# print(pagedata.page_source)
-# for link in driver.find_element_by_xpath("//*[@href]"):
-#     print(link.get_attribute('href'))

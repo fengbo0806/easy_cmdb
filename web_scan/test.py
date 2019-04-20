@@ -1,24 +1,20 @@
 from bs4 import BeautifulSoup
 import re
 
-with open('hongruan2.html') as tagsss:
+self.loginURL = 'http://%s/html/encoder/index.html' % (self.ipadd,)
+self.getInfoURL = 'http://%s/html/encoder/maininfo2.html?referer=1' % (self.ipadd,)
+self.getDeatilURL = 'http://%s/html/encoder/setup3.html?referer=1&id=0' % (self.ipadd,)
+self.inputUsr = [By.ID, 'loginname']
+self.inputPas = [By.ID, 'password']
+self.inputClick = [By.ID, 'Login_IndexImage']
+driver = self.loginTag()
+driver.find_element(By.ID, 'ChannelInfo_SettingImage1').click()
+time.sleep(1)
+driver.find_element(By.ID, 'leftEncodep').click()
+driver.implicitly_wait(1)
+# html =driver.find_element_by_xpath("*")
+html = driver.find_element_by_tag_name('html')
 
-    soup = BeautifulSoup(tagsss, "html.parser", )
-    # print(soup.contents)
-    result = [
-        soup.find('div', id='356_0').findAll('span', ),
-        # soup.find('div', id='iSrcMediaInfoContainer').find('span', attrs={'class': 'media_url'}).get_text(),
-        # soup.find('div', id='optional_inputs').find('span', attrs={'class': 'media_url'}).get_text()
-    ]
-    item = soup.find('div', id='356_0').findAll('span', )[-1]
-
-    a = list(filter(None, re.split('[\n|\t]', item.get_text())))
-    print(a)
-
-    # print(item.get_text().strip() )
-    # print(result)
-b = ['H264', '1920x1080', '@25fps', 'VBR', '3800Kbps ', '    ', 'MP2', '48.0kHz', '2', 'channels', '256', 'Kbps']
-c = re.split('x',b[1])
-d ,e =c[0],c[1]
-
-print(d,e)
+# html = driver.execute_script("return document.getElementsByTagName('html')[0].innerHTML")
+print(html.get_attribute('innerHTML'))
+time.sleep(4)
