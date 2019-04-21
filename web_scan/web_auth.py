@@ -35,6 +35,7 @@ class EncoderOperater:
         self.inputPas = None
         self.inputClick = None
         self.rawdi = rawid
+        self.resultdict = dict()
 
     def doOption(self):
         judgeEncoder = {
@@ -57,7 +58,7 @@ class EncoderOperater:
     def loginTag(self):
         chromeDir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'chromedriver')
         option = webdriver.ChromeOptions()
-        # option.add_argument("headless")
+        option.add_argument("headless")
         option.add_argument('lang=zh_CN.UTF-8')
         driver = webdriver.Chrome(chromeDir, chrome_options=option)
         driver.get(self.loginURL)
@@ -78,6 +79,10 @@ class EncoderOperater:
         return driver
 
     def powersmart(self):
+        '''
+
+        :return:
+        '''
         self.loginURL = 'http://%s/html/encoder/index.html' % (self.ipadd,)
         self.getInfoURL = 'http://%s/html/encoder/maininfo2.html?referer=1' % (self.ipadd,)
         self.getDeatilURL = 'http://%s/html/encoder/setup3.html?referer=1&id=0' % (self.ipadd,)
@@ -85,15 +90,52 @@ class EncoderOperater:
         self.inputPas = [By.ID, 'password']
         self.inputClick = [By.ID, 'Login_IndexImage']
         driver = self.loginTag()
-        driver.find_element(By.ID, 'ChannelInfo_SettingImage1').click()
-        time.sleep(1)
-        driver.find_element(By.ID, 'leftEncodep').click()
         driver.implicitly_wait(1)
-        # html =driver.find_element_by_xpath("*")
-        httpout = driver.find_element_by_id('OutputURL_HTTP').text
-        httpsubout = driver.find_element_by_id('TSUDPIP_sub1').text
-        print(httpout,httpsubout)
-        html = driver.find_element_by_tag_name('html')
+        # print(driver.page_source)
+        WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, "html")))
+
+        baseContext = BeautifulSoup(driver.page_source, "html.parser", )
+        programsInfo = baseContext.find_all('ul', attrs={'class': 'spritesAll ul1'})
+        # print(len(programsInfo))
+        programsMain = baseContext.find_all('td', attrs={'id': 'ChannelInfo_ChannelIndex0'})
+        programsbackup = baseContext.find_all('td', attrs={'id': 'ChannelInfo_ChannelIndex1'})
+        '''
+        resultdict[key]['outPutFirst'] = None
+            resultdict[key]['outPutSecond'] = None
+            resultdict[key]['outPutSecond'] = None
+            '''
+        for rowid in range(0, len(programsInfo)):
+            countSubNum = 0
+            driver.find_element(By.ID, 'ChannelInfo_SettingImage%d' % (rowid,)).click()
+            WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, "html")))
+            # WebDriverWait(driver,10).until(EC.visibility_of_element_located((By.XPATH,"html")))
+            # print(driver.page_source)
+            driver.find_element(By.ID, 'Setup_MainChannel').click()
+            self.resultdict[str(rowid + 1) + str(countSubNum)]['outPutFirst'] = \
+                driver.find_element(By.XPATH, '//input[@name="TSUDPIP"]').get_attribute("value") + ':' + \
+                driver.find_element(By.XPATH, '//input[@name="TSUDPPort"]').get_attribute("value")
+            self.resultdict[str(rowid + 1) + str(countSubNum)]['outPutSecond'] = \
+                driver.find_element(By.XPATH, '//span[@id="OutputURL_HTTP_sub1"]').get_attribute('innerHTML')
+            self.resultdict[str(rowid + 1) + str(countSubNum)][''] = \
+                driver.find_element(By.XPATH, '//input[@name="ChannelName"]').get_attribute("value")
+            
+            self.resultdict[str(rowid + 1) + str(countSubNum)][''] = ''
+            print(driver.find_element(By.XPATH, '//input[@name="ChannelName"]').get_attribute("value"))
+            print(driver.find_element(By.XPATH, '//td[@id="VideoSize_l"]').text)
+            print(driver.find_element(By.XPATH, '//span[@id="OutputURL_HTTP_sub1"]').get_attribute('innerHTML'))
+            print(driver.find_element(By.XPATH, '//input[@name="TSUDPIP"]').get_attribute("value"))
+            print(driver.find_element(By.XPATH, '//input[@name="TSUDPPort"]').get_attribute("value"))
+
+            print('----')
+            if programsbackup:
+                countSubNum = countSubNum + 1
+                print('rowid:', str(rowid + 1) + str(countSubNum))
+                # driver.find_element(By.ID, 'Setup_SubChannel1').click()
+                print(driver.find_element(By.XPATH, '//td[@id="VideoSize_l_sub1"]').text)
+                print(driver.find_element(By.XPATH, '//span[@id="OutputURL_HTTP_sub1"]').get_attribute('innerHTML'))
+                print(driver.find_element(By.XPATH, '//input[@name="TSUDPIP_sub1"]').get_attribute("value"))
+                print(driver.find_element(By.XPATH, '//input[@name="TSUDPPort_sub1"]').get_attribute("value"))
+            driver.get('http://10.78.64.117/html/encoder/maininfo2.html?referer=1')
         # print(driver.execute_script("return document.documentElement.outerHTML"))
 
         # 获得整个文档的HTML
@@ -396,7 +438,7 @@ class EncoderOperater:
              ['H264', '1920x1080', '@25fps', 'VBR', '3800Kbps ', '    ', 'MP2', '48.0kHz', '2', 'channels', '256',
                  'Kbps']
             '''
-            if len(encodespanitem)>5:
+            if len(encodespanitem) > 5:
                 wAndH = re.split('x', encodespanitem[1])
                 resultdict[keys]['width'], resultdict[keys]['height'] = wAndH[0], wAndH[1]
                 resultdict[keys]['outbandwidth'] = int(re.sub("\D", "", encodespanitem[4]))
