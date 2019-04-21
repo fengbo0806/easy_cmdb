@@ -18,6 +18,8 @@
                 <th>频道名称</th>
                 <th>启停</th>
                 <th>分辨率</th>
+                <th>输入1</th>
+                <th>输入2</th>
                 <th>输出1</th>
                 <th>输出2</th>
             </tr>
@@ -25,10 +27,12 @@
             <tbody>
             {% for item in queryencoders %}
                 <tr>
-                    <td>{{ item.ipv4__ip }}</td>
+                    <td>{{ item.ipv4__ip }} {{ item.countip }}</td>
                     <td>{{ item.programdetail__name }}</td>
                     <td>{{ item.programdetail__switchStatus }}</td>
                     <td>{{ item.programdetail__width }}*{{ item.programdetail__height }}</td>
+                    <td>{{ item.programdetail__inPutFirst }}</td>
+                    <td>{{ item.programdetail__intPutSecond }}</td>
                     <td>{{ item.programdetail__outPutFirst }}</td>
                     <td>{{ item.programdetail__outPutSecond }}</td>
                 </tr>

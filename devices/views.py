@@ -50,6 +50,7 @@ def detailDev(request):
                   {'deviceInfo': deviceInfo, 'deviceIp': deviceIp, 'deviceProcess': deviceProcess})
 
 
+@login_required
 def encoders(request):
     '''
 
@@ -61,10 +62,12 @@ def encoders(request):
         #                                       machine__machineType__name='编码器').order_by(
         #     'machine', 'rowid').values('name', 'machine__machineAssetNumber',
         #                                'machine__ipv4__ip', 'height', 'width', 'outPutHttpFlow', 'outPutFirst')
-        queryEncoders = Machine.objects.filter(machineType__name='编码器', ipv4__isHttpManage='True').order_by(
-            'id', 'programdetail__rowid').values('machineAssetNumber', 'programdetail__name', 'programdetail__height',
-                                                 'programdetail__width', 'programdetail__outPutSecond', 'ipv4__ip',
-                                                 'programdetail__switchStatus', 'programdetail__outPutFirst')
+        queryEncoders = Machine.objects.filter(machineType__name='编码器', ipv4__isHttpManage='True').annotate(
+            countip=Count("programdetail")).order_by('id', 'programdetail__rowid').values(
+            'machineAssetNumber', 'programdetail__name', 'programdetail__height', 'programdetail__width',
+            'programdetail__outPutSecond', 'ipv4__ip', 'programdetail__switchStatus',
+            'programdetail__outPutFirst', 'programdetail__inPutSecond', 'programdetail__inPutFirst',
+            'countip')
         # from web_scan import update
         # update.updateEncoderInfo()
         return render(request, 'encoders/listall.html', {'queryencoders': queryEncoders})
@@ -83,7 +86,7 @@ def updateEncoders(request):
         '''[{'id': , 'httpadminp': , 'httpadmin': , 'ipv4__ip': ,'machineVender__englishname': }]'''
         for items in queryEncoders:
             eor = EncoderOperater(ipadd=items['ipv4__ip'], username=items['httpadmin'],
-                                  passwd=items['httpadminp'], targetType=items['machineVender__englishname'],)
+                                  passwd=items['httpadminp'], targetType=items['machineVender__englishname'], )
             result = eor.doOption()
             updater = updateEncoder(machine=items['id'], messages=result)
             updater.updateInfo()

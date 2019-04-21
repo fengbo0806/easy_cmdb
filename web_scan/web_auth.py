@@ -66,7 +66,7 @@ class EncoderOperater:
         max_time = time.time() + 30
         while time.time() < max_time:
             if driver.find_element(By.ID, self.inputUsr[1]):
-                print('load success')
+                # print('load success')
                 # driver.find_element(By.ID, self.inputUsr[1]).send_keys(self.username)
                 break
             time.sleep(0.2)
@@ -110,32 +110,76 @@ class EncoderOperater:
             WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, "html")))
             # WebDriverWait(driver,10).until(EC.visibility_of_element_located((By.XPATH,"html")))
             # print(driver.page_source)
+            resKey = int(str(rowid + 1) + str(countSubNum))
+            self.resultdict[resKey] = dict()
             driver.find_element(By.ID, 'Setup_MainChannel').click()
-            self.resultdict[str(rowid + 1) + str(countSubNum)]['outPutFirst'] = \
-                driver.find_element(By.XPATH, '//input[@name="TSUDPIP"]').get_attribute("value") + ':' + \
-                driver.find_element(By.XPATH, '//input[@name="TSUDPPort"]').get_attribute("value")
-            self.resultdict[str(rowid + 1) + str(countSubNum)]['outPutSecond'] = \
-                driver.find_element(By.XPATH, '//span[@id="OutputURL_HTTP_sub1"]').get_attribute('innerHTML')
-            self.resultdict[str(rowid + 1) + str(countSubNum)][''] = \
+            self.resultdict[resKey]['rowid'] = resKey
+            if driver.find_element(By.XPATH, '//input[@name="TSUDPPort"]'):
+                updAddress = driver.find_element(By.XPATH, '//input[@name="TSUDPIP"]').get_attribute("value")
+                udpPort = driver.find_element(By.XPATH, '//input[@name="TSUDPPort"]').get_attribute("value")
+                self.resultdict[resKey]['outPutFirst'] = str(updAddress) + ':' + str(udpPort)
+            if driver.find_element(By.XPATH, '//span[@id="OutputURL_HTTP"]'):
+                self.resultdict[resKey]['outPutSecond'] = \
+                    driver.find_element(By.XPATH, '//span[@id="OutputURL_HTTP"]').get_attribute('innerHTML')
+            self.resultdict[resKey]['name'] = \
                 driver.find_element(By.XPATH, '//input[@name="ChannelName"]').get_attribute("value")
-            
-            self.resultdict[str(rowid + 1) + str(countSubNum)][''] = ''
+            if driver.find_element(By.XPATH, '//td[@id="VideoSize_l"]'):
+                videosize = driver.find_element(By.XPATH, '//td[@id="VideoSize_l"]').text
+                if re.search('Auto', videosize):
+                    pass
+                else:
+                    videosizesp = re.split('[* ]', videosize)
+                    self.resultdict[resKey]['width'] = int(videosizesp[0])
+                    self.resultdict[resKey]['height'] = int(videosizesp[1])
+            if driver.find_element(By.XPATH, '//td[@id="KbpsMix_l"]'):
+                outbandwidth = driver.find_element(By.XPATH, '//td[@id="KbpsMix_l"]').text
+                self.resultdict[resKey]['outbandwidth'] = re.split(' ', outbandwidth)[0]
+            if driver.find_element(By.XPATH, '//td[@id="ChannelStatus"]').text == '运行中':
+                self.resultdict[resKey]['switchStatus'] = True
+            '''
+            <td width="100" id="ChannelStatus">运行中</td>
             print(driver.find_element(By.XPATH, '//input[@name="ChannelName"]').get_attribute("value"))
             print(driver.find_element(By.XPATH, '//td[@id="VideoSize_l"]').text)
             print(driver.find_element(By.XPATH, '//span[@id="OutputURL_HTTP_sub1"]').get_attribute('innerHTML'))
             print(driver.find_element(By.XPATH, '//input[@name="TSUDPIP"]').get_attribute("value"))
             print(driver.find_element(By.XPATH, '//input[@name="TSUDPPort"]').get_attribute("value"))
-
             print('----')
+            '''
             if programsbackup:
+
                 countSubNum = countSubNum + 1
-                print('rowid:', str(rowid + 1) + str(countSubNum))
+                resKey =int(str(rowid + 1) + str(countSubNum))
+                self.resultdict[resKey] = dict()
+                self.resultdict[resKey]['rowid'] = resKey
                 # driver.find_element(By.ID, 'Setup_SubChannel1').click()
-                print(driver.find_element(By.XPATH, '//td[@id="VideoSize_l_sub1"]').text)
-                print(driver.find_element(By.XPATH, '//span[@id="OutputURL_HTTP_sub1"]').get_attribute('innerHTML'))
-                print(driver.find_element(By.XPATH, '//input[@name="TSUDPIP_sub1"]').get_attribute("value"))
-                print(driver.find_element(By.XPATH, '//input[@name="TSUDPPort_sub1"]').get_attribute("value"))
-            driver.get('http://10.78.64.117/html/encoder/maininfo2.html?referer=1')
+                if driver.find_element(By.XPATH, '//input[@name="TSUDPPort_sub1"]'):
+                    updAddress = driver.find_element(By.XPATH, '//input[@name="TSUDPIP_sub1"]').get_attribute("value")
+                    udpPort = driver.find_element(By.XPATH, '//input[@name="TSUDPPort_sub1"]').get_attribute("value")
+                self.resultdict[resKey]['outPutFirst'] = str(updAddress) + ':' + str(udpPort)
+                if driver.find_element(By.XPATH, '//span[@id="OutputURL_HTTP_sub1"]'):
+                    self.resultdict[resKey]['outPutSecond'] = \
+                        driver.find_element(By.XPATH, '//span[@id="OutputURL_HTTP_sub1"]').get_attribute('innerHTML')
+                self.resultdict[resKey]['name'] = \
+                    driver.find_element(By.XPATH, '//input[@name="ChannelName"]').get_attribute("value")
+                if driver.find_element(By.XPATH, '//td[@id="VideoSize_l"]'):
+                    videosize = driver.find_element(By.XPATH, '//td[@id="VideoSize_l_sub1"]').text
+                    if re.search('Auto', videosize):
+                        pass
+                    else:
+                        videosizesp = re.split('[* ]', videosize)
+                        self.resultdict[resKey]['width'] = int(videosizesp[0])
+                        self.resultdict[resKey]['height'] = int(videosizesp[1])
+                if driver.find_element(By.XPATH, '//td[@id="KbpsMix_l"]'):
+                    outbandwidth = driver.find_element(By.XPATH, '//td[@id="KbpsMix_l_sub1"]').text
+                    self.resultdict[resKey]['outbandwidth'] = re.split(' ', outbandwidth)[0]
+                if driver.find_element(By.XPATH, '//td[@id="ChannelStatus_sub1"]').text == '运行中':
+                    self.resultdict[resKey]['switchStatus'] = True
+                #####
+                # print(driver.find_element(By.XPATH, '//td[@id="VideoSize_l_sub1"]').text)
+                # print(driver.find_element(By.XPATH, '//span[@id="OutputURL_HTTP_sub1"]').get_attribute('innerHTML'))
+                # print(driver.find_element(By.XPATH, '//input[@name="TSUDPIP_sub1"]').get_attribute("value"))
+                # print(driver.find_element(By.XPATH, '//input[@name="TSUDPPort_sub1"]').get_attribute("value"))
+            driver.get(self.getInfoURL)
         # print(driver.execute_script("return document.documentElement.outerHTML"))
 
         # 获得整个文档的HTML
@@ -158,11 +202,12 @@ class EncoderOperater:
         #         # driver.find_element(By.ID, self.inputUsr[1]).send_keys(self.username)
         #         break
         #     time.sleep(0.2)
-        driver.implicitly_wait(1)
+
         # print(driver.page_source)
         # driver.implicitly_wait(2)
         # print(driver)
         driver.quit()
+        return self.resultdict
 
     def __powersmart(self):
         orderId = 0
@@ -484,15 +529,9 @@ if __name__ == '__main__':
     '''
     use for test 
     '''
+    url = "http://10.78.64.30/cgi-bin/status.cgi"
+    auth_values = ('root', '12345')
+    response = requests.get(url, auth=auth_values)
+    soup = BeautifulSoup(response.content, "html.parser", )
+    print(soup.contents)
 
-    testobj = EncoderOperater(ipadd='10.78.64.117', passwd='powersmart', targetType='powersmart', )
-    result = testobj.doOption()
-    # print(result.)
-    '''
-    use to log in the encoder server with http, and get the value from the web page,
-    :return resultdict
-    {0: {'rowid': , 'switchStatus': , 'name': , 'programStatus': , 'outbandwidth': , 'width': , 'height': , 'inPutFirst':,
-     'inPutSecond': , 'outPutFirst': , 'outPutHttpFlow': , 'outPutSecond': }}
-     {'0': {'id': '0', 'status': '0', 'name': 'CCTV4HD-卫星备2017', 'width': '640', 'height': '360', 'outbandwidth': '308'}, '1': {'id': '1', 'status': '0', 'name': 'CCTV5HD-总控备', 'width': '640', 'height': '360', 'outbandwidth': '308'}, '2': {'id': '2', 'status': '0', 'name': 'CCTV4HD-卫星备2017', 'width': '1920', 'height': '1080', 'outbandwidth': '8000'}, '3': {'id': '3', 'status': '0', 'name': 'CCTV5HD-总控备', 'width': '1920', 'height': '1080', 'outbandwidth': '8000'}}
-
-    '''
