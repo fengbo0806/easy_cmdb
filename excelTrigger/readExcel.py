@@ -15,10 +15,11 @@ openpyxl.utils.exceptions.InvalidFileException: openpyxl does not support the ol
 
 
 class readExcel(object):
-    def __init__(self, filepath, filename):
+    def __init__(self, filepath, filename,sheetname=None):
         self.filepath = filepath
         self.filename = filename
         self.fileType = None
+        self.sheetname = sheetname
         self.excelDict = dict()
 
     def typeOfExcel(self):
@@ -27,7 +28,7 @@ class readExcel(object):
             'xls': self.readXls,
         }
         self.fileType = re.split('\.', self.filename)[-1]
-        print(self.fileType)
+        # print(self.fileType)
         func = judgeExcel.get(self.fileType, 'error')
         return func()
 
@@ -43,7 +44,7 @@ class readExcel(object):
         return self.excelDict
 
     def readXlsx(self):
-        print(self.filepath)
+        # print(self.filepath)
         workBooktObj = load_workbook(self.filepath)
         sheetNames = workBooktObj.get_sheet_names()
         sheetObj = workBooktObj.get_sheet_by_name(sheetNames[0])
@@ -63,12 +64,13 @@ class readExcel(object):
 
 
 if __name__ == '__main__':
-    # path = os.path.abspath('testfile.xlsx')
+    pass
+    # path = os.path.abspath('移动直播2019年.xls')
     # print(path)
-    # filename = 'testfile.xlsx'
+    # filename = '移动直播2019年.xls'
     # obj = readExcel(path, filename)
     # testdict = obj.typeOfExcel()
     # print(testdict)
 
-    print(re.split('/','2019/04/10'))
-    print(re.split(':', '18:04'))
+    # print(re.split('/','2019/04/10'))
+    # print(re.split(':', '18:04'))
