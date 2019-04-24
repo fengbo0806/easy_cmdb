@@ -62,7 +62,8 @@ for item in objDict:
 舞典华章-中国舞蹈“荷花奖”第11届颁奖盛典 LIVE02 rtmp://tv.cdanet.org/wudianhuazhang/live_lud?auth_key=1546864260-0-0-ef7fcb29c74134791f990d154677e458
 1.0 0.0 1.0
     '''
-    print(objDict[item][1], time.localtime(objDict[item][2] + 1546574129.0), objDict[item][3])
+    # print(objDict[item][1], time.localtime(objDict[item][2] + 1546574130.0), objDict[item][3])
+    print(re.split('[-——]',objDict[item][3]))
     print(objDict[item][4], objDict[item][5], objDict[item][15])
     print(objDict[item][6], objDict[item][7], objDict[item][8])
 
