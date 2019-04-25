@@ -34,7 +34,10 @@ class readExcel(object):
 
     def readXls(self):
         xldata = xlrd.open_workbook(self.filepath)
-        xltable = xldata.sheets()[0]
+        if self.sheetname is not None:
+            xltable = xldata.sheet_by_name(self.sheetname)
+        else:
+            xltable = xldata.sheets()[0]
         nrows = xltable.nrows
         ncols = xltable.ncols
         countnum = 0
@@ -47,10 +50,10 @@ class readExcel(object):
         # print(self.filepath)
         workBooktObj = load_workbook(self.filepath)
         sheetNames = workBooktObj.get_sheet_names()
-        if self.sheetname:
-            sheetObj = workBooktObj.get_sheet_by_name(sheetNames[0])
-        else:
+        if self.sheetname is not None:
             sheetObj = workBooktObj.get_sheet_by_name(self.sheetname)
+        else:
+            sheetObj = workBooktObj.get_sheet_by_name(sheetNames[0])
         maxCol = sheetObj.max_column
         maxRow = sheetObj.max_row
         countnum = 0
