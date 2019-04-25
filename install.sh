@@ -4,6 +4,7 @@ echo "Please run this script by root "
 exit 1
 #_________intsll yum package_____________
 yum -y update
+yum install -y cifs-utils
 yum install -y yum-utils
 yum groupinstall -y development
 yum install -y https://centos7.iuscommunity.org/ius-release.rpm
