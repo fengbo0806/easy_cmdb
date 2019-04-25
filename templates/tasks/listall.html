@@ -9,14 +9,15 @@
     <script src={% static 'tempus/js/tempusdominus-bootstrap-4.min.js' %}></script>
 {% endblock %}
 {% block subTitle %}
-        <div class="btn-group" role="group" aria-label="Basic example">
-       <a href="/tasks/listalltask" type="button" class="btn btn-primary btn-sm">重点任务保障</a>
+    <div class="btn-group" role="group" aria-label="Basic example">
+        <a href="/tasks/listalltask" type="button" class="btn btn-primary btn-sm">重点任务保障</a>
         <a href="/tasks/staff" type="button" class="btn btn-primary btn-sm">业务部门</a>
+        <a href="/tasks/synctask" type="button" class="btn btn-primary btn-sm">移动直播同步</a>
     </div>
 
 {% endblock %}
 {% block content %}
-    <div >
+    <div>
         <table class="table table-striped table-sm">
             <thead>
             <tr>

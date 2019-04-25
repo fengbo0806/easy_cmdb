@@ -56,7 +56,7 @@ class WorkPackage(models.Model):
     isLive = models.BooleanField(verbose_name='直播', default=False, blank=True)
     isRecode = models.BooleanField(verbose_name='收录', default=False, blank=True)
     notes = models.TextField(verbose_name='备注', null=True, blank=True)
-    adminStaff = models.ForeignKey('Staff', on_delete=None, blank=True, default=None)
+    adminStaff = models.ForeignKey('Staff', on_delete=None, blank=True, default=None,)
 
     def __str__(self):
         return self.programName

@@ -24,6 +24,7 @@ from web_scan.update import updateEncoder
 from .forms import *
 from django.contrib.auth.decorators import login_required
 from excelTrigger.readExcel import readExcel
+from unperdictableLiveFlowAssist.UPLFA import *
 
 
 # import datetime
@@ -172,6 +173,11 @@ def taskList(request):
         return render(request, 'tasks/listall.html', {'message': message, 'getForm': getForm})
     else:
         return HttpResponseRedirect('/thanks/')
+
+
+@login_required
+def synctask(request):
+    return redirect('/tasks/listalltask')
 
 
 @login_required

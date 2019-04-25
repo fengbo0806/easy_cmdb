@@ -58,6 +58,7 @@ db.sqlite3
 *[0-9]_auto_[0-9]*\.py
 *[0-9]_initial\.py
 upload/
+test\.py
 
 # Flask stuff:
 instance/
@@ -136,3 +137,4 @@ web_scan/weix\.html
 excelTrigger/移动直播2019年\.xls
 
 unperdictableLiveFlowAssist/移动直播2019年\.xls
+

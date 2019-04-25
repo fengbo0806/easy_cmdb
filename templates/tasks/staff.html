@@ -4,6 +4,7 @@
     <div class="btn-group" role="group" aria-label="Basic example">
         <a href="/tasks/listalltask" type="button" class="btn btn-primary btn-sm">重点任务保障</a>
         <a href="/tasks/staff" type="button" class="btn btn-primary btn-sm">业务部门</a>
+        <a href="/tasks/synctask" type="button" class="btn btn-primary btn-sm">移动直播同步</a>
     </div>
 {% endblock %}
 {% block content %}
@@ -35,7 +36,8 @@
                     <td>{{ item.phoneNumber }}</td>
                     <td>{{ item.note }}</td>
                     <td>
-                        <button type="button" class="btn btn-danger" data-sid="{{ item.id }}"">删除
+                        <button type="button" class="btn btn-danger" data-sid="{{ item.id }}"
+                        ">删除
                         </button>
                     </td>
                 </tr>
@@ -50,7 +52,7 @@
             $("input").addClass("form-control form-control-sm");
             $("select").addClass("form-control form-control-sm");
 
-              $("button").click(function () {
+            $("button").click(function () {
                 var sid = $(this).data("sid");
                 var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
                 data = {
