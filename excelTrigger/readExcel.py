@@ -15,7 +15,7 @@ openpyxl.utils.exceptions.InvalidFileException: openpyxl does not support the ol
 
 
 class readExcel(object):
-    def __init__(self, filepath, filename,sheetname=None):
+    def __init__(self, filepath, filename, sheetname=None):
         self.filepath = filepath
         self.filename = filename
         self.fileType = None
@@ -39,7 +39,7 @@ class readExcel(object):
         ncols = xltable.ncols
         countnum = 0
         for row in range(nrows):
-            self.excelDict[countnum]=tuple(xltable.row_values(row))
+            self.excelDict[countnum] = tuple(xltable.row_values(row))
             countnum = countnum + 1
         return self.excelDict
 
@@ -47,19 +47,22 @@ class readExcel(object):
         # print(self.filepath)
         workBooktObj = load_workbook(self.filepath)
         sheetNames = workBooktObj.get_sheet_names()
-        sheetObj = workBooktObj.get_sheet_by_name(sheetNames[0])
+        if self.sheetname:
+            sheetObj = workBooktObj.get_sheet_by_name(sheetNames[0])
+        else:
+            sheetObj = workBooktObj.get_sheet_by_name(self.sheetname)
         maxCol = sheetObj.max_column
         maxRow = sheetObj.max_row
         countnum = 0
         # Loop will print all columns name
         for items in sheetObj.values:
-            self.excelDict[countnum]=items
-            countnum=countnum+1
+            self.excelDict[countnum] = items
+            countnum = countnum + 1
         # for row in range(1, maxRow + 1):
         #     for col in range(1, maxCol + 1):
         #         self.excelDict[row][col] = sheetObj.cell(row=row, column=col).value
-                # cell_obj = sheetObj.cell(row=row, column=col)
-                # print(cell_obj.value)
+        # cell_obj = sheetObj.cell(row=row, column=col)
+        # print(cell_obj.value)
         return self.excelDict
 
 

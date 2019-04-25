@@ -51,7 +51,8 @@ class WorkPackage(models.Model):
     programChannel = models.CharField(verbose_name='频道名称', max_length=255, )
     programStatus = models.IntegerField(verbose_name='频道状态', blank=True, default=0)
     programName = models.CharField(verbose_name='节目名称', max_length=255, )
-    inPutStream = models.CharField(verbose_name='源地址', max_length=255, )
+    inPutStream = models.CharField(verbose_name='源地址', max_length=255, null=True, default=None, blank=True)
+    inPutStreamSub = models.CharField(verbose_name='源地址备用', max_length=255, null=True, default=None, blank=True)
     isLive = models.BooleanField(verbose_name='直播', default=False, blank=True)
     isRecode = models.BooleanField(verbose_name='收录', default=False, blank=True)
     notes = models.TextField(verbose_name='备注', null=True, blank=True)
@@ -82,12 +83,12 @@ class Staff(models.Model):
 
 class SourceFlow(models.Model):
     programName = models.CharField(verbose_name='节目名称', max_length=255, )
-    inPutType = models.CharField(verbose_name='类型', max_length=255,)
+    inPutType = models.CharField(verbose_name='类型', max_length=255, )
     inPutStream = models.CharField(verbose_name='源地址', max_length=255, )
     port = models.IntegerField(default=0, blank=True)
     height = models.IntegerField(default=0, blank=True)
     width = models.IntegerField(default=0, blank=True)
-    flowPid = models.CharField(default=0, blank=True,max_length=255,)
+    flowPid = models.CharField(default=0, blank=True, max_length=255, )
     bandWidth = models.IntegerField(default=0, blank=True)
     notes = models.TextField(verbose_name='备注', null=True, blank=True)
 
