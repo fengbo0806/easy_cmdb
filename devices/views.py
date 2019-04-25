@@ -168,7 +168,8 @@ def taskList(request):
                                                                                                            'endDate',
                                                                                                            'typeOf',
                                                                                                            'id',
-                                                                                                           'countnum')
+                                                                                                           'countnum').order_by(
+            '-startDate')
         getForm = TaskForm()
         return render(request, 'tasks/listall.html', {'message': message, 'getForm': getForm})
     else:
@@ -190,7 +191,8 @@ def workPakgeList(request):
         searchId = request.GET.get('tid')
         message = WorkPackage.objects.filter(task__pk=searchId).values('id', 'programName', 'startDate', 'endDate',
                                                                        'isLive', 'isRecode', 'programChannel',
-                                                                       'inPutStream', 'adminStaff__staffName', 'notes')
+                                                                       'inPutStream', 'adminStaff__staffName',
+                                                                       'notes').order_by('-startDate')
 
         getForm = WorkPackageForm(initial={'task': searchId})
         getForm.task = searchId

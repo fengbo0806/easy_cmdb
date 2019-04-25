@@ -11,6 +11,7 @@ class syncTable(object):
     def __init__(self):
         self.path = os.path.join(os.path.abspath(os.path.dirname(__file__)), '移动直播2019年.xls')
         self.filename = '移动直播2019年.xls'
+        self.channelDict = {'LIVE01：‘'}
 
     def copyFile(self):
         copyfile('/home/chry/wintemp/00000A移动直播1324532&&&……&&为了让你们一眼就看到/移动直播2019年.xls', self.path)
@@ -22,8 +23,8 @@ class syncTable(object):
         for item in objDict:
             if item == 0:
                 continue
-            programName = objDict[item][4]
-            # print(programName)
+            programName = re.split('LIVE', '移动直播', objDict[item][4])
+            print(programName)
             if len(programName) < 5:
                 continue
             # print(objDict[item][1], time.localtime(objDict[item][2] + 1546574130.0), objDict[item][3])
@@ -117,7 +118,7 @@ class syncTable(object):
         for item in objDict:
             if item == 0:
                 continue
-            programName = objDict[item][4]
+            programName = objDict[item][4].strip()
             # print(programName)
             if len(programName) < 5:
                 continue
@@ -129,10 +130,12 @@ class syncTable(object):
                 startDate = datetime.datetime.utcfromtimestamp(dateSeconds)
             elif isinstance(dateSerial, str):
                 "['3', '1', '']"
+
                 strStartDate = re.split('[月日]', dateSerial)
                 startDate = datetime.datetime(year=datetime.datetime.today().year, month=int(strStartDate[0]),
                                               day=int(strStartDate[1]))
             # time.localtime(objDict[item][2] + 1547438126.0)
+            print(startDate)
             startTime = None
             if len(objDict[item][3]) < 3:
                 startTime = 'blank'
@@ -195,6 +198,7 @@ class syncTable(object):
                 task=Task.objects.get(taskName=taskName),
                 adminStaff=Staff.objects.get(department=department, staffName=staffName),
             )
+
 
 
 if __name__ == '__main__':
