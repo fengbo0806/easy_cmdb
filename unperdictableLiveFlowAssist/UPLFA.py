@@ -17,32 +17,35 @@ class syncTable(object):
         copyfile('/home/chry/wintemp/00000A移动直播1324532&&&……&&为了让你们一眼就看到/移动直播2019年.xls', self.path)
 
     def liveSteam(self):
-        # print(path)
         obj = readExcel(filepath=self.path, filename=self.filename, sheetname='直播明细')
         objDict = obj.typeOfExcel()
         for item in objDict:
             if item == 0:
                 continue
-            programName = re.split('LIVE', '移动直播', objDict[item][4])
-            print(programName)
+            programName = objDict[item][4]
+
             if len(programName) < 5:
                 continue
             # print(objDict[item][1], time.localtime(objDict[item][2] + 1546574130.0), objDict[item][3])
             dateSerial = objDict[item][2]
-            dateSeconds = (dateSerial - 25569) * 86400.0
-            startDate = datetime.datetime.utcfromtimestamp(dateSeconds)
+            # dateSeconds = (dateSerial - 25569) * 86400.0
+            # startDate = datetime.datetime.utcfromtimestamp(dateSeconds)
+            if isinstance(dateSerial, str):
+                strStartDate = re.split('[月日]', dateSerial)
+                startDate = datetime.datetime(year=datetime.datetime.today().year, month=int(strStartDate[0]),
+                                              day=int(strStartDate[1]))
+            else:
+                dateSeconds = (dateSerial - 25569) * 86400.0
+                startDate = datetime.datetime.utcfromtimestamp(dateSeconds)
             # time.localtime(objDict[item][2] + 1547438126.0)
             startTime = None
             if len(objDict[item][3]) < 3:
                 startTime = 'blank'
             elif re.search('\n', objDict[item][3]):
-                # print(objDict[item][3])
                 timeBlock = re.split('\n', objDict[item][3])
-                # print(timeBlock)
                 timeFirstBlock = re.split('[-——]', timeBlock[0])
                 timeSecondBlock = re.split('[-——]', timeBlock[1])
                 timeRange = [timeFirstBlock[0], timeSecondBlock[1]]
-                # print(timeRange)
             else:
                 timeRange = re.split('[-——]', objDict[item][3])
             if startTime:
@@ -62,7 +65,7 @@ class syncTable(object):
 
             isLive = objDict[item][6]
             isRecode = objDict[item][8]
-            programChannel = objDict[item][5]
+            programChannel = re.sub('LIVE', '移动直播', objDict[item][5])
             source = objDict[item][15]
             if '\n' in source:
                 source = re.sub('[主:|备:|主：|备：|主|备]', '', source)
@@ -72,7 +75,7 @@ class syncTable(object):
             else:
                 inPutStream = source
                 inPutStreamSub = None
-            programName = objDict[item][4]
+            programName = re.sub('体育','体育-',objDict[item][4])
 
             # if item > 5:
             #     break
@@ -82,7 +85,7 @@ class syncTable(object):
             Task.objects.update_or_create(taskName=taskName)
             Staff.objects.update_or_create(department=department, staffName=staffName)
             WorkPackage.objects.update_or_create(
-                startDate=startDate,
+                startDate=startDatetime,
                 endDate=endDatetime,
                 programName=programName,
                 programChannel=programChannel,
@@ -125,17 +128,16 @@ class syncTable(object):
             # print(objDict[item][1], time.localtime(objDict[item][2] + 1546574130.0), objDict[item][3])
             dateSerial = objDict[item][2]
             # print(dateSerial)
-            if isinstance(dateSerial, int):
-                dateSeconds = (dateSerial - 25569) * 86400.0
-                startDate = datetime.datetime.utcfromtimestamp(dateSeconds)
-            elif isinstance(dateSerial, str):
-                "['3', '1', '']"
-
+            if isinstance(dateSerial, str):
                 strStartDate = re.split('[月日]', dateSerial)
                 startDate = datetime.datetime(year=datetime.datetime.today().year, month=int(strStartDate[0]),
                                               day=int(strStartDate[1]))
+            else:
+                dateSeconds = (dateSerial - 25569) * 86400.0
+                startDate = datetime.datetime.utcfromtimestamp(dateSeconds)
+                print(startDate)
             # time.localtime(objDict[item][2] + 1547438126.0)
-            print(startDate)
+            # print(startDate)
             startTime = None
             if len(objDict[item][3]) < 3:
                 startTime = 'blank'
@@ -146,9 +148,10 @@ class syncTable(object):
                 timeFirstBlock = re.split('[-——]', timeBlock[0])
                 timeSecondBlock = re.split('[-——]', timeBlock[1])
                 timeRange = [timeFirstBlock[0], timeSecondBlock[1]]
-                # print(timeRange)
+
             else:
                 timeRange = re.split('[-——]', objDict[item][3])
+            # print(timeRange)
             if startTime:
                 startDatetime = None
                 endDatetime = None
@@ -186,7 +189,7 @@ class syncTable(object):
             Task.objects.update_or_create(taskName=taskName)
             Staff.objects.update_or_create(department=department, staffName=staffName)
             WorkPackage.objects.update_or_create(
-                startDate=startDate,
+                startDate=startDatetime,
                 endDate=endDatetime,
                 programName=programName,
                 programChannel=programChannel,
@@ -198,7 +201,6 @@ class syncTable(object):
                 task=Task.objects.get(taskName=taskName),
                 adminStaff=Staff.objects.get(department=department, staffName=staffName),
             )
-
 
 
 if __name__ == '__main__':

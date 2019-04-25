@@ -180,7 +180,7 @@ def taskList(request):
 def synctask(request):
     syncFlowTable = syncTable()
     syncFlowTable.copyFile()
-    # syncFlowTable.liveSteam()
+    syncFlowTable.liveSteam()
     syncFlowTable.qSteam()
     return redirect('/tasks/listalltask')
 
