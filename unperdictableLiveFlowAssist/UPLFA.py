@@ -68,14 +68,18 @@ class syncTable(object):
             programChannel = re.sub('LIVE', '移动直播', objDict[item][5])
             source = objDict[item][15]
             if '\n' in source:
-                source = re.sub('[主:|备:|主：|备：|主|备]', '', source)
+                source = re.sub('[主备]', '', source)
                 listone = re.split('\n', source)
+                for i in range(0,len(listone)):
+                    listone[i].strip()
+                    if re.search('^[:：]', listone[i]):
+                        listone[i] = listone[i][1:]
                 inPutStream = listone[0]
                 inPutStreamSub = listone[1]
             else:
                 inPutStream = source
                 inPutStreamSub = None
-            programName = re.sub('体育','体育-',objDict[item][4])
+            programName = re.sub('体育', '体育-', objDict[item][4])
 
             # if item > 5:
             #     break
@@ -122,12 +126,12 @@ class syncTable(object):
             if item == 0:
                 continue
             programName = objDict[item][4].strip()
-            # print(programName)
+
             if len(programName) < 5:
                 continue
             # print(objDict[item][1], time.localtime(objDict[item][2] + 1546574130.0), objDict[item][3])
             dateSerial = objDict[item][2]
-            # print(dateSerial)
+
             if isinstance(dateSerial, str):
                 strStartDate = re.split('[月日]', dateSerial)
                 startDate = datetime.datetime(year=datetime.datetime.today().year, month=int(strStartDate[0]),
@@ -135,23 +139,23 @@ class syncTable(object):
             else:
                 dateSeconds = (dateSerial - 25569) * 86400.0
                 startDate = datetime.datetime.utcfromtimestamp(dateSeconds)
-                print(startDate)
+
             # time.localtime(objDict[item][2] + 1547438126.0)
-            # print(startDate)
+
             startTime = None
             if len(objDict[item][3]) < 3:
                 startTime = 'blank'
             elif re.search('\n', objDict[item][3]):
-                # print(objDict[item][3])
+
                 timeBlock = re.split('\n', objDict[item][3])
-                # print(timeBlock)
+
                 timeFirstBlock = re.split('[-——]', timeBlock[0])
                 timeSecondBlock = re.split('[-——]', timeBlock[1])
                 timeRange = [timeFirstBlock[0], timeSecondBlock[1]]
 
             else:
                 timeRange = re.split('[-——]', objDict[item][3])
-            # print(timeRange)
+
             if startTime:
                 startDatetime = None
                 endDatetime = None
