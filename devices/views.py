@@ -155,7 +155,6 @@ def taskList(request):
             startDate = getForm.cleaned_data['startDate']
             endDate = getForm.cleaned_data['endDate']
             typeOf = getForm.cleaned_data['typeOf']
-            print(taskName)
             Task.objects.update_or_create(taskName=taskName, startDate=startDate, endDate=endDate, typeOf=typeOf)
             # process the data in form.cleaned_data as required
             # ...
@@ -178,10 +177,22 @@ def taskList(request):
 
 @login_required
 def synctask(request):
-    syncFlowTable = syncTable()
-    syncFlowTable.copyFile()
-    syncFlowTable.liveSteam()
-    syncFlowTable.qSteam()
+    try:
+        syncFlowTable = syncTable()
+    except Exception:
+        return '内部出错，无法启动'
+    try:
+        syncFlowTable.copyFile()
+    except Exception:
+        return '文件无法复制，同步失败'
+    try:
+        syncFlowTable.liveSteam()
+    except Exception:
+        return '移动直播表有问题，同步失败'
+    try:
+        syncFlowTable.qSteam()
+    except Exception:
+        return '清流表有问题，同步失败'
     return redirect('/tasks/listalltask')
 
 
@@ -196,8 +207,6 @@ def workPakgeList(request):
 
         getForm = WorkPackageForm(initial={'task': searchId})
         getForm.task = searchId
-        # for i in message :
-        #     print(i.programName)
 
         return render(request, 'tasks/detail.html', {'message': message, 'getForm': getForm, 'tid': searchId})
     elif request.method == 'POST':
@@ -234,8 +243,6 @@ def workPakgeListDelete(request):
     if request.method == 'POST':
         tid = request.POST.get('tid')
         wid = request.POST.get('wid')
-        # print(tid)
-        # print(wid)
         WorkPackage.objects.filter(task=tid, pk=wid).delete()
         result = json.dumps({'wid': wid})
         return HttpResponse(result)
@@ -286,13 +293,11 @@ def workDaily(request):
                                    'isLive', 'isRecode', 'adminStaff__staffName', 'adminStaff__department'):
 
             # taskMessage = item.values('id', 'startDate', 'endDate', 'programChannel', 'programName', )
-            # print(item.endDate)
             programMessage = ProgramDetail.objects.filter(name=item['programChannel']).values('programStatus',
                                                                                               'inPutFirst',
                                                                                               'outPutHttpFlow')
             if programMessage:
                 for subitem in programMessage:
-                    # print(subitem)
                     messagedict[dictCount] = item
                     messagedict[dictCount].update(subitem)
             else:
@@ -322,24 +327,20 @@ def getEncoderStatus(request):
             programMessage = ProgramDetail.objects.filter(name=item['programChannel']).values(
                 'rowid', 'machine_id', )
             for item in programMessage:
-                # print(item['machine_id'])
-                # print(item['rowid'])
                 if item['machine_id'] in machineDict:
                     machineDict[item['machine_id']].append(item['rowid'])
                 else:
                     machineDict[item['machine_id']] = list()
                     machineDict[item['machine_id']].append(item['rowid'])
-        # print(machineDict)
         pass
         '''{1: [0, 7]}'''
         for key in machineDict:
             targetMachine = Machine.objects.filter(id=key, ipv4__isHttpManage=True).values('id', 'ipv4__ip',
                                                                                            'httpadmin', 'httpadminp', )
-            # print(targetMachine[0]['id'])
+
             eor = EncoderOperater(ipadd=targetMachine[0]['ipv4__ip'], username=targetMachine[0]['httpadmin'],
                                   passwd=targetMachine[0]['httpadminp'], targetType='realmagic', rawid=machineDict[key])
             result = eor.doOption()
-            print(result)
             updater = updateEncoder(machine=targetMachine[0]['id'], messages=result)
             updater.updateInfo()
         # return HttpResponse(json.dumps({"msg": msg}))
@@ -352,7 +353,6 @@ def exportTaskExcel(request):
     if request.method == 'GET':
         searchStartTime = request.GET.get('starttime')
         searchEndTime = request.GET.get('endtime')
-        print(searchEndTime, searchStartTime)
         if searchStartTime:
             searchEndTime = str(searchEndTime)
             searchStartTime = str(searchStartTime)
@@ -441,14 +441,12 @@ def inportTaskExcel(request):
         for chunk in obj.chunks():
             f.write(chunk)
         f.close()
-        print(file_path, obj.name)
         getInportObj = readExcel(filepath=file_path, filename=obj.name)
         objDict = getInportObj.typeOfExcel()
-        print(objDict)
+
         for item in objDict:
             if item == 0:
                 continue
-            print(objDict[item][0])
             firstsell = re.split('/', objDict[item][0])
             secondsell = re.split(':', objDict[item][1])
             thirdsell = re.split('/', objDict[item][2])
