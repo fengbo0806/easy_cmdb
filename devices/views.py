@@ -181,16 +181,18 @@ def synctask(request):
         try:
             syncFlowTable = syncTable()
             syncFlowTable.copyFile()
-        except Exception:
+        except FileNotFoundError :
             return HttpResponse('文件无法复制，同步失败')
         try:
             syncFlowTable.liveSteam()
-        except Exception:
-            return HttpResponse('移动直播表有问题，同步失败')
+        except Exception as e:
+            message = '移动直播表有问题，同步失败'
         try:
             syncFlowTable.qSteam()
-        except Exception:
-            return HttpResponse('清流表有问题，同步失败')
+        except Exception as e:
+            message = '清流表有问题，同步失败'
+        if message:
+            return HttpResponse(message)
         return HttpResponse('同步成功')
     else:
         return HttpResponse('error')
