@@ -177,23 +177,23 @@ def taskList(request):
 
 @login_required
 def synctask(request):
-    try:
-        syncFlowTable = syncTable()
-    except Exception:
-        return '内部出错，无法启动'
-    try:
-        syncFlowTable.copyFile()
-    except Exception:
-        return '文件无法复制，同步失败'
-    try:
-        syncFlowTable.liveSteam()
-    except Exception:
-        return '移动直播表有问题，同步失败'
-    try:
-        syncFlowTable.qSteam()
-    except Exception:
-        return '清流表有问题，同步失败'
-    return redirect('/tasks/listalltask')
+    if request.method == 'POST':
+        try:
+            syncFlowTable = syncTable()
+            syncFlowTable.copyFile()
+        except Exception:
+            return HttpResponse('文件无法复制，同步失败')
+        try:
+            syncFlowTable.liveSteam()
+        except Exception:
+            return HttpResponse('移动直播表有问题，同步失败')
+        try:
+            syncFlowTable.qSteam()
+        except Exception:
+            return HttpResponse('清流表有问题，同步失败')
+        return HttpResponse('同步成功')
+    else:
+        return HttpResponse('error')
 
 
 @login_required

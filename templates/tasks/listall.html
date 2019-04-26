@@ -10,9 +10,10 @@
 {% endblock %}
 {% block subTitle %}
     <div class="btn-group" role="group" aria-label="Basic example">
+    {% csrf_token %}
         <a href="/tasks/listalltask" type="button" class="btn btn-primary btn-sm">重点任务保障</a>
         <a href="/tasks/staff" type="button" class="btn btn-primary btn-sm">业务部门</a>
-        <a href="/tasks/synctask" type="button" class="btn btn-primary btn-sm">移动直播同步</a>
+        <button id='synctask' type="button" class="btn btn-primary btn-sm">移动直播同步</button>
     </div>
 
 {% endblock %}
@@ -72,6 +73,16 @@
 {% block customerjs %}
     <script type="text/javascript">
         $(document).ready(function () {
+           $("#synctask").click(function () {
+                var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+                data = {
+                    csrfmiddlewaretoken: csrftoken,
+                };
+                $.post("/tasks/synctask", data, function (result) {
+                        alert(result);
+                    }
+                );
+            });
             $("input").addClass("form-control form-control-sm");
             $("#datetimepicker1").datetimepicker({
                 format: 'YYYY-MM-DD',

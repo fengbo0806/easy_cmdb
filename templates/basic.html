@@ -38,21 +38,21 @@
     {% endblock %}
 </head>
 <body>
-{#<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">#}
-{#    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#"> </a>#}
+{#<nav class="navbar navbar-dark fixed-top bg-light flex-md-nowrap p-0 shadow">#}
+{#    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#"><i class="fa fa-calendar"></i> </a>#}
 {#    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">#}
 {#    <ul class="navbar-nav px-3">#}
 {#        <li class="nav-item text-nowrap">#}
 {#            <a class="nav-link" href="#">Sign out</a>#}
 {#        </li>#}
 {#    </ul>#}
-{#</nav>#}
+</nav>
 
 <div class="container-fluid">
 
     <div class="row">
 
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar" style="max-width: 150px">
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
@@ -84,12 +84,15 @@
                         <a class="nav-link" href="/tasks/daily">
                               每日任务
                         </a>
+{#                        <a class="nav-link" href="#">#}
+{#                             <i class="fas fa-align-justify" data-check="change"></i>#}
+{#                        </a>#}
                     </li>
                 </ul>
             </div>
         </nav>
 
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <main role="main" class="col-md-10 ml-sm-auto col-lg-11 " style="margin-left: 150px;">
             <div class="chartjs-size-monitor"
                  style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
                 <div class="chartjs-size-monitor-expand"
