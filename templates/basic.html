@@ -11,6 +11,8 @@
     <script src={% static 'bootstrap-4.1.3/js/bootstrap.min.js' %}></script>
     <link rel="stylesheet" href={% static 'dashboard.css' %}>
     <link rel="stylesheet" href={% static 'css/icon/flaticon/flaticon.css' %}>
+    <script src={% static '/js/Chart/2.8.0/Chart.min.js' %}></script>
+    <link rel="stylesheet" href={% static '/js/Chart/2.8.0/Chart.min.css' %}>
     {#    <style type="text/css">/* Chart.js */#}
     {#    @-webkit-keyframes chartjs-render-animation {#}
     {#        from {#}
@@ -52,7 +54,7 @@
 
     <div class="row">
 
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar" style="max-width: 150px">
+        <nav class="col-md-1 d-none d-md-block bg-light sidebar" style="max-width: 150px">
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
                     <li class="nav-item">
@@ -92,7 +94,7 @@
             </div>
         </nav>
 
-        <main role="main" class="col-md-10 ml-sm-auto col-lg-11 " style="margin-left: 150px;">
+        <main role="main" class="container-fluid " style="margin-left: 150px;">
             <div class="chartjs-size-monitor"
                  style="position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
                 <div class="chartjs-size-monitor-expand"
