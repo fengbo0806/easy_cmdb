@@ -183,7 +183,7 @@ def synctask(request):
         try:
             syncFlowTable = syncTable()
             syncFlowTable.copyFile()
-        except FileNotFoundError :
+        except FileNotFoundError:
             return HttpResponse('文件无法复制，同步失败')
         try:
             syncFlowTable.liveSteam()
@@ -191,6 +191,7 @@ def synctask(request):
         except FieldError:
             message = 'django出错,单元格有问题,同步失败'
         except Exception as e:
+            # raise e
             message = '清流表有问题，同步失败'
         if message:
             return HttpResponse(message)
@@ -240,6 +241,7 @@ def workPakgeList(request):
             # redirect to a new URL:
             returnUrl = '/tasks/detailwork?tid=' + str(task)
             return HttpResponseRedirect(returnUrl)
+
 
 @login_required
 def workPakgeListDelete(request):
@@ -324,9 +326,11 @@ def getEncoderStatus(request):
         searchStartTime = datetime.datetime(search_today.year, search_today.month, search_today.day, 00, 00, 00)
         search_today_end = datetime.datetime(search_today.year, search_today.month, search_today.day, 23, 59, 59)
         searchEndTime = datetime.datetime(tomorrow.year, tomorrow.month, tomorrow.day, 23, 59, 59)
-        message = WorkPackage.objects.filter(startDate__range=(searchStartTime, searchEndTime))
+        workPackageMessage = WorkPackage.objects.filter(startDate__range=(searchStartTime, searchEndTime))
+        workPackageDict = dict()
         machineDict = dict()
-        for item in message.values('id', 'programChannel', ):
+        for item in workPackageMessage.values('id', 'programChannel', ):
+
             programMessage = ProgramDetail.objects.filter(name=item['programChannel']).values(
                 'rowid', 'machine_id', )
             for item in programMessage:
@@ -346,8 +350,21 @@ def getEncoderStatus(request):
             result = eor.doOption()
             updater = updateEncoder(machine=targetMachine[0]['id'], messages=result)
             updater.updateInfo()
-        # return HttpResponse(json.dumps({"msg": msg}))
-        return redirect("/tasks/daily")
+        returnMessage = WorkPackage.objects.filter(startDate__range=(searchStartTime, searchEndTime))
+        returnMessageList = list()
+        for item in returnMessage.values('id', 'programChannel', ):
+            programMessage = ProgramDetail.objects.filter(name=item['programChannel']).values('programStatus',
+                                                                                              'inPutFirst',
+                                                                                              'outPutHttpFlow')
+
+            programstatus = lambda x: '有流' if x > 0 else '无流'
+            returnMessageList.append(
+                {'wid': item['id'], 'programstatus': programstatus(programMessage[0]['programStatus']),
+                 'inPutFirst': programMessage[0]['inPutFirst'], 'outPutHttpFlow': programMessage[0]['outPutHttpFlow']})
+            # print(returnMessageDict)
+
+        return HttpResponse(json.dumps(returnMessageList))
+            # return redirect("/tasks/daily")
     else:
         return HttpResponse(None)
 
@@ -366,17 +383,18 @@ def exportTaskExcel(request):
             searchEndTime = datetime.datetime.strptime(searchEndTime, '%Y-%m-%d')
             searchEndTime = datetime.datetime(searchEndTime.year, searchEndTime.month, searchEndTime.day, 23,
                                               59, 59)
-            message = WorkPackage.objects.filter(startDate__range=(searchStartTime, searchEndTime)).values('startDate',
-                                                                                                           'task__taskName',
-                                                                                                           'adminStaff__staffName',
-                                                                                                           'adminStaff__department',
-                                                                                                           'isRecode',
-                                                                                                           'isLive',
-                                                                                                           'notes',
-                                                                                                           'inPutStream',
-                                                                                                           'programChannel',
-                                                                                                           'endDate',
-                                                                                                           'programName', )
+            message = WorkPackage.objects.filter(startDate__range=(searchStartTime, searchEndTime)).values(
+                'startDate',
+                'task__taskName',
+                'adminStaff__staffName',
+                'adminStaff__department',
+                'isRecode',
+                'isLive',
+                'notes',
+                'inPutStream',
+                'programChannel',
+                'endDate',
+                'programName', )
 
             activity_list = message.aggregate(Count('id'))
             response = HttpResponse(content_type="application/ms-excel")
@@ -387,7 +405,8 @@ def exportTaskExcel(request):
             icon = 1
             dateFormat = xlwt.XFStyle()
             dateFormat.num_format_str = 'yyyy/mm/dd hh:mm'
-            list_title = [u'开始日期', u'开始时间', u'结束日期', u'结束时间', u'节目名称', u'需求部门', u'源地址', u'使用频道', u'负责人', u'收录', u'直播',
+            list_title = [u'开始日期', u'开始时间', u'结束日期', u'结束时间', u'节目名称', u'需求部门', u'源地址', u'使用频道', u'负责人', u'收录',
+                          u'直播',
                           u'备注']
             for i in range(0, len(list_title)):
                 '''
@@ -454,7 +473,8 @@ def inportTaskExcel(request):
             secondsell = re.split(':', objDict[item][1])
             thirdsell = re.split('/', objDict[item][2])
             fourthsell = re.split(':', objDict[item][3])
-            startdate = datetime.datetime(int(firstsell[0]), int(firstsell[1]), int(firstsell[2]), int(secondsell[0]),
+            startdate = datetime.datetime(int(firstsell[0]), int(firstsell[1]), int(firstsell[2]),
+                                          int(secondsell[0]),
                                           int(secondsell[1]))
             enddate = datetime.datetime(int(thirdsell[0]), int(thirdsell[1]), int(thirdsell[2]), int(fourthsell[0]),
                                         int(fourthsell[1]))
@@ -480,7 +500,8 @@ def inportTaskExcel(request):
 
 def machineroom(request):
     if request.method == 'GET':
-        message = MachineRoom.objects.all().annotate(countnum=Count('machinerack')).values('name', 'address', 'note',
+        message = MachineRoom.objects.all().annotate(countnum=Count('machinerack')).values('name', 'address',
+                                                                                           'note',
                                                                                            'countnum')
         return render(request, 'machinerooms/listall.html', {'message': message, })
     elif request.method == 'POST':

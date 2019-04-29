@@ -73,12 +73,18 @@ class syncTable(object):
             if '\n' in source:
                 source = re.sub('[主备]', '', source)
                 listone = re.split('\n', source)
+                listtwo =list()
                 for i in range(0, len(listone)):
                     listone[i].strip()
+                    if re.search('路：$', listone[i]):
+                        continue
                     if re.search('^[:：]', listone[i]):
-                        listone[i] = listone[i][1:]
-                inPutStream = listone[0]
-                inPutStreamSub = listone[1]
+                        listtwo.append( listone[i][1:])
+                    else:
+                        listtwo.append(listone[i])
+
+                inPutStream = listtwo[0]
+                inPutStreamSub = listtwo[1]
             else:
                 inPutStream = source
                 inPutStreamSub = None

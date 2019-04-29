@@ -46,7 +46,7 @@
         .custom-table-width-large {
             flex-grow: 0;
             flex-shrink: 0;
-            flex-basis:11.99999%;
+            flex-basis: 11.99999%;
             max-width: 11.99999%;
         }
     </style>
@@ -106,7 +106,7 @@
             <tbody>
             {% for key,item in message.items %}
                 <tr class="d-flex">
-                    <td class="col-1 custom-table-width">{{ forloop.counter }}</td>
+                    <td class="col-1 custom-table-width" id="{{ item.id }}">{{ forloop.counter }}</td>
                     <td class="col-1">
                         {{ item.startDate|date:"m-d H:i" }}
                         <br/>
@@ -179,16 +179,41 @@
             }
         });
         $("tr:gt(0)").each(function () {
-            if ($(this).children().eq(8).text() == $(this).children().eq(9).text()) {
+            if ($(this).children().eq(8).text().replace(/[\r\n ]/g, "") == $(this).children().eq(9).text().replace(/[\r\n ]/g, "")) {
                 $(this).children().eq(9).css("background-color", "#8EC2F5");
-            } else if ($(this).children().eq(8).text() != $(this).children().eq(9).text()) {
+            } else if ($(this).children().eq(8).text().replace(/[\r\n ]/g, "") != $(this).children().eq(9).text().replace(/[\r\n ]/g, "")) {
                 $(this).children().eq(9).css("background-color", "#f55fb9");
+                //alert(encodeURIComponent($(this).children().eq(9).text()));
+                //alert(encodeURIComponent($(this).children().eq(8).text()));
             }
         });
 
         function getEncoderStatus() {
             $.get(targetUrl, function (data) {
-                {#alert("Data Loaded: " + data);#}
+                $.each(JSON.parse(data), function (n, value) {
+
+                    var targetwid = "td[id=" + value.wid + "]";
+                    var targetprogramstatus = value.programstatus;
+                    $(targetwid).parent().children().eq(10).text(value.outPutHttpFlow);
+                    $(targetwid).parent().children().find('span[data-programstatus]').text(targetprogramstatus);
+                    $(targetwid).parent().children().eq(9).text(value.inPutFirst);
+                })
+            });
+            $("span").each(function () {
+                if ($(this).text() == "无流") {
+                    $(this).removeClass();
+                    $(this).addClass("badge badge-secondary");
+                } else if ($(this).text() == "有流") {
+                    $(this).removeClass();
+                    $(this).addClass("badge badge-success");
+                }
+            });
+            $("tr:gt(0)").each(function () {
+                if ($(this).children().eq(8).text().replace(/[\r\n ]/g, "") == $(this).children().eq(9).text().replace(/[\r\n ]/g, "")) {
+                    $(this).children().eq(9).css("background-color", "#8EC2F5");
+                } else if ($(this).children().eq(8).text().replace(/[\r\n ]/g, "") != $(this).children().eq(9).text().replace(/[\r\n ]/g, "")) {
+                    $(this).children().eq(9).css("background-color", "#f55fb9");
+                }
             });
         }
 
