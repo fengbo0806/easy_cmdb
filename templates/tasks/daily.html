@@ -37,6 +37,19 @@
     <script src={% static 'js/monent/moment.min.js' %}></script>
     <link rel="stylesheet" href={% static 'tempus/css/tempusdominus-bootstrap-4.min.css' %}>
     <script src={% static 'tempus/js/tempusdominus-bootstrap-4.min.js' %}></script>
+    <style>
+        .custom-table-width {
+            width: 50px;
+            max-width: 5%;
+        }
+
+        .custom-table-width-large {
+            flex-grow: 0;
+            flex-shrink: 0;
+            flex-basis:11.99999%;
+            max-width: 11.99999%;
+        }
+    </style>
 {% endblock %}
 {% block subTitle %}
     <div class="form-inline">
@@ -74,45 +87,46 @@
     <div class="table-responsive ">
         <table class="table table-striped table-sm">
             <thead>
-            <tr>
-                <th style="color: #2b669a">
+            <tr class="d-flex">
+                <th class="col-1 custom-table-width" style="color: #2b669a">
                     序号
                 </th>
-                <th>启止时间</th>
-                <th>频道名称</th>
-                <th>节目名称</th>
-                <th>状态</th>
-                <th>需求部门</th>
-                <th>责任人</th>
-                <th>业务类型</th>
-                <th>源地址</th>
-                <th>输入地址</th>
-                <th>http流地址</th>
+                <th class="col-1 ">启止时间</th>
+                <th class="col-1">频道名称</th>
+                <th class="col-2">节目名称</th>
+                <th class="col-1  custom-table-width">状态</th>
+                <th class="col-1">需求部门</th>
+                <th class="col-1 custom-table-width">责任人</th>
+                <th class="col-1  custom-table-width">业务类型</th>
+                <th class="col-1 custom-table-width-large">源地址</th>
+                <th class="col-1 custom-table-width-large">输入地址</th>
+                <th class="col-1 custom-table-width-large">http流地址</th>
             </tr>
             </thead>
             <tbody>
             {% for key,item in message.items %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>
+                <tr class="d-flex">
+                    <td class="col-1 custom-table-width">{{ forloop.counter }}</td>
+                    <td class="col-1">
                         {{ item.startDate|date:"m-d H:i" }}
                         <br/>
                         {{ item.endDate |date:"m-d H:i" }}
                     </td>
-                    <td>{{ item.programChannel }}</td>
-                    <td>{{ item.programName }}</td>
-                    <td>
+                    <td class="col-1">{{ item.programChannel }}</td>
+                    <td class="col-2">{{ item.programName }}</td>
+                    <td class="col-1  custom-table-width">
                         <span class="badge badge-success" data-programstatus="{{ item.programStatus }}"></span>
                     </td>
-                    <td>{{ item.adminStaff__department }}</td>
-                    <td>{{ item.adminStaff__staffName }}</td>
-                    <td>
+                    <td class="col-1">{{ item.adminStaff__department }}</td>
+                    <td class="col-1 custom-table-width">{{ item.adminStaff__staffName }}</td>
+                    <td class="col-1  custom-table-width">
                         <span class="badge badge-secondary" data-usefor="{{ item.isLive }}">收录</span>
                         <span class="badge badge-secondary" data-usefor="{{ item.isRecode }}">直播</span>
                     </td>
-                    <td>{{ item.inPutStream }}</td>
-                    <td>{{ item.inPutFirst }}</td>
-                    <td>{{ item.outPutHttpFlow }}</td>
+                    <td class="col-1 custom-table-width-large" style="word-wrap: break-word">{{ item.inPutStream }}</td>
+                    <td class="col-1 custom-table-width-large" style="word-wrap: break-word">{{ item.inPutFirst }}</td>
+                    <td class="col-1 custom-table-width-large"
+                        style="word-wrap: break-word">{{ item.outPutHttpFlow }}</td>
                 </tr>
             {% endfor %}
         </table>
