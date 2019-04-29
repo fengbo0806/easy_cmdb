@@ -178,21 +178,25 @@ def taskList(request):
 @login_required
 def synctask(request):
     if request.method == 'POST':
+        message = None
         try:
             syncFlowTable = syncTable()
             syncFlowTable.copyFile()
         except FileNotFoundError :
             return HttpResponse('文件无法复制，同步失败')
-        try:
-            syncFlowTable.liveSteam()
-        except Exception as e:
-            message = '移动直播表有问题，同步失败'
-        try:
-            syncFlowTable.qSteam()
-        except Exception as e:
-            message = '清流表有问题，同步失败'
-        if message:
-            return HttpResponse(message)
+        # try:
+        syncFlowTable.liveSteam()
+        # except Exception as e:
+        #     message = '移动直播表有问题，同步失败'
+        # try:
+        syncFlowTable.qSteam()
+        # except Exception as e:
+        #     message = '清流表有问题，同步失败'
+        # if message:
+        #     return HttpResponse(message)
+        'FieldError django'
+        "TypeError: QuerySet.aggregate() received non-expression(s): D, t."
+        "configureBaseData.models.encoderserver.MultipleObjectsReturned: get() returned more than one Task -- it returned 2!"
         return HttpResponse('同步成功')
     else:
         return HttpResponse('error')
@@ -240,7 +244,7 @@ def workPakgeList(request):
             returnUrl = '/tasks/detailwork?tid=' + str(task)
             return HttpResponseRedirect(returnUrl)
 
-
+@login_required
 def workPakgeListDelete(request):
     if request.method == 'POST':
         tid = request.POST.get('tid')

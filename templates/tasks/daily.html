@@ -51,14 +51,8 @@
                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                 </div>
             </div>
-            {#            <input type="date" name="endtime" value="{{ tomorrow|date:'Y-m-d' }}">#}
-            {#                <select name="searchfield">#}
-            {#                    <option value="0">播放时间</option>#}
-            {#                    <option value="1">更新时间</option>#}
-            {#                </select>#}
-
             <div class="input-group date" id="datetimepicker2" data-target-input="nearest">
-                <label>开始时间</label>
+                <label>结束时间</label>
                 <input type="text" name="endtime" value="{{ tomorrow|date:'Y-m-d' }}">
                 <div class="input-group-append" data-target="#datetimepicker2" data-toggle="datetimepicker">
                     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
@@ -132,64 +126,64 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $("input").addClass("form-control form-control-sm");
-            var startTime = $("input[name='starttime']").val();
-            var endTime = $("input[name='endtime']").val();
-            var targetUrl = '/tasks/getEncoderStatus?starttime=' + startTime + '&endtime=' + endTime;
-            var exportUrl = "/tasks/exportworks?starttime={{ today|date:'Y-m-d' }}&endtime={{ tomorrow|date:'Y-m-d' }}";
-            var inportUrl = "/tasks/inportworks";
-            $("button[id=exportexcel]").click(function () {
-                {#$.get(exportUrl)#}
-                window.location.href = exportUrl
-            });
-            $("button[id=inportexcel]").click(function () {
-                {#$.get(exportUrl)#}
-                window.location.href = inportUrl
-            });
-            //$("i[data-check=change]").click(function () {
-            //    $("div[class=sidebar-sticky]").hide();
-
-             //   alert('check');
-            //});
-            $("span").each(function () {
-                if ($(this).data("usefor") == "True") {
-                    $(this).removeClass();
-                    $(this).addClass("badge badge-success");
-                }
-                ;
-                if ($(this).data("programstatus") == "-1") {
-
-                    $(this).removeClass();
-                    $(this).addClass("badge badge-secondary");
-                    $(this).text('无流');
-                } else if ($(this).data("programstatus") == "1") {
-                    $(this).removeClass();
-                    $(this).addClass("badge badge-success");
-                    $(this).text('有流');
-                }
-            });
-            $("tr:gt(0)").each(function () {
-                if ($(this).children().eq(8).text() == $(this).children().eq(9).text()) {
-                    $(this).children().eq(9).css("background-color", "#8EC2F5");
-                } else if ($(this).children().eq(8).text() != $(this).children().eq(9).text()) {
-                    $(this).children().eq(9).css("background-color", "#f55991");
-                }
-            });
-
-            function getEncoderStatus() {
-                $.get(targetUrl, function (data) {
-                    {#alert("Data Loaded: " + data);#}
-                });
-            }
-
-            var timer = setInterval(function () {
-                getEncoderStatus();
-            }, 10000);
             $("#datetimepicker1").datetimepicker({
                 format: 'YYYY-MM-DD',
             });
             $("#datetimepicker2").datetimepicker({
                 format: 'YYYY-MM-DD',
             });
-        })
+        });
+        var startTime = $("input[name='starttime']").val();
+        var endTime = $("input[name='endtime']").val();
+        var targetUrl = '/tasks/getEncoderStatus?starttime=' + startTime + '&endtime=' + endTime;
+        var exportUrl = "/tasks/exportworks?starttime={{ today|date:'Y-m-d' }}&endtime={{ tomorrow|date:'Y-m-d' }}";
+        var inportUrl = "/tasks/inportworks";
+        $("button[id=exportexcel]").click(function () {
+            {#$.get(exportUrl)#}
+            window.location.href = exportUrl
+        });
+        $("button[id=inportexcel]").click(function () {
+            {#$.get(exportUrl)#}
+            window.location.href = inportUrl
+        });
+        //$("i[data-check=change]").click(function () {
+        //    $("div[class=sidebar-sticky]").hide();
+
+        //   alert('check');
+        //});
+        $("span").each(function () {
+            if ($(this).data("usefor") == "True") {
+                $(this).removeClass();
+                $(this).addClass("badge badge-success");
+            }
+            ;
+            if ($(this).data("programstatus") == "-1") {
+
+                $(this).removeClass();
+                $(this).addClass("badge badge-secondary");
+                $(this).text('无流');
+            } else if ($(this).data("programstatus") == "1") {
+                $(this).removeClass();
+                $(this).addClass("badge badge-success");
+                $(this).text('有流');
+            }
+        });
+        $("tr:gt(0)").each(function () {
+            if ($(this).children().eq(8).text() == $(this).children().eq(9).text()) {
+                $(this).children().eq(9).css("background-color", "#8EC2F5");
+            } else if ($(this).children().eq(8).text() != $(this).children().eq(9).text()) {
+                $(this).children().eq(9).css("background-color", "#f55fb9");
+            }
+        });
+
+        function getEncoderStatus() {
+            $.get(targetUrl, function (data) {
+                {#alert("Data Loaded: " + data);#}
+            });
+        }
+
+        var timer = setInterval(function () {
+            getEncoderStatus();
+        }, 10000);
     </script>
 {% endblock %}

@@ -5,6 +5,7 @@ import re
 import datetime
 from configureBaseData.models import Task, WorkPackage, Staff
 from shutil import copyfile
+from django.db.models import Max, Min
 
 
 class syncTable(object):
@@ -65,12 +66,14 @@ class syncTable(object):
 
             isLive = objDict[item][6]
             isRecode = objDict[item][8]
+
             programChannel = re.sub('LIVE', '移动直播', objDict[item][5])
+            programChannel = re.sub('体育', '体育-', programChannel)
             source = objDict[item][15]
             if '\n' in source:
                 source = re.sub('[主备]', '', source)
                 listone = re.split('\n', source)
-                for i in range(0,len(listone)):
+                for i in range(0, len(listone)):
                     listone[i].strip()
                     if re.search('^[:：]', listone[i]):
                         listone[i] = listone[i][1:]
@@ -79,7 +82,8 @@ class syncTable(object):
             else:
                 inPutStream = source
                 inPutStreamSub = None
-            programName = re.sub('体育', '体育-', objDict[item][4])
+            if re.search('互动', inPutStream):
+                inPutStream = re.sub(r'互动[0-1]', '', inPutStream.strip())
 
             # if item > 5:
             #     break
@@ -101,7 +105,12 @@ class syncTable(object):
                 task=Task.objects.get(taskName=taskName),
                 adminStaff=Staff.objects.get(department=department, staffName=staffName),
             )
-
+            taskUpdate = WorkPackage.objects.filter(task__taskName=taskName).aggregate(Min('startDate'),
+                                                                                       Max('endDate'))
+            updateTimeRange = Task.objects.get(taskName=taskName)
+            updateTimeRange.startDate = taskUpdate['startDate__min']
+            updateTimeRange.endDate = taskUpdate['endDate__max']
+            updateTimeRange.save()
         # print(time.localtime(43474.0 + 1547438126.0))
         # print(time.time(2019/1/5))
         # print(time.time(datetime.date(9999, 12, 31)))
@@ -173,7 +182,9 @@ class syncTable(object):
 
             isLive = objDict[item][6]
             isRecode = objDict[item][8]
-            programChannel = objDict[item][5]
+            # programChannel = objDict[item][5]
+            programChannel = re.sub('体育', '体育-', objDict[item][5])
+            # print(programChannel)
             source = objDict[item][15]
             if '\n' in source:
                 source = re.sub('[主:|备:|主：|备：|主|备]', '', source)
@@ -183,6 +194,8 @@ class syncTable(object):
             else:
                 inPutStream = source
                 inPutStreamSub = None
+            if re.search('互动', inPutStream):
+                inPutStream = re.sub(r'互动[0-1]', '', inPutStream.strip())
             programName = objDict[item][4]
 
             # if item > 5:
@@ -205,6 +218,12 @@ class syncTable(object):
                 task=Task.objects.get(taskName=taskName),
                 adminStaff=Staff.objects.get(department=department, staffName=staffName),
             )
+            taskUpdate = WorkPackage.objects.filter(task__taskName=taskName).aggregate(Min('startDate'),
+                                                                                       Max('endDate'))
+            updateTimeRange = Task.objects.get(taskName=taskName)
+            updateTimeRange.startDate = taskUpdate['startDate__min']
+            updateTimeRange.endDate = taskUpdate['endDate__max']
+            updateTimeRange.save()
 
 
 if __name__ == '__main__':
