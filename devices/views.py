@@ -25,6 +25,7 @@ from .forms import *
 from django.contrib.auth.decorators import login_required
 from excelTrigger.readExcel import readExcel
 from unperdictableLiveFlowAssist.UPLFA import *
+from django.core.exceptions import FieldError
 
 
 # import datetime
@@ -184,19 +185,15 @@ def synctask(request):
             syncFlowTable.copyFile()
         except FileNotFoundError :
             return HttpResponse('文件无法复制，同步失败')
-        # try:
-        syncFlowTable.liveSteam()
-        # except Exception as e:
-        #     message = '移动直播表有问题，同步失败'
-        # try:
-        syncFlowTable.qSteam()
-        # except Exception as e:
-        #     message = '清流表有问题，同步失败'
-        # if message:
-        #     return HttpResponse(message)
-        'FieldError django'
-        "TypeError: QuerySet.aggregate() received non-expression(s): D, t."
-        "configureBaseData.models.encoderserver.MultipleObjectsReturned: get() returned more than one Task -- it returned 2!"
+        try:
+            syncFlowTable.liveSteam()
+            syncFlowTable.qSteam()
+        except FieldError:
+            message = 'django出错,单元格有问题,同步失败'
+        except Exception as e:
+            message = '清流表有问题，同步失败'
+        if message:
+            return HttpResponse(message)
         return HttpResponse('同步成功')
     else:
         return HttpResponse('error')

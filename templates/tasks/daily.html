@@ -44,7 +44,7 @@
     </div>
     <div class="form-inline">
         <form action="/tasks/daily" method="get" class="form-inline" role="form">
-            <div class="form-group date" id="datetimepicker1" data-target-input="nearest">
+            <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
                 <label>开始时间</label>
                 <input type="text" name="starttime" value="{{ today|date:'Y-m-d' }}">
                 <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
@@ -71,11 +71,11 @@
 {% endblock %}
 
 {% block content %}
-    <div class="table-responsive">
+    <div class="table-responsive ">
         <table class="table table-striped table-sm">
             <thead>
             <tr>
-                <th width="5%" style="color: #2b669a">
+                <th style="color: #2b669a">
                     序号
                 </th>
                 <th>启止时间</th>
@@ -93,11 +93,7 @@
             <tbody>
             {% for key,item in message.items %}
                 <tr>
-                    <td>
-                        {#                        <a href="/admin/flows/video_flow/{{ item.id }}/change">#}
-                        {{ forloop.counter }}
-                        {#                        </a>#}
-                    </td>
+                    <td>{{ forloop.counter }}</td>
                     <td>
                         {{ item.startDate|date:"m-d H:i" }}
                         <br/>
