@@ -23,6 +23,9 @@ class syncTable(object):
         for item in objDict:
             if item == 0:
                 continue
+            # print(objDict[item])
+            if objDict[item].count('')>5:
+                continue
             programName = objDict[item][4]
 
             if len(programName) < 5:
@@ -31,6 +34,7 @@ class syncTable(object):
             dateSerial = objDict[item][2]
             # dateSeconds = (dateSerial - 25569) * 86400.0
             # startDate = datetime.datetime.utcfromtimestamp(dateSeconds)
+
             if isinstance(dateSerial, str):
                 strStartDate = re.split('[月日]', dateSerial)
                 startDate = datetime.datetime(year=datetime.datetime.today().year, month=int(strStartDate[0]),
@@ -73,13 +77,13 @@ class syncTable(object):
             if '\n' in source:
                 source = re.sub('[主备]', '', source)
                 listone = re.split('\n', source)
-                listtwo =list()
+                listtwo = list()
                 for i in range(0, len(listone)):
                     listone[i].strip()
                     if re.search('路：$', listone[i]):
                         continue
                     if re.search('^[:：]', listone[i]):
-                        listtwo.append( listone[i][1:])
+                        listtwo.append(listone[i][1:])
                     else:
                         listtwo.append(listone[i])
 
