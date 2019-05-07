@@ -148,7 +148,7 @@ class EncoderOperater:
             if programsbackup:
 
                 countSubNum = countSubNum + 1
-                resKey =int(str(rowid + 1) + str(countSubNum))
+                resKey = int(str(rowid + 1) + str(countSubNum))
                 self.resultdict[resKey] = dict()
                 self.resultdict[resKey]['rowid'] = resKey
                 # driver.find_element(By.ID, 'Setup_SubChannel1').click()
@@ -357,8 +357,20 @@ class EncoderOperater:
             '''
             deal with the in put part,get the value of inPutFirst
             '''
-            resultdict[item]['inPutFirst'] = soupInput.find('input', attrs={'name': 'ipinput_address___%d' % (item)})[
-                "value"].strip()
+            inFormat = \
+                soupInput.find('select', attrs={'name': 'ipinput_protocol___%d' % (item)}).find('option',
+                                                                                       attrs={'selected': 'selected'})[
+                    "value"].strip()
+            if inFormat == 'UDP':
+                inAdress = soupInput.find('input', attrs={'name': 'ipinput_address___%d' % (item)})[
+                    "value"].strip()
+                inPort = soupInput.find('input', attrs={'name': 'ipinput_port___%d' % (item)})[
+                    "value"].strip()
+                resultdict[item]['inPutFirst'] = inFormat.lower() + '://' + inAdress + ':' + inPort
+            else:
+                resultdict[item]['inPutFirst'] = \
+                soupInput.find('input', attrs={'name': 'ipinput_address___%d' % (item)})[
+                    "value"].strip()
             resultdict[item]['inPutSecond'] = soupInput.find('input', attrs={'name': 'ipinput_address2___%d' % (item)})[
                 "value"].strip()
             '''
@@ -534,4 +546,3 @@ if __name__ == '__main__':
     response = requests.get(url, auth=auth_values)
     soup = BeautifulSoup(response.content, "html.parser", )
     print(soup.contents)
-

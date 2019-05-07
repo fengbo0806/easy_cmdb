@@ -19,6 +19,53 @@ from selenium.webdriver.support import expected_conditions as EC
 <input name="tuner_format" readonly="readonly" size="12" type="text" value="188"/>
 '''
 
+url = "http:///chinese/index.cgi?status___"
+auth_values = ('', '')
+response = requests.get(url, auth=auth_values)
+soup = BeautifulSoup(response.content, "html.parser", )
+getOutputUrl = "http:///chinese/index.cgi?output_setup___"
+responseOutput = requests.get(getOutputUrl, auth=auth_values)
+soupOutput = BeautifulSoup(responseOutput.content, "html.parser", )
+
+inFormat = \
+soupOutput.find('select', attrs={'name': 'ipinput_protocol___'}).find('option', attrs={'selected': 'selected'})[
+    "value"].strip()
+if inFormat == 'UDP':
+    inAdress = soupOutput.find('input', attrs={'name': 'ipinput_address___'})[
+        "value"].strip()
+    inPort = soupOutput.find('input', attrs={'name': 'ipinput_port___'})[
+    "value"].strip()
+out = inFormat + '://' + inAdress + ':' + inPort
+
+print(out)
+'''
+            outFormat = \
+                soupOutput.find('select', attrs={'name': 'ipout_format___%d' % (item)}).find('option',
+                                                                                             attrs={
+                                                                                                 'selected': 'selected'})[
+                    "value"].strip()
+            outAdress = soupOutput.find('input', attrs={'name': 'enc_outip___%d' % (item)})[
+                "value"].strip()
+            outPort = soupOutput.find('input', attrs={'name': 'enc_ipout_port___%d' % (item)})[
+                "value"].strip()
+            if outFormat == 'UDP':
+                resultdict[item]['outPutFirst'] = outFormat + '://' + outAdress + ':' + outPort
+            else:
+                resultdict[item]['outPutFirst'] = outAdress
+            outFormat = \
+                soupOutput.find('select', attrs={'name': 'ipout_format1___%d' % (item)}).find('option',
+                                                                                              attrs={
+                                                                                                  'selected': 'selected'})[
+                    "value"].strip()
+            outAdress = soupOutput.find('input', attrs={'name': 'enc_outip1___%d' % (item)})[
+                "value"].strip()
+            outPort = soupOutput.find('input', attrs={'name': 'enc_ipout_port1___%d' % (item)})[
+                "value"].strip()
+            if outFormat == 'UDP':
+                resultdict[item]['outPutSecond'] = outFormat + '://' + outAdress + ':' + outPort
+            else:
+                resultdict[item]['outPutSecond'] = outAdress
+'''
 #
 # class loginencoder(object):
 #     pass
@@ -75,9 +122,3 @@ from selenium.webdriver.support import expected_conditions as EC
 #
 #     driver.close()
 #     driver.quit()
-
-
-testchr =['路：','sdfsf']
-for i in testchr:
-    if re.search('路：$',i):
-        print(i)

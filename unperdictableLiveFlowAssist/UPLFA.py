@@ -75,7 +75,7 @@ class syncTable(object):
             programChannel = re.sub('体育', '体育-', programChannel)
             source = objDict[item][15]
             if '\n' in source:
-                source = re.sub('[主备]', '', source)
+                source = re.sub(r'[^\x00-\x7F]+', '', source)
                 listone = re.split('\n', source)
                 listtwo = list()
                 for i in range(0, len(listone)):
