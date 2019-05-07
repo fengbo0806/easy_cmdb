@@ -191,8 +191,8 @@ def synctask(request):
         except FieldError:
             message = 'django出错,单元格有问题,同步失败'
         except Exception as e:
-            raise e
-            # message = '清流表有问题，同步失败'
+            # raise e
+            message = '清流表有问题，同步失败'
         if message:
             return HttpResponse(message)
         return HttpResponse('同步成功')
