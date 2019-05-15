@@ -40,7 +40,7 @@ class restart(object):
 
 
 if __name__ == '__main__':
-    res = restart(ipadd='172.20.51.12', port=22, user='root', passwd='cctv.com')
+    res = restart()
     res.restProcess()
 '''
 NoValidConnectionsError(errors)
