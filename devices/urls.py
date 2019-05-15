@@ -34,5 +34,6 @@ urlpatterns = [
     path('deletestaff', views.staffDelete),
     path('machineroom', views.machineroom),
     path('synctask', views.synctask),
+    path('livechina', views.livechina),
 
 ]

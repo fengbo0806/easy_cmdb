@@ -1,0 +1,5 @@
+---
+- hosts: monitor
+  tasks:
+    - name: "restart chinalive"
+      shell: ps -ef | grep cntvxxx | grep -v grep | grep -v daemon | awk '{print "kill -9 " $2}'|sh

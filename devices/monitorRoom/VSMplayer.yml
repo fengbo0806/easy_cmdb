@@ -1,0 +1,5 @@
+---
+- hosts: monitor
+  tasks:
+    - name: "restart VSMplayer"
+      shell: ps -ef | grep VSMplayer

@@ -364,7 +364,7 @@ def getEncoderStatus(request):
             # print(returnMessageDict)
 
         return HttpResponse(json.dumps(returnMessageList))
-            # return redirect("/tasks/daily")
+        # return redirect("/tasks/daily")
     else:
         return HttpResponse(None)
 
@@ -514,6 +514,14 @@ def machineroom(request):
         if getForm.is_valid():
             return HttpResponse('404')
             # return HttpResponseRedirect(returnUrl)
+
+
+@login_required
+def livechina(request):
+    if request.method == 'GET':
+        return render(request, 'livechina/listall.html', )
+    elif request.method == 'POST':
+        return render(request, 'livechina/listall.html', )
 
 
 '''
