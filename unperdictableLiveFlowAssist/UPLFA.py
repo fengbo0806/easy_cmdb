@@ -24,7 +24,7 @@ class syncTable(object):
             if item == 0:
                 continue
             # print(objDict[item])
-            if objDict[item].count('')>5:
+            if objDict[item].count('') > 5:
                 continue
             programName = objDict[item][4]
 
@@ -74,6 +74,8 @@ class syncTable(object):
             programChannel = re.sub('LIVE', '移动直播', objDict[item][5])
             programChannel = re.sub('体育', '体育-', programChannel)
             source = objDict[item][15]
+            if re.search('rtmp|http|udp', source):
+                source = re.search('rtmp.*|http.*|udp.*', source).group()
             if '\n' in source:
                 source = re.sub(r'[^\x00-\x7F]+', '', source)
                 listone = re.split('\n', source)
@@ -196,8 +198,11 @@ class syncTable(object):
             programChannel = re.sub('体育', '体育-', objDict[item][5])
             # print(programChannel)
             source = objDict[item][15]
+            if re.search('rtmp|http|udp', source):
+                source = re.search('rtmp.*|http.*|udp.*', source).group()
             if '\n' in source:
-                source = re.sub('[主:|备:|主：|备：|主|备]', '', source)
+                source = re.sub(r'[^\x00-\x7F]+', '', source)
+                # source = re.sub('[主:|备:|主：|备：|主|备]', '', source)
                 listone = re.split('\n', source)
                 inPutStream = listone[0]
                 inPutStreamSub = listone[1]
