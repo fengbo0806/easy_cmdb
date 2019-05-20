@@ -15,7 +15,8 @@ class syncTable(object):
         self.channelDict = {'LIVE01：‘'}
 
     def copyFile(self):
-        copyfile('/home/chry/wintemp/00000A移动直播1324532&&&……&&为了让你们一眼就看到/移动直播2019年.xls', self.path)
+        # copyfile('/home/chry/wintemp/00000A移动直播1324532&&&……&&为了让你们一眼就看到/移动直播2019年.xls', self.path)
+        copyfile('/root/wintemp/00000A移动直播1324532&&&……&&为了让你们一眼就看到/移动直播2019年.xls', self.path)
 
     def liveSteam(self):
         obj = readExcel(filepath=self.path, filename=self.filename, sheetname='直播明细')
