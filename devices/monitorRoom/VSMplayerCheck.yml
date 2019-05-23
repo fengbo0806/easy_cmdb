@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: vsmgroup
   tasks:
     - name: "restart VSMplayer"
       shell: ps -ef | grep VSMplayer

@@ -1,0 +1,6 @@
+---
+- hosts: vsmgroup
+  tasks:
+    - name: "reboot host"
+      reboot:
+        reboot_timeout:3600

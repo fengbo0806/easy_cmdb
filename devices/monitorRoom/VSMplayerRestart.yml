@@ -1,0 +1,5 @@
+---
+- hosts: vsmgroup
+  tasks:
+    - name: "restart VSMplayer"
+      shell: ps -ef | grep VSMplayer | grep v daemon | awk '{print "kill -9 " $2}'|sh
