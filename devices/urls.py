@@ -35,5 +35,6 @@ urlpatterns = [
     path('machineroom', views.machineroom),
     path('synctask', views.synctask),
     path('livechina', views.livechina),
+    path('monitorroom', views.monitorroom),
 
 ]

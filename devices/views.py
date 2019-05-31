@@ -524,6 +524,17 @@ def livechina(request):
         return render(request, 'livechina/listall.html', )
 
 
+@login_required
+def monitorroom(request):
+    if request.method == 'GET':
+        result = Machine.objects.filter(services__name='VSMplayer').values('id', 'ipv4__ip','services__name' ).order_by('ipv4__ip')
+        from .monitorRoom.VSMplayerAss import vsm
+        result2 = vsm.check
+        return render(request, 'mointorRoom/listall.html', {'result': result})
+    elif request.method == 'POST':
+        return render(request, 'mointorRoom/listall.html', )
+
+
 '''
 def change_status_flow(request):
     if request.method=='POST':

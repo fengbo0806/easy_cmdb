@@ -42,12 +42,12 @@ class ResultCallback(CallbackBase, ):
 
 # since API is constructed for CLI it expects certain options to always be set, named tuple 'fakes' the args parsing options object
 Options = namedtuple('Options',
-                     ['connection','module_path', 'forks', 'become', 'become_method',
-                      'become_user', 'check', 'diff','private_key_file',
+                     ['connection', 'module_path', 'forks', 'become', 'become_method',
+                      'become_user', 'check', 'diff', 'private_key_file',
                       ])
-options = Options(connection='smart',module_path=['/to/mymodules'], forks=10, become=None,
+options = Options(connection='smart', module_path=['/to/mymodules'], forks=10, become=None,
                   become_method=None,
-                  become_user='root', check=False, diff=False, private_key_file='~/.ssh/id_rsa',)
+                  become_user='root', check=False, diff=False, private_key_file='~/.ssh/id_rsa', )
 
 # initialize needed objects
 loader = DataLoader()  # Takes care of finding and reading yaml, json and ini files
@@ -67,11 +67,11 @@ variable_manager = VariableManager(loader=loader, inventory=inventory)
 # create data structure that represents our play, including tasks, this is basically what our YAML loader does internally.
 play_source = dict(
     name="Ansible Play",
-    hosts='test',
+    hosts='monitor',
     gather_facts='no',
     tasks=[
-        # dict(action=dict(module='shell', args='mkdir test2018'), register='shell_out', ),
-        dict(action=dict(module='setup', ), register='shell_out'),
+        dict(action=dict(module='shell', args='ps -ef | grep VSM'), register='shell_out', ),
+        # dict(action=dict(module='setup', ), register='shell_out'),
         # dict(action=dict(module='debug', args=dict(msg='{{shell_out.stdout}}')))
     ]
 )
