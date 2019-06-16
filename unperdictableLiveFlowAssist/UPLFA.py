@@ -15,8 +15,8 @@ class syncTable(object):
         self.channelDict = {'LIVE01：‘'}
 
     def copyFile(self):
-        # copyfile('/home/chry/wintemp/00000A移动直播1324532&&&……&&为了让你们一眼就看到/移动直播2019年.xls', self.path)
-        copyfile('/root/wintemp/00000A移动直播1324532&&&……&&为了让你们一眼就看到/移动直播2019年.xls', self.path)
+        copyfile('/home/chry/wintemp/00000A移动直播1324532&&&……&&为了让你们一眼就看到/移动直播2019年.xls', self.path)
+        # copyfile('/root/wintemp/00000A移动直播1324532&&&……&&为了让你们一眼就看到/移动直播2019年.xls', self.path)
 
     def liveSteam(self):
         obj = readExcel(filepath=self.path, filename=self.filename, sheetname='直播明细')
@@ -31,7 +31,7 @@ class syncTable(object):
 
             if len(programName) < 5:
                 continue
-
+            print(objDict[item])
             # print(objDict[item][1], time.localtime(objDict[item][2] + 1546574130.0), objDict[item][3])
             dateSerial = objDict[item][2]
             if len(str(dateSerial)) < 1:
@@ -73,7 +73,11 @@ class syncTable(object):
                                                 minute=endTime.minute)
 
             isLive = objDict[item][6]
+            if isLive != 1.0:
+                isLive = 0.0
             isRecode = objDict[item][8]
+            if isRecode != 1.0:
+                isRecode = 0.0
 
             programChannel = re.sub('LIVE', '移动直播', objDict[item][5])
             programChannel = re.sub('体育', '体育-', programChannel)
