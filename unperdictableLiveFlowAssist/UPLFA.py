@@ -31,8 +31,11 @@ class syncTable(object):
 
             if len(programName) < 5:
                 continue
+
             # print(objDict[item][1], time.localtime(objDict[item][2] + 1546574130.0), objDict[item][3])
             dateSerial = objDict[item][2]
+            if len(dateSerial) < 1:
+                continue
             # dateSeconds = (dateSerial - 25569) * 86400.0
             # startDate = datetime.datetime.utcfromtimestamp(dateSeconds)
 
