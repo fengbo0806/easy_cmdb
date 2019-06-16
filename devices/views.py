@@ -469,6 +469,7 @@ def inportTaskExcel(request):
         for item in objDict:
             if item == 0:
                 continue
+            # print(objDict[item])
             firstsell = re.split('/', objDict[item][0])
             secondsell = re.split(':', objDict[item][1])
             thirdsell = re.split('/', objDict[item][2])
@@ -483,9 +484,9 @@ def inportTaskExcel(request):
             WorkPackage.objects.create(
                 startDate=startdate,
                 endDate=enddate,
-                programName=objDict[item][7],
-                programChannel=objDict[item][8],
-                inPutStream=objDict[item][9],
+                programName=objDict[item][5],
+                programChannel=objDict[item][7],
+                inPutStream=objDict[item][6],
                 isRecode=objDict[item][10],
                 isLive=objDict[item][11],
                 notes=objDict[item][12],
