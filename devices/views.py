@@ -137,7 +137,7 @@ def staffDelete(request):
     else:
         return None
 
-
+@login_required
 def taskList(request):
     '''
     :param request:
