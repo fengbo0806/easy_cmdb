@@ -79,17 +79,16 @@
                 <tr>
                 <td id="{{ item.id }}">{{ forloop.counter }}</td>
                 <td>{{ item.ipv4__ip }}</td>
-                <td>{{ item.ipv4__ip }}</td>
+                <td>None</td>
                 <td>{{ item.services__name }}</td>
-                <td>{{ item.programName }}</td>
+                <td>None</td>
                 <td>
-                    <div class="form-group">
                         {% csrf_token %}
-                        <button value="shutdown" type="button" class="btn btn-danger" nid="{{ item.id }}">关闭设备</button>
-                        <button value="restart" type="button" class="btn btn-warning" nid="{{ item.id }}">重启设备</button>
-                        <button value="restartp" type="button" class="btn btn-info" nid="{{ item.id }}"> 重启进程
+                        <button value="shutdown" class="btn btn-danger btn-sm" nid="{{ item.id }}">关闭设备</button>
+                        <button value="restart"  class="btn btn-warning btn-sm" nid="{{ item.id }}">重启设备</button>
+                        <button value="restartp"  class="btn btn-info btn-sm" nid="{{ item.id }}"> 重启进程
                         </button>
-                    </div>
+
                 </td>
             {% endfor %}
         </table>
@@ -98,7 +97,7 @@
 {% block customerjs %}
     <script type="text/javascript">
         $(document).ready(function () {
-            $("div button").on('click', function () {
+            $("td button").on('click', function () {
                 var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
                 data = {
                     csrfmiddlewaretoken: csrftoken,

@@ -37,5 +37,4 @@ class fabAct():
 
 
 if __name__ == '__main__':
-    test = fabAct(host='172.20.51.12', port=22, username='root', passwd='cctv.com', )
-    test.restartProcess()
+    pass
