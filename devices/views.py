@@ -26,6 +26,8 @@ from django.contrib.auth.decorators import login_required
 from excelTrigger.readExcel import readExcel
 from unperdictableLiveFlowAssist.UPLFA import *
 from django.core.exceptions import FieldError
+from .monitorRoom.fabtools import fabAct
+import fabric
 
 
 # import datetime
@@ -136,6 +138,7 @@ def staffDelete(request):
         return HttpResponse(result)
     else:
         return None
+
 
 @login_required
 def taskList(request):
@@ -528,11 +531,25 @@ def livechina(request):
 @login_required
 def monitorroom(request):
     if request.method == 'GET':
-        result = Machine.objects.filter(services__name='VSMplayer').values('id', 'ipv4__ip','services__name' ).order_by('ipv4__ip')
-        from .monitorRoom.VSMplayerAss import vsm
-        result2 = vsm.check
+        result = Machine.objects.filter(services__name='VSMplayer').values('id', 'ipv4__ip', 'services__name').order_by(
+            'ipv4__ip')
+        # from .monitorRoom.VSMplayerAss import vsm
+        # result2 = vsm.check
         return render(request, 'mointorRoom/listall.html', {'result': result})
     elif request.method == 'POST':
+        nid = request.POST.get('nid')
+        action_value = request.POST.get('value')
+        action_object = Machine.objects.filter(id=nid).values('ipv4__ip', 'loginUser', 'loginPass')
+        print(action_object.first()['ipv4__ip'])
+
+        actionTag = fabAct(host=action_object.first()['ipv4__ip'], port=22, username=action_object.first()['loginUser'],
+                           passwd=action_object.first()['loginPass'], )
+        if action_value == 'restart':
+            actionTag.rebootDev()
+        elif action_value == 'restartp':
+            actionTag.restartProcess()
+        elif action_value == 'shutdown':
+            actionTag.shutDownDev()
         return render(request, 'mointorRoom/listall.html', )
 
 

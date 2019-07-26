@@ -68,6 +68,7 @@
                     序号
                 </th>
                 <th>IP</th>
+                <th>设备状态</th>
                 <th>进程</th>
                 <th>状态</th>
                 <th>操作</th>
@@ -78,15 +79,42 @@
                 <tr>
                 <td id="{{ item.id }}">{{ forloop.counter }}</td>
                 <td>{{ item.ipv4__ip }}</td>
+                <td>{{ item.ipv4__ip }}</td>
                 <td>{{ item.services__name }}</td>
                 <td>{{ item.programName }}</td>
-                <td>{{ item.id }}</td>
+                <td>
+                    <div class="form-group">
+                        {% csrf_token %}
+                        <button value="shutdown" type="button" class="btn btn-danger" nid="{{ item.id }}">关闭设备</button>
+                        <button value="restart" type="button" class="btn btn-warning" nid="{{ item.id }}">重启设备</button>
+                        <button value="restartp" type="button" class="btn btn-info" nid="{{ item.id }}"> 重启进程
+                        </button>
+                    </div>
+                </td>
             {% endfor %}
         </table>
     </div>
 {% endblock %}
 {% block customerjs %}
     <script type="text/javascript">
-
+        $(document).ready(function () {
+            $("div button").on('click', function () {
+                var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+                data = {
+                    csrfmiddlewaretoken: csrftoken,
+                };
+                var formdata = {
+                    csrfmiddlewaretoken: csrftoken,
+                    'value':$(this).val(),
+                    'nid':$(this).attr('nid'),
+                };
+                url = '/devices/monitorroom';
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: formdata
+                });
+            });
+        })
     </script>
 {% endblock %}
