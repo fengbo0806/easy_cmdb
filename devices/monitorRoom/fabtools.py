@@ -1,6 +1,4 @@
 from fabric import Connection
-from invoke import Responder
-
 
 class fabAct():
     def __init__(self, host, port, username, passwd):
@@ -19,13 +17,15 @@ class fabAct():
         # print(daemonStatus)
         if 'daemon' in daemonStatus:
             # print(1)
-            c.run('ps -ef | grep VSMplayer | grep -v \'daemon\|grep\' | awk \'{print "kill -9 " $2}\'|sh')
+            c.run('ps -ef | grep VSMplayer | grep -v \'daemon\|grep\' | awk \'{print "kill -9 " $2}\'|sh',hide=True)
         else:
-            c.run('export DISPLAY=:0 ; daemon VSMplayer ', )
+            c.run('export DISPLAY=:0 ; daemon VSMplayer ', hide=True)
+        vncStatus = c.run()
+        "nohup x0vncserver --passwordfile=/root/.vnc/passwd display=':0.0' &>/dev/null"
 
     def processStatus(self):
         c = self.conn()
-        c.run('ps -ef | grep VSMplayer ')
+        c.run('ps -ef | grep VSMplayer ', hide=True)
 
     def rebootDev(self):
         c = self.conn()
