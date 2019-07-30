@@ -15,18 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from dashboard import urls as dashboard
-from devices import urls as devices
-from suppliers import urls as suppliers
+from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('dashboard/', include(dashboard)),
-    path('devices/', include(devices)),
-    path('tasks/', include(devices)),
-    path('suppliers/', include(suppliers)),
-    path('accounts/', include('django.contrib.auth.urls')),
-
-    # url()
-
+    path('listall/', views.listAllSuppliers),
+    path('inportsuppliers', views.inportSuppliersExcel),
 ]

@@ -1,0 +1,96 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block customerhead %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Static Example</title>
+    <link rel="stylesheet" href={% static 'fontawesome-free-5.8.1-web/css/all.min.css' %}>
+    <script src={% static 'js/monent/moment.min.js' %}></script>
+    <link rel="stylesheet" href={% static 'tempus/css/tempusdominus-bootstrap-4.min.css' %}>
+    <script src={% static 'tempus/js/tempusdominus-bootstrap-4.min.js' %}></script>
+    <style>
+        .custom-table-width {
+            width: 50px;
+            max-width: 5%;
+        }
+
+        . {
+            flex-grow: 0;
+            flex-shrink: 0;
+            flex-basis: 11.99999%;
+            max-width: 11.99999%;
+        }
+    </style>
+{% endblock %}
+{% block subTitle %}
+
+    <div class="form-inline">
+        <h1 class="h2">上游信源</h1>
+    </div>
+    <div class="form-inline">
+
+        {#            <button id="exportexcel" class="btn btn-success btn-sm">导出表格</button>#}
+        <button id="inportexcel" class="btn btn-success btn-sm">导入表格</button>
+
+    </div>
+
+{% endblock %}
+{% block content %}
+    <div class="table-responsive ">
+        <table class="table table-striped table-sm">
+            <thead>
+            <tr>
+                <th style="color: #2b669a">
+                    序号
+                </th>
+                <th>供应商</th>
+                <th>名称</th>
+                <th>节目类型</th>
+                <th>分辨率</th>
+                <th>带宽</th>
+                <th>类型</th>
+                <th>流</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in result %}
+                <tr>
+                <td id="{{ item.id }}">{{ forloop.counter }}</td>
+                <td>{{ item.vender__chinaname }}</td>
+                <td>{{ item.programname }}</td>
+                <td>{{ item.programtype }}</td>
+                <td>{{ item.width }} * {{ item.height }}</td>
+                <td>{{ item.bandwidth }}</td>
+                <td>{{ item.inPutType }}</td>
+                <td>{{ item.inPutStream }}</td>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
+{% block customerjs %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var inportUrl = "/suppliers/inportsuppliers";
+            $("button[id=inportexcel]").click(function () {
+                window.location.href = inportUrl
+            });
+            $("td button").on('click', function () {
+                var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+                data = {
+                    csrfmiddlewaretoken: csrftoken,
+                };
+                var formdata = {
+                    csrfmiddlewaretoken: csrftoken,
+                    'value': $(this).val(),
+                    'nid': $(this).attr('nid'),
+                };
+                url = '/devices/monitorroom';
+                $.ajax({
+                    url: url,
+                    type: "POST",
+                    data: formdata
+                });
+            });
+        })
+    </script>
+{% endblock %}

@@ -57,29 +57,29 @@
         <nav class="col-md-1 d-none d-md-block bg-light sidebar" style="max-width: 150px">
             <div class="sidebar-sticky">
                 <ul class="nav flex-column">
+
                     <li class="nav-item">
-                        {#                        <a class="nav-link active" href="/dashboard/mainboard">#}
-                        {#                            仪表盘 <span class="sr-only">(current)</span>#}
-                        {#                        </a>#}
+                        {#                                                <a class="nav-link active" href="/dashboard/mainboard">#}
+                        {#                                                    仪表盘 <span class="sr-only">(current)</span>#}
+                        {#                                                </a>#}
                     </li>
                     <li class="nav-item">
-                        {#                        <a class="nav-link" href="/devices/listall">#}
-                        {#                            设备#}
-                        {#                        </a>#}
+                        {#                                                <a class="nav-link" href="/devices/listall">#}
+                        {#                                                    设备#}
+                        {#                                                </a>#}
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/devices/encoders">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
                             信源系统
                         </a>
-                        {#                        <a class="nav-link" href="/devices/encoders">#}
-                        {#                            信源表#}
-                        {#                        </a>#}
-                        {#                        <a class="nav-link" href="/devices/encoders">#}
-                        {#                            编码表#}
-                        {#                        </a>#}
-                        {#                        <a class="nav-link" href="/devices/encoders">#}
-                        {#                            汇总#}
-                        {#                        </a>#}
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/suppliers/listall">上游信源</a>
+                            <a class="dropdown-item" href="/devices/encoders">编码器表</a>
+
+                        </div>
+                    </li>
+                    <li class="nav-item ">
+
                         <a class="nav-link" href="/tasks/listalltask">
                             清流/移动直播
                         </a>

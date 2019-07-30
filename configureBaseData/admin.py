@@ -5,6 +5,7 @@ from .models.venders import *
 from .models.processes import *
 from .models.businesses import *
 from .models.encoderserver import *
+from .models.suppliers import *
 
 # Register your models here.
 '''
@@ -171,6 +172,18 @@ class WorkPackageadmin(admin.ModelAdmin):
 
 @admin.register(Staff)
 class Staffadmin(admin.ModelAdmin):
+    '''
+    typeName
+    '''
+    pass
+
+@admin.register(VideoSupplier)
+class VideoSupplieradmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(SupplyProgram)
+class SupplyProgramadmin(admin.ModelAdmin):
     '''
     typeName
     '''
