@@ -16,18 +16,20 @@ class syncTable(object):
             # print(objDict[item])
             # if objDict[item].count('') > 5:
             #     continue
-            programName = objDict[item][4]
-            if len(programName) < 5:
-                continue
-            print(objDict[item])
-            chinaname = objDict[item],
-            programname = objDict[item],
-            note = objDict[item],
-            height = objDict[item],
-            width = objDict[item],
-            bandwidth = objDict[item],
-            inPutType = objDict[item],
-            inPutStream = objDict[item],
+            # print(type(objDict[item]))
+            # objlist=list(objDict[item])
+
+            chinaname = str(objDict[item][0])
+            programname = objDict[item][1]
+            note = None,
+            height = int(objDict[item][3])
+            width = int(objDict[item][4])
+            bandwidth = int(objDict[item][5])
+            inPutType = objDict[item][6]
+            inPutStream = objDict[item][7]
+
+
+            'TypeError: expected string or bytes-like object'
             VideoSupplier.objects.update_or_create(chinaname=chinaname)
             SupplyProgram.objects.update_or_create(
                 programname=programname,
