@@ -25,7 +25,7 @@ class syncTable(object):
             if item == 0:
                 continue
             # print(objDict[item])
-            if objDict[item].count('') > 5:
+            if objDict[item].count('') > 7:
                 continue
             programName = objDict[item][4]
 
@@ -110,6 +110,10 @@ class syncTable(object):
             taskName = '移动直播2019年'
             staffName = objDict[item][10]
             department = objDict[item][12]
+            # Task.objects.update_or_create(taskName=taskName)
+            # reNewTask = Task.objects.get(taskName=taskName)
+            # reNewTask.workpackage_set.all().delete()  # 注意有.all()
+            # reNewTask.save()
             Task.objects.update_or_create(taskName=taskName)
             Staff.objects.update_or_create(department=department, staffName=staffName)
             WorkPackage.objects.update_or_create(
@@ -123,6 +127,7 @@ class syncTable(object):
                 isLive=isLive,
                 # notes = objDict[item][12],
                 task=Task.objects.get(taskName=taskName),
+                # task=reNewTask,
                 adminStaff=Staff.objects.get(department=department, staffName=staffName),
             )
             taskUpdate = WorkPackage.objects.filter(task__taskName=taskName).aggregate(Min('startDate'),
@@ -227,6 +232,8 @@ class syncTable(object):
             staffName = objDict[item][10]
             department = objDict[item][12]
             Task.objects.update_or_create(taskName=taskName)
+            reNewTask = Task.objects.get(taskName=taskName)
+            # reNewTask.workpackage_set.all().delete()
             Staff.objects.update_or_create(department=department, staffName=staffName)
             WorkPackage.objects.update_or_create(
                 startDate=startDatetime,
