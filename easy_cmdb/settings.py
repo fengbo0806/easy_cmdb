@@ -12,11 +12,11 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 import pymysql
+
 pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
@@ -28,7 +28,6 @@ SECRET_KEY = '2$@uer!=8^34m!lw$bnkl)w_1&-k3h3xfkh97tx@0o=8_rlv8d'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -63,7 +62,7 @@ ROOT_URLCONF = 'easy_cmdb.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,'templates'),],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -78,10 +77,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'easy_cmdb.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
-DATABASES_PATH= os.path.join(BASE_DIR,'my.cnf')
+DATABASES_PATH = os.path.join(BASE_DIR, 'my.cnf')
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -108,7 +106,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+SESSION_COOKIE_AGE = 60*60
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
@@ -123,7 +122,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
@@ -136,5 +134,3 @@ STATICFILES_DIRS = [
 # my_project/settings.py
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/tasks/listalltask'
-
-

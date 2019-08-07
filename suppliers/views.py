@@ -7,6 +7,7 @@ import os
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
+@login_required
 def listAllSuppliers(request):
     result = SupplyProgram.objects.all().values('programname', 'vender__chinaname', 'note', 'vender', 'height',
                                                 'width', 'bandwidth', 'inPutType', 'inPutStream')

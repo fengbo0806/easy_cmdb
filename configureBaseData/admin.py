@@ -188,3 +188,10 @@ class SupplyProgramadmin(admin.ModelAdmin):
     typeName
     '''
     pass
+
+@admin.register(SupplierStaff)
+class SupplierStaffadmin(admin.ModelAdmin):
+    '''
+    typeName
+    '''
+    pass

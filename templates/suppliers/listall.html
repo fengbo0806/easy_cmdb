@@ -78,7 +78,7 @@
                 </li>
                 <li class="page-item active">
                     <span class="page-link current">
-                    Page {{ result.number }} of {{ result.paginator.num_pages }}</span>
+                    第{{ result.number }} 页，共 {{ result.paginator.num_pages }}页</span>
                 </li>
                 <li class="page-item">
                     {% if result.has_next %}
