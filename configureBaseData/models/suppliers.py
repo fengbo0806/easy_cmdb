@@ -24,13 +24,14 @@ class SupplyProgram(models.Model):
     ProgramSupplier
     '''
     programname = models.CharField(max_length=255)
-    programtype = models.CharField(max_length=255,null=True, blank=True, default=None)
+    programtype = models.CharField(max_length=255, null=True, blank=True, default=None)
     aliasname = models.CharField(max_length=255, null=True, blank=True, default=None)
     note = models.TextField(null=True, blank=True, default=None)
     vender = models.ForeignKey('VideoSupplier', on_delete=models.CASCADE)
     height = models.IntegerField(default=0, blank=True)
     width = models.IntegerField(default=0, blank=True)
     bandwidth = models.IntegerField(default=0, blank=True)
+    programid = models.CharField(default=None, blank=True, max_length=255)
     inPutType = models.CharField(max_length=255, null=True, blank=True)
     inPutStream = models.CharField(max_length=255, null=True, blank=True)
 

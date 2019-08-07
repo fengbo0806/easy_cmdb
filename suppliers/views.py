@@ -4,11 +4,21 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from excelTrigger.readSuppliersPrograms import syncTable
 import os
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def listAllSuppliers(request):
     result = SupplyProgram.objects.all().values('programname', 'vender__chinaname', 'note', 'vender', 'height',
-                                                     'width', 'bandwidth', 'inPutType', 'inPutStream')
+                                                'width', 'bandwidth', 'inPutType', 'inPutStream')
+    paginator = Paginator(result, 30)
+    page = request.GET.get('page')
+    try:
+        result = paginator.page(page)
+    except PageNotAnInteger:
+        result = paginator.page(1)
+    except EmptyPage:
+        result = paginator.page(paginator.num_pages)
+
     return render(request, 'suppliers/listall.html', {'result': result})
 
 
