@@ -50,7 +50,7 @@ class SupplierStaff(models.Model):
     name = models.CharField(max_length=30)
     title = models.CharField(max_length=128, blank=True)
     company = models.ForeignKey('VideoSupplier', on_delete=models.CASCADE)
-    phone = models.IntegerField()
+    phone = models.CharField(max_length=60, blank=True)
     wechat = models.CharField(max_length=60, blank=True)
     mail = models.CharField(max_length=60, blank=True)
     qq = models.IntegerField(blank=True)
