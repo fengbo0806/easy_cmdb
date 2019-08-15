@@ -20,4 +20,5 @@ from . import views
 urlpatterns = [
     path('listall/', views.listAllSuppliers),
     path('inportsuppliers', views.inportSuppliersExcel),
+    path('suppliersdetail', views.SuppliersDetail),
 ]

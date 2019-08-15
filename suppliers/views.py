@@ -9,8 +9,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 @login_required
 def listAllSuppliers(request):
-    result = SupplyProgram.objects.all().values('programname', 'vender__chinaname', 'note', 'vender', 'height',
-                                                'width', 'bandwidth', 'inPutType', 'inPutStream')
+    result = SupplyProgram.objects.all().values('programname', 'vender__id', 'vender__chinaname', 'note', 'vender',
+                                                'height','width', 'bandwidth', 'inPutType', 'inPutStream')
     paginator = Paginator(result, 30)
     page = request.GET.get('page')
     try:
@@ -21,6 +21,14 @@ def listAllSuppliers(request):
         result = paginator.page(paginator.num_pages)
 
     return render(request, 'suppliers/listall.html', {'result': result})
+
+
+@login_required
+def SuppliersDetail(request):
+    targetId = request.GET.get('id')
+    result = VideoSupplier.objects.filter(id=targetId).values('chinaname', 'englishname', 'note')
+    resultStaff = SupplierStaff.objects.filter(company=targetId)
+    return render(request, 'suppliers/suppliersdetail.html', {'result': result})
 
 
 @login_required
