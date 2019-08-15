@@ -10,8 +10,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 @login_required
 def listAllSuppliers(request):
     targId = request.GET.get('sid')
+    print(targId)
     if targId:
-        result = SupplyProgram.objects.filter(vender_id=targId).values('programname', 'vender__id', 'programtype',
+        result = SupplyProgram.objects.filter(vender__id=targId).values('programname', 'vender__id', 'programtype',
                                                                        'vender__chinaname', 'note', 'vender', 'height',
                                                                        'width', 'bandwidth', 'inPutType', 'inPutStream')
     else:
@@ -35,7 +36,7 @@ def SuppliersDetail(request):
     targetId = request.GET.get('id')
     result = VideoSupplier.objects.filter(id=targetId).values('chinaname', 'englishname', 'note')
     resultStaff = SupplierStaff.objects.filter(company=targetId)
-    return render(request, 'suppliers/suppliersdetail.html', {'result': result})
+    return render(request, 'suppliers/suppliersdetail.html', {'result': result, 'resultStaff': resultStaff})
 
 
 @login_required
