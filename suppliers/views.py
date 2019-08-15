@@ -11,12 +11,13 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 def listAllSuppliers(request):
     targId = request.GET.get('sid')
     if targId:
-        result = SupplyProgram.objects.filter(vender_id=targId).values('programname', 'vender__id', 'vender__chinaname',
-                                                                       'note', 'vender', 'height', 'width', 'bandwidth',
-                                                                       'inPutType', 'inPutStream')
+        result = SupplyProgram.objects.filter(vender_id=targId).values('programname', 'vender__id', 'programtype ',
+                                                                       'vender__chinaname', 'note', 'vender', 'height',
+                                                                       'width', 'bandwidth', 'inPutType', 'inPutStream')
     else:
-        result = SupplyProgram.objects.all().values('programname', 'vender__id', 'vender__chinaname', 'note', 'vender',
-                                                    'height', 'width', 'bandwidth', 'inPutType', 'inPutStream')
+        result = SupplyProgram.objects.all().values('programname', 'vender__id', 'programtype ',
+                                                    'vender__chinaname', 'note', 'vender', 'height',
+                                                    'width', 'bandwidth', 'inPutType', 'inPutStream')
     paginator = Paginator(result, 30)
     page = request.GET.get('page')
     try:
