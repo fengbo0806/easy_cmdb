@@ -30,7 +30,7 @@
     <div class="form-inline">
 
         {#            <button id="exportexcel" class="btn btn-success btn-sm">导出表格</button>#}
-        <button id="inportexcel" class="btn btn-success btn-sm disabled">频道</button>
+        <a class="btn btn-success btn-sm" type="button" href="/suppliers/listall/?sid=1">频道</a>
 
     </div>
 
@@ -77,8 +77,8 @@
 {% block customerjs %}
     <script type="text/javascript">
         $(document).ready(function () {
-            var inportUrl = "/suppliers/inportsuppliers";
-            $("button[id=inportexcel]").click(function () {
+            var inportUrl = "/suppliers/listall?sid=";
+            $("button[id=backtotatil]").click(function () {
                 window.location.href = inportUrl
             });
             $("td button").on('click', function () {
