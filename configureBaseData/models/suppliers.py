@@ -31,7 +31,7 @@ class SupplyProgram(models.Model):
     height = models.IntegerField(default=0, blank=True)
     width = models.IntegerField(default=0, blank=True)
     bandwidth = models.IntegerField(default=0, blank=True)
-    programid = models.CharField(default=None, blank=True, max_length=255)
+    programid = models.CharField(default=None, blank=True,null=True, max_length=255)
     inPutType = models.CharField(max_length=255, null=True, blank=True)
     inPutStream = models.CharField(max_length=255, null=True, blank=True)
 

@@ -18,13 +18,14 @@ class syncTable(object):
             #     continue
             # print(type(objDict[item]))
             # objlist=list(objDict[item])
-
-            chinaname = str(objDict[item][0])
+            print(item)
+            chinaname = objDict[item][0]
             programname = objDict[item][1]
-            note = None,
-            height = int(objDict[item][3])
-            width = int(objDict[item][4])
-            bandwidth = int(objDict[item][5])
+            programtype=objDict[item][2]
+
+            height = objDict[item][3]
+            width = objDict[item][4]
+            bandwidth = objDict[item][5]
             inPutType = objDict[item][6]
             inPutStream = objDict[item][7]
 
@@ -33,8 +34,9 @@ class syncTable(object):
             VideoSupplier.objects.update_or_create(chinaname=chinaname)
             SupplyProgram.objects.update_or_create(
                 programname=programname,
+                programtype=programtype,
                 vender=VideoSupplier.objects.get(chinaname=chinaname),
-                note=note,
+                programid=None,
                 height=height,
                 width=width,
                 bandwidth=bandwidth,
