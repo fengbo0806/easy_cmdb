@@ -140,3 +140,11 @@ unperdictableLiveFlowAssist/移动直播2019年\.xls
 
 
 devices/monitorRoom/VSMplayer\.retry
+
+configureBaseData/migrations/0007_machine_loginpass\.py
+
+nohup\.out
+
+configureBaseData/migrations/0009_supplyprogram_programtype\.py
+
+configureBaseData/migrations/0010_supplyprogram_programid\.py
